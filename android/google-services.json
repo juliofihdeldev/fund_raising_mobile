@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "1007886381659",
+    "project_id": "pote-kole",
+    "storage_bucket": "pote-kole.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1007886381659:android:5508c0608419684e5a857e",
+        "android_client_info": {
+          "package_name": "org.potekole.ede"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1007886381659-rb9c7kbuv708j69kqtgbg008vmdni0bs.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.potekole.ede",
+            "certificate_hash": "710fc2328ef2e8f6b4a71c14adf3cc7a1aac63b7"
+          }
+        },
+        {
+          "client_id": "1007886381659-5cflihhgcu71d156slrnkjlg2qeirdkt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA52Jfb5Ah6JTbU6HE8vrLO9gecEYhGWVE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1007886381659-5cflihhgcu71d156slrnkjlg2qeirdkt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
