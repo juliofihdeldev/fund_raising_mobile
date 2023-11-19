@@ -36,11 +36,7 @@ const Category: React.FC<CategoryIconProps> = ({
       <View style={[styles.baseStyleContainer, style]}>
         <Ionicons name={iconName} color={color} size={iconSize} />
       </View>
-      <TextComponent
-        fontWeight="bold"
-        fontSize={fontSize}
-        fontFamily="Montserrat-Bold"
-        style={styles.categoryTitle}>
+      <TextComponent fontSize={fontSize} style={styles.categoryTitle}>
         {title}
       </TextComponent>
     </TouchableOpacity>

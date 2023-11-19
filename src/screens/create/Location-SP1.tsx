@@ -52,6 +52,7 @@ const Location: React.FC = () => {
       <View style={styles.containerPosition}>
         {data_state.map((loc, index) => (
           <CustomButton
+            textTextColor={loc === location ? Color.white : Color.gray_100}
             key={index}
             title={loc}
             onPress={() => {
@@ -65,10 +66,6 @@ const Location: React.FC = () => {
               },
               boxShadow,
             ]}
-            textStyle={{
-              color: loc === location ? Color.gray_500 : Color.secondary,
-              fontFamily: 'Montserrat-Regular',
-            }}
           />
         ))}
       </View>
@@ -83,6 +80,7 @@ const Location: React.FC = () => {
       <View style={styles.containerPosition}>
         {data_category.map((cat, index) => (
           <CustomButton
+            textTextColor={cat === category ? Color.white : Color.gray_100}
             key={index}
             title={cat}
             onPress={() => {
@@ -96,10 +94,6 @@ const Location: React.FC = () => {
               },
               boxShadow,
             ]}
-            textStyle={{
-              color: cat === category ? Color.gray_100 : Color.secondary,
-              fontFamily: 'Montserrat-Regular',
-            }}
           />
         ))}
       </View>

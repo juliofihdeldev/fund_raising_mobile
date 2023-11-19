@@ -22,6 +22,8 @@ import UserCommentItem from '../../component/UserCommentItem';
 import {Color, boxShadow} from '../../assets/GlobalStyles';
 import {useLang} from '../../context/LanguageContext';
 
+import Ionicons from 'react-native-vector-icons/Ionicons';
+
 import CustomBackIcon from '../../component/atom/CustomBackIcon';
 
 const FeedDetails: React.FC<ProjectType> = ({navigation, item}: any) => {
@@ -55,13 +57,21 @@ const FeedDetails: React.FC<ProjectType> = ({navigation, item}: any) => {
         ]}>
         <CustomBackIcon
           name="close-outline"
+          style={styles.iconMargin}
           size={28}
           color={Color.primary}
           onPress={() => navigation.goBack()}
         />
-        <TextComponent color="#000" numberOfLines={3}>
+        <TextComponent color="#000" numberOfLines={3} style={styles.titleStyle}>
           $26,269 USD raised of $20,000 goal • 1.2K donations
         </TextComponent>
+
+        <Ionicons
+          name="menu-outline"
+          size={28}
+          color={Color.primary}
+          onPress={() => navigation.goBack()}
+        />
       </Animated.View>
 
       <ScrollView
@@ -102,7 +112,7 @@ const FeedDetails: React.FC<ProjectType> = ({navigation, item}: any) => {
 
                 <CustomButton
                   title={useLang().lang.make_donnation}
-                  onPress={() => console.log('Button')}
+                  onPress={() => navigation.navigate('Payment')}
                   buttonStyle={styles.buttonStyle}
                 />
 
@@ -253,12 +263,12 @@ const styles = StyleSheet.create({
     position: 'absolute',
     zIndex: 1,
     padding: 16,
+    paddingStart: 8,
     width: '100%',
     flexDirection: 'row',
     alignContent: 'center',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginTop: 2,
   },
   buttonStyle: {
     backgroundColor: Color.primary,
@@ -283,5 +293,11 @@ const styles = StyleSheet.create({
     marginTop: 8,
   },
   contentTextStyle: {padding: 16},
+  titleStyle: {
+    width: '76%',
+  },
+  iconMargin: {
+    marginRight: 4,
+  },
 });
 export default FeedDetails;

@@ -14,6 +14,7 @@ import CreateWithLoading from '../screens/create/Create';
 import EditProjectWithLoading from '../screens/create/EditProject';
 import History from '../screens/feed/ProjectHistory';
 import ManageFundrasing from '../screens/manage/MangeFundrasing';
+import PaymentFormWithLoading from '../screens/feed/PaymentForm';
 
 export type ProfileStackParamList = {
   Profile: undefined;
@@ -30,10 +31,12 @@ export type FeedStackParamList = {
   Profile: undefined;
   Notifications: undefined;
   ProfileTab: undefined;
+  Payment: undefined;
 };
 
 const Tab = createMaterialBottomTabNavigator<FeedStackParamList>();
-const Stack = createStackNavigator();
+
+const Stack = createStackNavigator<FeedStackParamList>();
 
 const FeedStack = () => {
   return (
@@ -53,6 +56,14 @@ const FeedStack = () => {
           presentation: 'modal',
         }}
         component={FeedDetails}
+      />
+      <Stack.Screen
+        name="Payment"
+        options={{
+          // headerShown: false,
+          presentation: 'modal',
+        }}
+        component={PaymentFormWithLoading}
       />
     </Stack.Navigator>
   );

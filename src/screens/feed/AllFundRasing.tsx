@@ -3,10 +3,13 @@ import {FlatList, View, SafeAreaView, ScrollView} from 'react-native';
 import {feedStyles} from './GlobalStyle';
 import {useFunding} from '../../context/FundingContext';
 import ItemDonationVertical from '../../component/ItemDonationVertical';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { FeedStackParamList } from '../../navigations/MainNavigation';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {FeedStackParamList} from '../../navigations/MainNavigation';
 
-type AllScreenNavigationProp = StackNavigationProp<FeedStackParamList, 'FeedDetails'>;
+type AllScreenNavigationProp = StackNavigationProp<
+  FeedStackParamList,
+  'FeedDetails'
+>;
 
 interface Props {
   navigation: AllScreenNavigationProp;
@@ -23,7 +26,7 @@ const AllFundraising: React.FC<Props> = ({navigation, route}) => {
 
   React.useEffect(() => {
     handleGetFundraising();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -33,16 +36,14 @@ const AllFundraising: React.FC<Props> = ({navigation, route}) => {
           <FlatList
             data={
               category === 'All Categories'
-                ? (fundraising?.filter(
-                  project => project.status === 'Active',
-                ) )
-                : (fundraising?.filter(project =>
-                  category !== 'Emergency'
-                    ? project.category === category &&
+                ? fundraising?.filter(project => project.status === 'Active')
+                : fundraising?.filter(project =>
+                    category !== 'Emergency'
+                      ? project.category === category &&
                         project.status === 'Active'
-                    : project.is_emergency === true &&
+                      : project.is_emergency === true &&
                         project.status === 'Active',
-                ) )
+                  )
             }
             renderItem={project => (
               <View style={feedStyles.projectItemVertical}>

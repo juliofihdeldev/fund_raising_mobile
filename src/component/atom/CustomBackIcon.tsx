@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, StyleSheet, StyleProp, ViewStyle, Text} from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
@@ -17,12 +17,10 @@ const CustomBackIcon: React.FC<CustomBackIconProps> = ({
   name = 'notifications-outline',
   size = 24,
   color = '#333',
-  onPress
+  onPress,
 }) => {
   return (
-    <TouchableOpacity 
-        style={[styles.container, style]} 
-        onPress={onPress}>
+    <TouchableOpacity style={[styles.container, style]} onPress={onPress}>
       <Ionicons name={name} size={size} color={color} />
     </TouchableOpacity>
   );

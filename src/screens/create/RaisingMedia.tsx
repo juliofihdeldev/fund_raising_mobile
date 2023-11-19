@@ -63,7 +63,7 @@ const RaisingMedia: React.FC = () => {
           [
             {
               text: 'OK',
-              onPress: () => requestCameraPermission(),
+              onPress: () => null,
             },
           ],
         );

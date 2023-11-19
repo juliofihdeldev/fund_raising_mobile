@@ -3,8 +3,8 @@ import {View, StyleSheet, TextInput, Dimensions} from 'react-native';
 import {Color} from '../../assets/GlobalStyles';
 import TextComponent from '../../component/atom/CustomText';
 import {useFunding} from '../../context/FundingContext';
-import { useLang } from '../../context/LanguageContext';
-import { currency } from '../../utils/currency';
+import {useLang} from '../../context/LanguageContext';
+import {currency} from '../../utils/currency';
 
 const RaisingAmount: React.FC = () => {
   const {lang} = useLang();
@@ -20,9 +20,8 @@ const RaisingAmount: React.FC = () => {
   }, [amount]);
   return (
     <View style={styles.container}>
-
       <TextComponent
-        fontFamily='Montserrat-Regular'
+        fontFamily="Montserrat-Regular"
         style={{
           fontSize: 17,
 
@@ -33,7 +32,6 @@ const RaisingAmount: React.FC = () => {
         {lang.word_how_much_do_you_want_to_collect}
       </TextComponent>
       <View style={styles.containerPosition}>
-        
         <TextInput
           placeholder="0.00"
           keyboardType="numeric"
@@ -55,19 +53,19 @@ const RaisingAmount: React.FC = () => {
           }}
         />
         <TextComponent
-          fontFamily='Montserrat-Bold'
+          fontFamily="Montserrat-Bold"
           style={{
             fontSize: 23,
             color: Color.black,
             marginLeft: 16,
           }}>
-          {currency(state?.amount)} 
+          {currency(state?.amount)}
         </TextComponent>
         <TextComponent
-          fontFamily='Montserrat-Regular'
+          color="#fff"
+          fontFamily="Montserrat-Regular"
           style={{
             width: '98%',
-            color: Color.white,
             marginTop: 16,
             padding: 16,
             borderRadius: 8,

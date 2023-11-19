@@ -29,6 +29,7 @@ export const Color = {
   gray_300: 'rgba(0, 0, 0, 0.42)',
   gray_400: 'rgba(255, 255, 255, 0.9)',
   grayLight: '#f2f2f2',
+  blue: 'blue',
 };
 /* border radiuses */
 export const Border = {
@@ -46,4 +47,4 @@ export const boxShadow = {
   shadowOpacity: 0.5,
   shadowRadius: 0.84,
   elevation: 1,
-}
+};

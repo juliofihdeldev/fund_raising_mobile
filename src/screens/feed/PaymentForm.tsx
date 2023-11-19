@@ -1,4 +1,4 @@
-import React, {useEffect, useState,useCallback} from 'react';
+import React, {useEffect, useState, useCallback} from 'react';
 import {
   View,
   SafeAreaView,
@@ -7,7 +7,7 @@ import {
   StyleSheet,
   Alert,
 } from 'react-native';
-import {feedStyles} from './GlobalStyle';
+import {GlobalStyles} from './GlobalStyle';
 import TextComponent from '../../component/atom/CustomText';
 import CustomButton from '../../component/atom/CustomButton';
 import ListItem from '../../component/atom/ListItem';
@@ -17,17 +17,16 @@ import {Color} from '../../assets/GlobalStyles';
 import {currency} from '../../utils/currency';
 import firestore from '@react-native-firebase/firestore';
 import CustomDialog from '../../component/atom/CustomDialog';
-import {Root, ALERT_TYPE, Toast } from 'react-native-alert-notification';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { FeedStackParamList } from '../../navigations/MainNavigation';
-import { useLang } from '../../context/LanguageContext';
+import {Root, ALERT_TYPE, Toast} from 'react-native-alert-notification';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {FeedStackParamList} from '../../navigations/MainNavigation';
+import {useLang} from '../../context/LanguageContext';
 import withLoadingModal from '../../component/HOC/Loading';
 import RenflouerAccountComponentWithLoading from './RenflouerAccountComponent';
-import { useFocusEffect } from '@react-navigation/native';
+import {useFocusEffect} from '@react-navigation/native';
 import ActionSheet from '../../component/HOC/ActionSheet';
 import ThankYou from '../../component/HOC/ThankYou';
-import Modal from "react-native-modal";
-
+import Modal from 'react-native-modal';
 
 // Use a local emulator in development
 // if (__DEV__) {
@@ -35,14 +34,17 @@ import Modal from "react-native-modal";
 //   firebase.functions().useEmulator('localhost', 5001);
 // }
 
-type PaymentFormScreenNavigationProp = StackNavigationProp<FeedStackParamList, 'FeedDetails'>;
+type PaymentFormScreenNavigationProp = StackNavigationProp<
+  FeedStackParamList,
+  'FeedDetails'
+>;
 
 interface Props {
   navigation: PaymentFormScreenNavigationProp;
   setLoading: (isLoading: boolean) => void;
 }
 
-const PaymentForm: React.FC<Props> = ({route, navigation, setLoading}:any) => {
+const PaymentForm: React.FC<Props> = ({route, navigation, setLoading}: any) => {
   const {lang} = useLang();
   const {
     name,
@@ -50,14 +52,14 @@ const PaymentForm: React.FC<Props> = ({route, navigation, setLoading}:any) => {
     collect,
     id,
     image,
-    user: {name: user_name,email , id: user_id},
-  } = route.params.project;
+    user: {name: user_name, email, id: user_id},
+  } = route?.params?.project;
 
   navigation.setOptions({
     title: name as string,
   });
 
-  const {user,usersPayment , handleGetUserPayment} = useAuth();
+  const {user, usersPayment, handleGetUserPayment} = useAuth();
   const [value, setValue] = React.useState('');
   const [monCashMenu, setMonCashMenu] = React.useState(false);
   const [tipAmount, setTipAmount] = useState(100);
@@ -65,9 +67,9 @@ const PaymentForm: React.FC<Props> = ({route, navigation, setLoading}:any) => {
 
   const [actionSheet, setActionSheet] = useState(false);
   const closeActionSheet = () => {
-    setActionSheet(false)
-    navigation.goBack()
-  }
+    setActionSheet(false);
+    navigation.goBack();
+  };
 
   const handleSelectTips = (percentage: number) => {
     const tipCal = (percentage * Number(value)) / 100;
@@ -81,164 +83,162 @@ const PaymentForm: React.FC<Props> = ({route, navigation, setLoading}:any) => {
     setSelectTips(selectTips);
   }, [value]);
 
+  const handleShowMenuPayment = () => {
+    setMonCashMenu(!monCashMenu);
+  };
 
-  const handleShowMenuPayment =()=>{
-    setMonCashMenu(!monCashMenu)
-  }
-
-  const usersPaymentAmount = usersPayment?.reduce((sum, item) => sum + (item.amount || 0), 0);
-
+  const usersPaymentAmount = usersPayment?.reduce(
+    (sum, item) => sum + (item.amount || 0),
+    0,
+  );
 
   useFocusEffect(
     useCallback(() => {
-       handleGetUserPayment();
-    }, [])
+      handleGetUserPayment();
+    }, []),
   );
 
-  const handlePaymentFromAccount =() => {
+  const handlePaymentFromAccount = () => {
     setLoading(true);
 
-      // check if value if a valid number
-      if (isNaN(Number(value))) return
-      if (usersPaymentAmount < Number(value)) {
-        Alert.alert('Attention','Tu n\'as pas assez d\'argent.');
-        setLoading(false);
-        return;
-      }
+    // check if value if a valid number
+    if (isNaN(Number(value))) return;
+    if (usersPaymentAmount < Number(value)) {
+      Alert.alert('Attention', "Tu n'as pas assez d'argent.");
+      setLoading(false);
+      return;
+    }
 
-      try {
-        const save_donation_object = {
-          user_name: user.name,
-          user_email: user.email,  
-          user_id: user.id,
-          project_name: name,
-          amount: Number(value),
-          project_image: image,
-          project_id: id,
-          image: user?.image,
-          tipAmount: tipAmount,
-          status: 'Approved',
-          payment_method: 'Account',
-        };
+    try {
+      const save_donation_object = {
+        user_name: user.name,
+        user_email: user.email,
+        user_id: user.id,
+        project_name: name,
+        amount: Number(value),
+        project_image: image,
+        project_id: id,
+        image: user?.image,
+        tipAmount: tipAmount,
+        status: 'Approved',
+        payment_method: 'Account',
+      };
 
-        // Save donation in database
-        const ref_fundraising = firestore().collection('fundraising');
-        const donationRef = firestore().collection('donations');
+      // Save donation in database
+      const ref_fundraising = firestore().collection('fundraising');
+      const donationRef = firestore().collection('donations');
 
-        donationRef.add(save_donation_object);
+      donationRef.add(save_donation_object);
 
-        // Add porject to users donation list
-        const userRef = firestore().collection('users');
-        userRef.doc(user?.id!).update({
-          donations:
-            firebase.firestore.FieldValue.arrayUnion(save_donation_object),
-        });
-         
-        let amountToRemoveFormAccount  = Number(value) + Number(tipAmount)
+      // Add porject to users donation list
+      const userRef = firestore().collection('users');
+      userRef.doc(user?.id!).update({
+        donations:
+          firebase.firestore.FieldValue.arrayUnion(save_donation_object),
+      });
 
-        firestore().collection('Payments').add({
-            amount:  - amountToRemoveFormAccount,
-            user_name: user.name,
-            user_email: user.email,  
-            user_id: user.id,
-            tips: tipAmount,
-            date: new Date().toDateString().toString(),
-            status:'Approval'
-        })
+      let amountToRemoveFormAccount = Number(value) + Number(tipAmount);
 
-        // Update fundraising collect and donation
-        ref_fundraising.doc(id).update({
-          collect: Number(collect) + Number(value),
-          donation: firebase.firestore.FieldValue.arrayUnion(
-            save_donation_object,
-          ),
-        });
+      firestore().collection('Payments').add({
+        amount: -amountToRemoveFormAccount,
+        user_name: user.name,
+        user_email: user.email,
+        user_id: user.id,
+        tips: tipAmount,
+        date: new Date().toDateString().toString(),
+        status: 'Approval',
+      });
 
-        firestore()
-          .collection('mail')
-          .add({
-            to: user_name,
-            message: {
-              subject: `Donation for ${save_donation_object?.project_name}`,
-              html: `<p>Hi ${user.name},</p>
+      // Update fundraising collect and donation
+      ref_fundraising.doc(id).update({
+        collect: Number(collect) + Number(value),
+        donation:
+          firebase.firestore.FieldValue.arrayUnion(save_donation_object),
+      });
+
+      firestore()
+        .collection('mail')
+        .add({
+          to: user_name,
+          message: {
+            subject: `Donation for ${save_donation_object?.project_name}`,
+            html: `<p>Hi ${user.name},</p>
         <p>You have received a donation of ${amount} gourdes from you for the ${save_donation_object.project_name}.</p>
         <p>Thank you for using Potekole.</p>
         <p>Potekole Team</p>`,
-            },
-          });
+          },
+        });
 
-        setLoading(false)
-  
-        setActionSheet(true)
+      setLoading(false);
 
-       
-      } catch (e) {
-        // Handle any errors raised by presentPaymentSheet
-        console.log('error', e);
-        Alert.alert('Error', JSON.stringify(e));
-        setLoading(false);
-      }
-  }
+      setActionSheet(true);
+    } catch (e) {
+      // Handle any errors raised by presentPaymentSheet
+      console.log('error', e);
+      Alert.alert('Error', JSON.stringify(e));
+      setLoading(false);
+    }
+  };
 
   const onClose = () => {
     setMonCashMenu(false);
   };
 
-
-
   return (
     <Root>
-      <SafeAreaView style={feedStyles.container}>
-      <Modal
+      <SafeAreaView style={GlobalStyles.container}>
+        <Modal
           isVisible={actionSheet}
-          animationIn='fadeInUp'
+          animationIn="fadeInUp"
           coverScreen={true}
           onBackdropPress={closeActionSheet}
           onBackButtonPress={closeActionSheet}
           style={{
             margin: 0,
             justifyContent: 'flex-end',
-            backfaceVisibility:'hidden'
-          }}
-        >
+            backfaceVisibility: 'hidden',
+          }}>
           <ActionSheet
-              component={<ThankYou message={`Merci ${user.name} d'avoir aidez  ${user_name} avec ${currency(
-                Number(value),
-              )} Pour sa collect de fond.`} />}
-              actionItems={[]}
-              onCancel={closeActionSheet}
+            component={
+              <ThankYou
+                message={`Merci ${
+                  user.name
+                } d'avoir aidez  ${user_name} avec ${currency(
+                  Number(value),
+                )} Pour sa collect de fond.`}
+              />
+            }
+            actionItems={[]}
+            onCancel={closeActionSheet}
           />
         </Modal>
 
         {monCashMenu && (
           <CustomDialog onClose={onClose}>
-  
-           <View style={localStyle.width}>
+            <View style={localStyle.width}>
               <ListItem
                 text="Fermer"
                 icon="close-outline"
                 color={Color.black}
                 onPress={onClose}
                 fontSize={19}
-                containerStyle={[feedStyles.containerList]}
-                iconStyle={[feedStyles.customIcon, {color:Color.black}]}
+                containerStyle={[GlobalStyles.containerList]}
+                iconStyle={[GlobalStyles.customIcon, {color: Color.black}]}
               />
-        
 
               <RenflouerAccountComponentWithLoading />
             </View>
           </CustomDialog>
         )}
-      
-        <ScrollView>
-          <View style={feedStyles.contentText}>
 
-          <TextComponent
-              fontFamily='Montserrat-Bold'
-                  style={{
-                    fontSize: 19,
-                    marginTop: 16,
-                  }}>
+        <ScrollView>
+          <View style={GlobalStyles.contentText}>
+            <TextComponent
+              fontFamily="Montserrat-Bold"
+              style={{
+                fontSize: 19,
+                marginTop: 16,
+              }}>
               Compte: {currency(Number(usersPaymentAmount))}
             </TextComponent>
 
@@ -252,10 +252,10 @@ const PaymentForm: React.FC<Props> = ({route, navigation, setLoading}:any) => {
                 marginTop: 16,
               }}
               textStyle={{color: '#fff'}}
-            /> 
-         
+            />
+
             <TextComponent
-              style={[feedStyles.goalTextBold, {marginTop: 12}]}
+              style={[GlobalStyles.goalTextBold, {marginTop: 12}]}
               numberOfLines={3}>
               {name}
             </TextComponent>
@@ -269,7 +269,7 @@ const PaymentForm: React.FC<Props> = ({route, navigation, setLoading}:any) => {
               {user_name} {lang?.need} {currency(Number(amount))}
             </TextComponent>
 
-            <View style={feedStyles.contentTextPrice}>
+            <View style={GlobalStyles.contentTextPrice}>
               <TextComponent
                 fontSize={25}
                 fontWeight="bold"
@@ -279,7 +279,7 @@ const PaymentForm: React.FC<Props> = ({route, navigation, setLoading}:any) => {
                   left: 16,
                   top: 28,
                 }}>
-              HTG 
+                HTG
               </TextComponent>
 
               <TextComponent
@@ -308,7 +308,7 @@ const PaymentForm: React.FC<Props> = ({route, navigation, setLoading}:any) => {
                 }}
                 onChangeText={text => setValue(text)}
               />
-              
+
               <View
                 style={{
                   height: 60,
@@ -323,19 +323,16 @@ const PaymentForm: React.FC<Props> = ({route, navigation, setLoading}:any) => {
             </View>
 
             <TextComponent
-              fontFamily='Montserrat-Bold'
-                  style={{
-                    fontSize: 21,
-                    marginTop: 16,
-                    marginHorizontal: 8,
-                  }}>
-                  { !isNaN(Number(value)) ? currency(Number(value)):0} 
+              fontFamily="Montserrat-Bold"
+              style={{
+                fontSize: 21,
+                marginTop: 16,
+                marginHorizontal: 8,
+              }}>
+              {!isNaN(Number(value)) ? currency(Number(value)) : 0}
             </TextComponent>
-           
 
-            <TextComponent>
-              {lang?.deduction_pourcetange}
-            </TextComponent>
+            <TextComponent>{lang?.deduction_pourcetange}</TextComponent>
             <View>
               <View
                 style={{
@@ -350,16 +347,14 @@ const PaymentForm: React.FC<Props> = ({route, navigation, setLoading}:any) => {
                     fontSize: 19,
                     fontWeight: 'bold',
                   }}>
-                Tips
+                  Tips
                 </TextComponent>
                 <TextComponent
                   style={{
                     marginTop: 16,
                     marginHorizontal: 8,
                   }}>
-
-                  { !isNaN(Number(value)) ? currency(tipAmount):0} 
-
+                  {!isNaN(Number(value)) ? currency(tipAmount) : 0}
                 </TextComponent>
               </View>
 
@@ -375,7 +370,8 @@ const PaymentForm: React.FC<Props> = ({route, navigation, setLoading}:any) => {
                   buttonStyle={[
                     styles.tipsButton,
                     {
-                      backgroundColor: selectTips === 0 ? Color.primary : '#333',
+                      backgroundColor:
+                        selectTips === 0 ? Color.primary : '#333',
                     },
                   ]}
                   textStyle={styles.textButton}
@@ -386,7 +382,8 @@ const PaymentForm: React.FC<Props> = ({route, navigation, setLoading}:any) => {
                   buttonStyle={[
                     styles.tipsButton,
                     {
-                      backgroundColor: selectTips === 10 ? Color.primary : '#333',
+                      backgroundColor:
+                        selectTips === 10 ? Color.primary : '#333',
                     },
                   ]}
                   textStyle={styles.textButton}
@@ -397,7 +394,8 @@ const PaymentForm: React.FC<Props> = ({route, navigation, setLoading}:any) => {
                   buttonStyle={[
                     styles.tipsButton,
                     {
-                      backgroundColor: selectTips === 20 ? Color.primary : '#333',
+                      backgroundColor:
+                        selectTips === 20 ? Color.primary : '#333',
                     },
                   ]}
                   textStyle={styles.textButton}
@@ -408,7 +406,8 @@ const PaymentForm: React.FC<Props> = ({route, navigation, setLoading}:any) => {
                   buttonStyle={[
                     styles.tipsButton,
                     {
-                      backgroundColor: selectTips === 30 ? Color.primary : '#333',
+                      backgroundColor:
+                        selectTips === 30 ? Color.primary : '#333',
                     },
                   ]}
                   textStyle={styles.textButton}
@@ -419,9 +418,15 @@ const PaymentForm: React.FC<Props> = ({route, navigation, setLoading}:any) => {
             <CustomButton
               title="Effectuer le Don"
               onPress={handlePaymentFromAccount}
-              disabled={value === '' || value === '0' || Number(value) < 250 }
+              disabled={value === '' || value === '0' || Number(value) < 250}
               buttonStyle={{
-                backgroundColor:  !(value === '' || value === '0' || Number(value) < 250 )  ?  Color.primary  : '#eee',
+                backgroundColor: !(
+                  value === '' ||
+                  value === '0' ||
+                  Number(value) < 250
+                )
+                  ? Color.primary
+                  : '#eee',
                 width: '100%',
                 borderRadius: 26,
                 marginTop: 16,
@@ -442,7 +447,7 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     backgroundColor: Color.white,
   },
- 
+
   customIcon: {
     marginRight: 10,
     fontSize: 28,

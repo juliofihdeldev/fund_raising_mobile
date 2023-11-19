@@ -76,13 +76,13 @@ const Create: React.FC<Props> = ({navigation}) => {
               color: Color.black,
             }}></TextComponent>
           <CustomButton
-            title="Close"
+            title="Annuler"
             onPress={() => {
               navigation.goBack();
             }}
             buttonStyle={{
               backgroundColor: Color.secondary,
-              width: '20%',
+              width: '25%',
               height: 44,
               borderRadius: 89,
             }}

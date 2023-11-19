@@ -4,45 +4,42 @@ import TextComponent from '../../component/atom/CustomText';
 import {View, StyleSheet, Dimensions, ScrollView} from 'react-native';
 import CustomSeparator from '../../component/atom/CustomSeparator';
 import {useFunding} from '../../context/FundingContext';
-import { useLang } from '../../context/LanguageContext';
-import { currency } from '../../utils/currency';
+import {useLang} from '../../context/LanguageContext';
+import {currency} from '../../utils/currency';
 import CustomView from '../../component/atom/CustomView';
 
 const RaisingConfirmation: React.FC = () => {
   const {state} = useFunding();
-  const  {lang} =useLang()
+  const {lang} = useLang();
   return (
     <View style={styles.container}>
       <TextComponent
-        fontFamily='Montserrat-Bold'
+        fontFamily="Montserrat-Bold"
         style={{
           color: Color.black,
           width: '100%',
-          justifyContent:'flex-start',
-
+          justifyContent: 'flex-start',
           borderRadius: 8,
           marginLeft: 32,
         }}>
         {lang?.recap}
       </TextComponent>
-      <CustomView 
+      <CustomView
         style={{
           paddingVertical: 16,
           paddingHorizontal: 16,
-        }}
-      >
-  
+        }}>
         <ScrollView style={{flex: 16}}>
           <CustomSeparator />
           <TextComponent
-            fontFamily='Montserrat-Bold'
+            fontFamily="Montserrat-Bold"
             style={{
               color: Color.black,
               fontSize: 17,
               borderRadius: 8,
               marginTop: 16,
             }}>
-            {currency(state?.amount)}  {'\n'}
+            {currency(state?.amount)} {'\n'}
             {'\n'}
             {state?.name} {state?.location}
           </TextComponent>
@@ -58,6 +55,7 @@ const RaisingConfirmation: React.FC = () => {
           </TextComponent>
 
           <TextComponent
+            color="#fff"
             style={{
               marginTop: 16,
               padding: 16,
@@ -67,7 +65,9 @@ const RaisingConfirmation: React.FC = () => {
               fontSize: 15,
               textAlign: 'left',
             }}>
-            {'Konfime ke tout enfomasyon ou mete yo koret,\npa bliye ke ou pap ka odifye yo apre ke ou fin pibliye Kolèt lan.'}
+            {
+              'Konfime ke tout enfomasyon ou mete yo koret,\npa bliye ke ou pap ka odifye yo apre ke ou fin pibliye Kolèt lan.'
+            }
           </TextComponent>
           <CustomSeparator />
         </ScrollView>
