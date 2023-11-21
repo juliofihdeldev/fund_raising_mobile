@@ -25,9 +25,25 @@ import {useLang} from '../../context/LanguageContext';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import CustomBackIcon from '../../component/atom/CustomBackIcon';
+import CustomImage from '../../component/atom/CustomImage';
+import {formatDate} from '../../utils/dateFormat';
 
-const FeedDetails: React.FC<ProjectType> = ({navigation, item}: any) => {
+const FeedDetails: React.FC<ProjectType> = ({
+  route,
+  navigation,
+  setLoading,
+}: any) => {
   const [readMore, setReadMore] = React.useState(false);
+  const {
+    name,
+    amount,
+    collect,
+    id,
+    date,
+    image,
+    description,
+    user: {name: user_name, email, id: user_id},
+  } = route?.params?.project;
   const handleSetReadMore = () => {
     setReadMore(!readMore);
   };
@@ -82,11 +98,7 @@ const FeedDetails: React.FC<ProjectType> = ({navigation, item}: any) => {
           <View style={GlobalStyles.projectContainerDetails}>
             <View>
               <View style={[GlobalStyles.imagesView]}>
-                <Image
-                  source={imagesitem13x}
-                  style={GlobalStyles.image}
-                  resizeMode="cover"
-                />
+                <CustomImage image={image} style={GlobalStyles.image} />
 
                 <View style={styles.textContentStyle}>
                   <TextComponent
@@ -95,8 +107,7 @@ const FeedDetails: React.FC<ProjectType> = ({navigation, item}: any) => {
                     showTextShadow={true}
                     fontWeight="bold"
                     numberOfLines={2}>
-                    Let’s Give Reggie A Life Changing Gift! Changing Gift after
-                    20 years of
+                    {name}
                   </TextComponent>
                 </View>
               </View>
@@ -112,7 +123,11 @@ const FeedDetails: React.FC<ProjectType> = ({navigation, item}: any) => {
 
                 <CustomButton
                   title={useLang().lang.make_donnation}
-                  onPress={() => navigation.navigate('Payment')}
+                  onPress={() =>
+                    navigation.navigate('Payment', {
+                      project: route?.params?.project,
+                    })
+                  }
                   buttonStyle={styles.buttonStyle}
                 />
 
@@ -142,7 +157,7 @@ const FeedDetails: React.FC<ProjectType> = ({navigation, item}: any) => {
 
                 <View style={styles.containerStat}>
                   <TextComponent numberOfLines={2}>
-                    Created 3 days ago
+                    Created {formatDate(date)}
                   </TextComponent>
 
                   <TextComponent numberOfLines={2}>Donation</TextComponent>
@@ -155,17 +170,7 @@ const FeedDetails: React.FC<ProjectType> = ({navigation, item}: any) => {
                 <TextComponent
                   numberOfLines={readMore ? 0 : 5}
                   style={GlobalStyles.description}>
-                  I was walking and saw this guy playing basketball so I
-                  introduced myself and his name was Reggie. I told him my ball
-                  had been stolen and asked if I could shoot around with him and
-                  out of the kindness of his heart he said yes forsure! I then
-                  surprised Reggie with $500 for his kindness. He began telling
-                  me his life story how his dream is to make it to the NBA and
-                  ever since he was 13 he had been in and out of homelessness.
-                  His friend just passed away and Reggie has been hit with storm
-                  after storm to derail him from his dream. Let’s raise some
-                  funds to bless Reggie with so he never has to worry about
-                  being on the streets again and can pursue his dreams!
+                  {description}
                 </TextComponent>
 
                 <TouchableOpacity

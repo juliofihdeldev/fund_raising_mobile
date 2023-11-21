@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet, Text} from 'react-native';
 import {TouchableOpacity} from 'react-native';
-import { Color } from '../../assets/GlobalStyles';
+import {Color} from '../../assets/GlobalStyles';
 
 interface CustomProgressBarProps {
   value: number;

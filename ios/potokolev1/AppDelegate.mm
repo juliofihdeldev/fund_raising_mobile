@@ -1,7 +1,7 @@
 #import "AppDelegate.h"
-#import <Firebase.h>
-#import <React/RCTBundleURLProvider.h>
 
+#import <React/RCTBundleURLProvider.h>
+#import <Firebase.h>
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions

@@ -60,7 +60,6 @@ const FeedStack = () => {
       <Stack.Screen
         name="Payment"
         options={{
-          // headerShown: false,
           presentation: 'modal',
         }}
         component={PaymentFormWithLoading}

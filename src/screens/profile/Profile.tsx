@@ -135,7 +135,10 @@ const Profile: React.FC = ({navigation}: any) => {
         <View style={styles.containerProfile}>
           {!isLoginFn() ? (
             <View>
-              <TextComponent fontSize={21} color={Color.secondary}>
+              <TextComponent
+                fontSize={25}
+                color={Color.secondary}
+                fontWeight="bold">
                 {lang?.hiStranger}
               </TextComponent>
               <TextComponent fontSize={15}>
@@ -155,7 +158,10 @@ const Profile: React.FC = ({navigation}: any) => {
             </View>
           ) : (
             <View>
-              <TextComponent fontSize={21} color={Color.secondary}>
+              <TextComponent
+                fontSize={27}
+                color={Color.secondary}
+                fontWeight="bold">
                 {lang.hi}, {user?.name || lang?.stranger}
               </TextComponent>
               <TextComponent>{user?.email || user.phone}</TextComponent>

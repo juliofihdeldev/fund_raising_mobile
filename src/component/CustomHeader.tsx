@@ -15,7 +15,11 @@ const CustomHeader: React.FC<SearchBarProps> = ({goToSearch}) => {
   // how to show an env variable
   return (
     <View style={styles.searchContainer}>
-      <TextComponent fontSize={32} fontFamily="LilitaOne-Regular">
+      <TextComponent
+        fontSize={32}
+        fontFamily="LilitaOne-Regular"
+        color={Color.primary}
+        style={styles.logoColor}>
         POTE KOLE
       </TextComponent>
       <View style={styles.iconStyle}>
@@ -67,6 +71,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     width: '30%',
     marginEnd: 16,
+  },
+  logoColor: {
+    color: Color.primary,
   },
 });
 

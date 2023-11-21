@@ -247,7 +247,7 @@ const PaymentForm: React.FC<Props> = ({route, navigation, setLoading}: any) => {
               onPress={handleShowMenuPayment}
               buttonStyle={{
                 backgroundColor: Color.blue,
-                width: '50%',
+                width: '60%',
                 borderRadius: 12,
                 marginTop: 16,
               }}

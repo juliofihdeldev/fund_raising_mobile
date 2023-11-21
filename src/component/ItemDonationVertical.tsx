@@ -1,45 +1,47 @@
 import React from 'react';
-import {Image, View, StyleSheet} from 'react-native';
+import {View, StyleSheet} from 'react-native';
 import {TouchableOpacity} from 'react-native';
-import {imagesitem23x} from '../assets/images';
+
 import TextComponent from './atom/CustomText';
 import {Color} from '../assets/GlobalStyles';
 import CustomProgressBar from './atom/CustomProgressBar';
 import {currency} from '../utils/currency';
+import CustomImage from './atom/CustomImage';
+import {ProjectType} from '../types/Index';
+import {formatDate} from '../utils/dateFormat';
 
-// create props interface
+// Create props interface
 interface ItemDonationVerticalProps {
   onPress: () => void;
+  project: ProjectType;
 }
 
 const ItemDonationVertical: React.FC<ItemDonationVerticalProps> = ({
   onPress,
+  project,
 }) => {
+  let {category, amount, description, image, date, collect, user} =
+    project?.item;
+
+  let pourcetage = (collect * 100) / amount;
   return (
     <TouchableOpacity onPress={onPress}>
       <View style={[styles.container]}>
-        <Image
-          source={imagesitem23x}
-          style={styles.imagesStyle}
-          resizeMode="stretch"
-        />
+        <CustomImage image={image} style={styles.image} />
         <View style={styles.containerText}>
-          <TextComponent numberOfLines={2} fontSize={15}>
-            Lorem ipsum dolor sit amet consectetur elit. Lorem ipsum dolor sit
-            amet consectetur elit. Lorem ipsum dolor sit amet consectetur elit.
-          </TextComponent>
+          <TextComponent numberOfLines={2}>{description}</TextComponent>
           <TextComponent fontSize={15} color={Color.black} fontWeight="bold">
-            @jUlio
+            {user.name} {category}
           </TextComponent>
           <View>
-            <CustomProgressBar value={80} />
+            <CustomProgressBar value={pourcetage} />
           </View>
           <View style={[styles.containerPriceDate]}>
             <TextComponent fontSize={15} color={Color.black} fontWeight="bold">
-              {currency(120)}
+              {currency(amount)}
             </TextComponent>
             <TextComponent fontSize={13} color={Color.black}>
-              3 days left
+              {formatDate(date)}
             </TextComponent>
           </View>
         </View>
@@ -72,6 +74,11 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     width: '100%',
     marginTop: 4,
+  },
+  image: {
+    width: 160,
+    height: 120,
+    borderRadius: 16,
   },
 });
 

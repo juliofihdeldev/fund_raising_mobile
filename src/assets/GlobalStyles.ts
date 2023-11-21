@@ -39,12 +39,12 @@ export const Border = {
 
 // box shadow for react native
 export const boxShadow = {
-  shadowColor: '#444',
+  shadowColor: '#ccc',
   shadowOffset: {
     width: 0,
     height: 3,
   },
   shadowOpacity: 0.5,
   shadowRadius: 0.84,
-  elevation: 1,
+  elevation: 8,
 };

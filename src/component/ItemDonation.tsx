@@ -1,35 +1,53 @@
 import React from 'react';
-import {Image, View, StyleSheet} from 'react-native';
+import {View, StyleSheet, Share} from 'react-native';
 import {TouchableOpacity} from 'react-native';
-import {imagesitem13x} from '../assets/images';
 import CustomProgressBar from './atom/CustomProgressBar';
 import TextComponent from './atom/CustomText';
 import {Color, boxShadow} from '../assets/GlobalStyles';
+import {ProjectType} from '../types/Index';
+import {currency} from '../utils/currency';
+import CustomImage from './atom/CustomImage';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 interface ItemDonationProps {
   onPress: () => void;
-}
 
-const ItemDonation: React.FC<ItemDonationProps> = ({onPress}) => {
+  project: ProjectType;
+}
+const handleShare = project => {
+  Share.share({
+    message: `Pote kole: ${project?.item.description} ${project?.item.amount} https://www.potekole.com/${project?.item.id}
+    `,
+  });
+};
+
+const ItemDonation: React.FC<ItemDonationProps> = ({onPress, project}) => {
+  let {amount, description, image, user} = project?.item;
   return (
     <TouchableOpacity style={[styles.container, boxShadow]} onPress={onPress}>
       <View style={styles.imagesView}>
-        <Image source={imagesitem13x} style={styles.image} resizeMode="cover" />
+        <CustomImage image={image} style={styles.image} />
       </View>
 
       <View style={styles.contentText}>
-        <TextComponent numberOfLines={2}>
-          Some description about the project Some description about theSome
-          description about the project Some description about the project
-        </TextComponent>
+        <TextComponent numberOfLines={2}>{description}</TextComponent>
         <CustomProgressBar value={65} />
 
         <View style={styles.contentTextPrice}>
-          <TextComponent fontWeight='bold' fontSize={14}>HTG 100.00</TextComponent>
-
-          <TextComponent fontSize={15} color={Color.black} >
-            Shared
+          <TextComponent
+            fontWeight="bold"
+            fontSize={14}
+            style={styles.spaceTop}>
+            {currency(amount)}
           </TextComponent>
+
+          <Ionicons
+            onPress={() => handleShare(project)}
+            name="share-outline"
+            size={24}
+            color={Color.primary}
+            style={styles.icon}
+          />
         </View>
       </View>
     </TouchableOpacity>
@@ -57,7 +75,7 @@ const styles = StyleSheet.create({
   contentText: {
     margin: 8,
   },
-  
+
   progressBarContainer: {
     width: '100%',
     backgroundColor: '#eee',
@@ -81,6 +99,12 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginTop: 4,
+  },
+  icon: {
+    marginHorizontal: 4,
+  },
+  spaceTop: {
+    marginTop: 8,
   },
 });
 

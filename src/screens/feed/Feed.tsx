@@ -6,6 +6,8 @@ import {
   StyleSheet,
   ScrollView as ReactScrollView,
 } from 'react-native';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+
 import {ProjectType} from '../../types/Index';
 import {projects} from '../../mock/feeds';
 import ItemDonation from '../../component/ItemDonation';
@@ -19,6 +21,7 @@ import CustomButton from '../../component/atom/CustomButton';
 import {useLang} from '../../context/LanguageContext';
 import TextComponent from '../../component/atom/CustomText';
 import CustomView from '../../component/atom/CustomView';
+import {useFunding} from '../../context/FundingContext';
 
 let category = [
   {
@@ -30,8 +33,8 @@ let category = [
   },
   {
     id: '2',
-    title: 'Charity',
-    name: 'Charity',
+    title: 'Charite',
+    name: 'Charite',
     iconName: 'cart-outline',
     iconSize: 32,
   },
@@ -52,7 +55,7 @@ let category = [
   {
     id: '5',
     title: 'Nature',
-    name: 'Environment',
+    name: 'Nature',
     iconName: 'leaf-outline',
     iconSize: 32,
   },
@@ -61,7 +64,13 @@ let category = [
 const Feed: React.FC<ProjectType> = ({navigation}: any) => {
   const [selectedId, setSelectedId] = React.useState(category[0]);
 
+  const {fundraising, handleGetFundraising} = useFunding();
   const {lang} = useLang();
+
+  React.useEffect(() => {
+    handleGetFundraising();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <SafeAreaView style={GlobalStyles.container}>
@@ -124,12 +133,15 @@ const Feed: React.FC<ProjectType> = ({navigation}: any) => {
           {/* <ScrollView horizontal={true}> */}
           <FlatList
             horizontal={true}
-            data={projects as ProjectType[]}
-            renderItem={() => (
+            data={fundraising as ProjectType[]}
+            renderItem={project => (
               <View style={GlobalStyles.projectContainer}>
                 <ItemDonation
+                  project={project}
                   onPress={() => {
-                    navigation.navigate('FeedDetails');
+                    navigation.navigate('FeedDetails', {
+                      project: project.item,
+                    });
                   }}
                 />
               </View>
@@ -157,12 +169,21 @@ const Feed: React.FC<ProjectType> = ({navigation}: any) => {
 
           <FlatList
             horizontal={false}
-            data={projects as ProjectType[]}
-            renderItem={() => (
+            data={
+              selectedId.name === 'Toutes'
+                ? fundraising
+                : (fundraising.filter(
+                    item => item.category === selectedId?.name,
+                  ) as ProjectType[])
+            }
+            renderItem={project => (
               <View style={GlobalStyles.projectItem}>
                 <ItemDonationVertical
+                  project={project}
                   onPress={() => {
-                    navigation.navigate('FeedDetails');
+                    navigation.navigate('FeedDetails', {
+                      project: project.item,
+                    });
                   }}
                 />
               </View>
