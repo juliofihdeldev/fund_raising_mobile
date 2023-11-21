@@ -104,7 +104,25 @@ const PaymentForm: React.FC<Props> = ({route, navigation, setLoading}: any) => {
     // check if value if a valid number
     if (isNaN(Number(value))) return;
     if (usersPaymentAmount < Number(value)) {
-      Alert.alert('Attention', "Tu n'as pas assez d'argent.");
+      Alert.alert(
+        'Attention',
+        "Vous n'avez pas assez d'argent pour effectuer cette transaction.",
+        [
+          {
+            text: 'Cancel',
+            onPress: () => {
+              setLoading(false);
+            },
+          },
+          {
+            text: "Ajouter de l'argent",
+            onPress: () => {
+              setMonCashMenu(true);
+            },
+          },
+        ],
+      );
+
       setLoading(false);
       return;
     }

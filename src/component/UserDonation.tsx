@@ -3,35 +3,27 @@ import {Image, View, StyleSheet} from 'react-native';
 import {TouchableOpacity} from 'react-native';
 import TextComponent from './atom/CustomText';
 import {Color, boxShadow} from '../assets/GlobalStyles';
-import { currency } from '../utils/currency';
+import {currency} from '../utils/currency';
+import {DonationType} from '../types/Index';
+import CustomImage from './atom/CustomImage';
 
 interface UserDonationProps {
   onPress: () => void;
-  image?: string;
-  name: string;
-  amount?: string | number;
+  item?: DonationType;
 }
 
-const UserDonation: React.FC<UserDonationProps> = ({
-  onPress,
-  image,
-  name,
-  amount,
-}) => {
+const UserDonation: React.FC<UserDonationProps> = ({onPress, item}) => {
+  let {amount, image, user_name} = item;
   return (
     <TouchableOpacity onPress={onPress}>
       <View style={[styles.container]}>
-        <Image
-          source={image}
-          style={[styles.imagesStyle, boxShadow]}
-          resizeMode="cover"
-        />
+        <CustomImage image={image} style={[styles.imagesStyle, boxShadow]} />
         <View style={styles.containerText}>
           <TextComponent fontSize={15} color={Color.black}>
-            {name}
+            {user_name}
           </TextComponent>
           <TextComponent fontSize={15} color={Color.black} fontWeight="bold">
-             {currency(amount)}
+            {currency(amount)}
           </TextComponent>
         </View>
       </View>

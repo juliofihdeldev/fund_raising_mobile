@@ -56,7 +56,7 @@ export interface ProjectType {
   social_link?: string;
   donation?: Array<DonationType>;
   user: UserType;
-  views?: number;
   likes?: number;
   category: string;
+  view_count?: number;
 }

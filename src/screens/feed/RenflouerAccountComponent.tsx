@@ -174,7 +174,7 @@ const RenflouerAccountComponent: React.FC = () => {
               padding: 12,
               marginLeft: 0,
               marginBottom: 12,
-              borderRadius: 32,
+              borderRadius: 12,
             },
           ]}
           iconStyle={[GlobalStyles.customIcon, {color: 'white'}]}
@@ -195,7 +195,7 @@ const RenflouerAccountComponent: React.FC = () => {
               padding: 12,
               marginLeft: 0,
               marginBottom: 12,
-              borderRadius: 32,
+              borderRadius: 12,
             },
           ]}
           iconStyle={[GlobalStyles.customIcon, {color: 'white'}]}
@@ -216,7 +216,7 @@ const RenflouerAccountComponent: React.FC = () => {
               padding: 12,
               marginLeft: 0,
               marginBottom: 12,
-              borderRadius: 32,
+              borderRadius: 12,
             },
           ]}
           iconStyle={[GlobalStyles.customIcon, {color: 'white'}]}

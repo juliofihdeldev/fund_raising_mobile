@@ -26,14 +26,13 @@ interface FundingContextProps {
   updateFundraising: (project_id: string) => void;
   updateFundraisingStatus: (project_id: string, data: ProjectType) => void;
   updateFundraisingViews: (project_id: string, data: ProjectType) => void;
-
+  handleAddMoncashPayment: (data: any) => void;
+  handleAdduserMoncashPayment: (data: any) => void;
   fundraising: ProjectType[];
   projects: ProjectType[];
   donations: DonationType[];
   messages: MessageType[];
   donationsUser: DonationType[];
-  handleAddMoncashPayment: (data: any) => void;
-  handleAdduserMoncashPayment: (data: any) => void;
 }
 
 const FundingContext = createContext<FundingContextProps | undefined>(

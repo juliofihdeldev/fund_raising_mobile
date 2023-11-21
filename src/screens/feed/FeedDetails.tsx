@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {
   FlatList,
   View,
@@ -8,7 +8,7 @@ import {
   Animated,
   StyleSheet,
 } from 'react-native';
-import {ProjectType} from '../../types/Index';
+import {DonationType, ProjectType} from '../../types/Index';
 import {projects} from '../../mock/feeds';
 import {GlobalStyles} from './GlobalStyle';
 import {imagesitem13x, imagesitem33x, user3x} from '../../assets/images';
@@ -27,6 +27,9 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import CustomBackIcon from '../../component/atom/CustomBackIcon';
 import CustomImage from '../../component/atom/CustomImage';
 import {formatDate} from '../../utils/dateFormat';
+import {currency} from '../../utils/currency';
+import {useFunding} from '../../context/FundingContext';
+import {useFocusEffect} from '@react-navigation/native';
 
 const FeedDetails: React.FC<ProjectType> = ({
   route,
@@ -34,6 +37,7 @@ const FeedDetails: React.FC<ProjectType> = ({
   setLoading,
 }: any) => {
   const [readMore, setReadMore] = React.useState(false);
+
   const {
     name,
     amount,
@@ -42,8 +46,31 @@ const FeedDetails: React.FC<ProjectType> = ({
     date,
     image,
     description,
+    category,
+    view_count,
     user: {name: user_name, email, id: user_id},
   } = route?.params?.project;
+
+  const {
+    projects,
+    donations,
+    messages,
+    handleGetMessagesByID,
+    handleGetProjectByID,
+    handleGetDonations,
+  } = useFunding();
+
+  useEffect(() => {
+    async function fetchData() {
+      await Promise.all([
+        handleGetProjectByID(id),
+        handleGetMessagesByID(id),
+        handleGetDonations(id),
+      ]);
+    }
+    fetchData();
+  }, [id]);
+
   const handleSetReadMore = () => {
     setReadMore(!readMore);
   };
@@ -117,7 +144,8 @@ const FeedDetails: React.FC<ProjectType> = ({
 
                 <View style={[GlobalStyles.contentTextPrice, {marginTop: 12}]}>
                   <TextComponent numberOfLines={2}>
-                    $26,269 USD raised of $20,000 goal • 1.2K donations
+                    {currency(collect)} USD raised of {currency(amount)} goal •
+                    1.2K donations
                   </TextComponent>
                 </View>
 
@@ -160,9 +188,11 @@ const FeedDetails: React.FC<ProjectType> = ({
                     Created {formatDate(date)}
                   </TextComponent>
 
-                  <TextComponent numberOfLines={2}>Donation</TextComponent>
+                  <TextComponent numberOfLines={2}>{category}</TextComponent>
 
-                  <TextComponent numberOfLines={2}>Views 1.2K</TextComponent>
+                  <TextComponent numberOfLines={2}>
+                    Views: {view_count}
+                  </TextComponent>
                 </View>
               </View>
 
@@ -187,24 +217,19 @@ const FeedDetails: React.FC<ProjectType> = ({
                   fontSize={21}
                   fontWeight="bold"
                   numberOfLines={2}>
-                  Donations (1.2K)
+                  Donations {donations?.length}
                 </TextComponent>
 
                 <View>
-                  <TextComponent fontWeight="bold" fontSize={19}>
-                    120 people just donated
+                  <TextComponent fontWeight="bold" fontSize={15}>
+                    {Math.floor(donations?.length / 2.5)} people just donated
                   </TextComponent>
 
                   <FlatList
                     horizontal={false}
-                    data={projects as ProjectType[]}
+                    data={donations as DonationType[]}
                     renderItem={({item}) => (
-                      <UserDonation
-                        onPress={() => {}}
-                        image={imagesitem33x}
-                        name="@JUlio"
-                        amount={150.0}
-                      />
+                      <UserDonation item={item} onPress={() => {}} />
                     )}
                     keyExtractor={item => item.id}
                     contentContainerStyle={GlobalStyles.container}
@@ -217,19 +242,14 @@ const FeedDetails: React.FC<ProjectType> = ({
                   fontWeight="bold"
                   fontSize={19}
                   numberOfLines={2}>
-                  Words of support (700)
+                  Words of support ({messages?.length})
                 </TextComponent>
 
                 <FlatList
                   horizontal={false}
-                  data={projects as ProjectType[]}
+                  data={messages as any}
                   renderItem={({item}) => (
-                    <UserCommentItem
-                      onPress={() => {}}
-                      amount={150}
-                      name="@JUlio"
-                      comment="Lorem ipsum dolor sit amet consectetur elit."
-                    />
+                    <UserCommentItem onPress={() => {}} item={item} />
                   )}
                   keyExtractor={item => item.id}
                   contentContainerStyle={GlobalStyles.container}

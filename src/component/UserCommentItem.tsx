@@ -4,35 +4,33 @@ import {TouchableOpacity} from 'react-native';
 import TextComponent from './atom/CustomText';
 import {Color, boxShadow} from '../assets/GlobalStyles';
 import {imagesitem13x} from '../assets/images';
-import { currency } from '../utils/currency';
+import {currency} from '../utils/currency';
+import CustomImage from './atom/CustomImage';
 
 interface UserCommentItemProps {
   onPress: () => void;
   comment: string;
   amount?: number;
   name?: string;
+  item?: any;
 }
 
-const UserCommentItem: React.FC<UserCommentItemProps> = ({
-  onPress,
-  comment,
-  amount,
-  name,
-}) => {
+const UserCommentItem: React.FC<UserCommentItemProps> = ({onPress, item}) => {
+  let {
+    message,
+    amount_donation,
+    sender: {name, image},
+  } = item;
   return (
     <TouchableOpacity onPress={onPress}>
       <View style={[styles.container]}>
-        <Image
-          source={imagesitem13x}
-          style={[styles.imagesStyle, boxShadow]}
-          resizeMode="cover"
-        />
+        <CustomImage image={image} style={[styles.imagesStyle]} />
         <View style={styles.containerText}>
           <TextComponent color={Color.black} fontWeight="bold">
-            {name} has donated HTG { currency(amount)}
+            {name} has donated {currency(amount_donation)}
           </TextComponent>
-          <TextComponent fontSize={13} color={Color.black} >
-            {comment}
+          <TextComponent fontSize={14} color={Color.black}>
+            {message}
           </TextComponent>
         </View>
       </View>
@@ -56,7 +54,7 @@ const styles = StyleSheet.create({
   },
   containerText: {
     paddingLeft: 12,
-    marginEnd: 42,
+    marginEnd: 52,
   },
 });
 

@@ -6,10 +6,8 @@ import {
   StyleSheet,
   ScrollView as ReactScrollView,
 } from 'react-native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import {ProjectType} from '../../types/Index';
-import {projects} from '../../mock/feeds';
 import ItemDonation from '../../component/ItemDonation';
 import Category from '../../component/Category';
 import {Color} from '../../assets/GlobalStyles';
