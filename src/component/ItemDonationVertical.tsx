@@ -20,8 +20,15 @@ const ItemDonationVertical: React.FC<ItemDonationVerticalProps> = ({
   onPress,
   project,
 }) => {
-  let {category, amount, description, image, date, collect, user} =
-    project?.item;
+  let {
+    category = '',
+    amount = 0,
+    description = '',
+    image = '',
+    date = '',
+    collect = 0,
+    user,
+  } = project?.item;
 
   let pourcetage = (collect * 100) / amount;
   return (

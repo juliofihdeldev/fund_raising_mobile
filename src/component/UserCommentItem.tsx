@@ -1,17 +1,13 @@
 import React from 'react';
-import {Image, View, StyleSheet} from 'react-native';
+import {View, StyleSheet} from 'react-native';
 import {TouchableOpacity} from 'react-native';
 import TextComponent from './atom/CustomText';
-import {Color, boxShadow} from '../assets/GlobalStyles';
-import {imagesitem13x} from '../assets/images';
+import {Color} from '../assets/GlobalStyles';
 import {currency} from '../utils/currency';
 import CustomImage from './atom/CustomImage';
 
 interface UserCommentItemProps {
-  onPress: () => void;
-  comment: string;
-  amount?: number;
-  name?: string;
+  onPress?: () => void;
   item?: any;
 }
 

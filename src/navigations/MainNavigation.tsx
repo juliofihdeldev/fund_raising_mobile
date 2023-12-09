@@ -4,9 +4,7 @@ import {createMaterialBottomTabNavigator} from '@react-navigation/material-botto
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Feed from '../screens/feed/Feed';
 import {Color, boxShadow} from '../assets/GlobalStyles';
-import FeedDetails from '../screens/feed/FeedDetails';
 import {createStackNavigator} from '@react-navigation/stack';
-import Favorite from '../screens/feed/Favorite';
 import Profile from '../screens/profile/Profile';
 import ProfileEdit from '../screens/profile/ProfileEdit';
 import PhoneLoginWithLoading from '../screens/auth/PhoneLogin';
@@ -15,6 +13,11 @@ import EditProjectWithLoading from '../screens/create/EditProject';
 import History from '../screens/feed/ProjectHistory';
 import ManageFundrasing from '../screens/manage/MangeFundrasing';
 import PaymentFormWithLoading from '../screens/feed/PaymentForm';
+import FeedDetailsWithLoading from '../screens/feed/FeedDetails';
+import Favorite from '../screens/favoris/Favorite';
+import Search from '../screens/feed/Search';
+import MoncashPaymentRegisterWithLoading from '../screens/manage/MoncashPaymentRegister';
+import UserMoncashPaymentRegisterWithLoading from '../screens/manage/UserPaymentMoncash';
 
 export type ProfileStackParamList = {
   Profile: undefined;
@@ -22,6 +25,8 @@ export type ProfileStackParamList = {
   PhoneLogin: undefined;
   Create: undefined;
   EditProject: undefined;
+  Search: undefined;
+  UserMoncashPaymentRegister: undefined;
 };
 
 export type FeedStackParamList = {
@@ -29,13 +34,15 @@ export type FeedStackParamList = {
   Home: undefined;
   FeedDetails: undefined;
   Profile: undefined;
-  Notifications: undefined;
+  Favorite: undefined;
   ProfileTab: undefined;
   Payment: undefined;
+  Search: undefined;
+  EditProject: undefined;
+  ManageFundrasing: undefined;
 };
 
 const Tab = createMaterialBottomTabNavigator<FeedStackParamList>();
-
 const Stack = createStackNavigator<FeedStackParamList>();
 
 const FeedStack = () => {
@@ -55,7 +62,7 @@ const FeedStack = () => {
           // headerShown: false,
           presentation: 'modal',
         }}
-        component={FeedDetails}
+        component={FeedDetailsWithLoading}
       />
       <Stack.Screen
         name="Payment"
@@ -63,6 +70,29 @@ const FeedStack = () => {
           presentation: 'modal',
         }}
         component={PaymentFormWithLoading}
+      />
+      <Stack.Screen
+        name="Search"
+        options={{
+          presentation: 'modal',
+        }}
+        component={Search}
+      />
+
+      <Stack.Screen
+        name="EditProject"
+        options={{
+          presentation: 'modal',
+        }}
+        component={EditProjectWithLoading}
+      />
+
+      <Stack.Screen
+        name="ManageFundrasing"
+        options={{
+          presentation: 'modal',
+        }}
+        component={ManageFundrasing}
       />
     </Stack.Navigator>
   );
@@ -84,6 +114,10 @@ const ProfileStack = () => {
       <Stack.Screen name="EditProject" component={EditProjectWithLoading} />
       <Stack.Screen name="History" component={History} />
       <Stack.Screen name="ManageFundrasing" component={ManageFundrasing} />
+      <Stack.Screen
+        name="UserMoncashPaymentRegister"
+        component={UserMoncashPaymentRegisterWithLoading}
+      />
     </Stack.Navigator>
   );
 };
@@ -92,12 +126,17 @@ export default function MainNavigation() {
   return (
     <Tab.Navigator
       initialRouteName="Feed"
-      activeColor={Color.gray_100}
-      inactiveColor={'#333333'}
-      theme={{colors: {secondaryContainer: 'yellow'}}}
+      activeColor={Color.primary}
+      inactiveColor={'#333'}
+      theme={{colors: {secondaryContainer: Color.primary}}}
+      labeled={false}
+      // shifting={true}
       barStyle={[
         {
           backgroundColor: Color.white,
+          height: 80,
+          borderTopColor: '#eee',
+          borderTopWidth: 1,
         },
         boxShadow,
       ]}>
@@ -105,20 +144,29 @@ export default function MainNavigation() {
         name="Home"
         component={FeedStack}
         options={{
-          tabBarLabel: 'Home',
+          tabBarLabel: 'Explorer',
           tabBarIcon: ({color}) => (
-            <Ionicons name="home-outline" color={color} size={26} />
+            <Ionicons name="home" color={color} size={26} />
           ),
         }}
       />
-
       <Tab.Screen
-        name="Notifications"
+        name="Search"
+        component={Search}
+        options={{
+          tabBarLabel: 'Rechercher',
+          tabBarIcon: ({color}) => (
+            <Ionicons name="search" color={color} size={26} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Favorite"
         component={Favorite}
         options={{
-          tabBarLabel: 'Favorite',
+          tabBarLabel: 'Preferences',
           tabBarIcon: ({color}) => (
-            <Ionicons name="heart-outline" color={color} size={26} />
+            <Ionicons name="heart" color={color} size={26} />
           ),
         }}
       />
@@ -126,9 +174,11 @@ export default function MainNavigation() {
         name="Profile"
         component={ProfileStack}
         options={{
-          tabBarLabel: 'Profile',
+          tabBarAccessibilityLabel: 'Profile',
+          tabBarLabel: 'Compte',
+
           tabBarIcon: ({color}) => (
-            <Ionicons name="person-outline" color={color} size={26} />
+            <Ionicons name="person" color={color} size={26} />
           ),
         }}
       />

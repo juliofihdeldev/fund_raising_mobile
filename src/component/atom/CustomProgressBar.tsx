@@ -8,14 +8,18 @@ interface CustomProgressBarProps {
 }
 
 const CustomProgressBar: React.FC<CustomProgressBarProps> = ({value}) => {
+  let checkValue = value > 100 ? 100 : value;
   return (
     <TouchableOpacity style={styles.containerBar}>
-      <TouchableOpacity style={[{width: `${value}%`}, styles.containerValue]}>
+      <TouchableOpacity
+        testID="container-value"
+        style={[{width: `${checkValue}%`}, styles.containerValue]}>
         <Text />
       </TouchableOpacity>
     </TouchableOpacity>
   );
 };
+// fix above component if value is greater than 100
 
 const styles = StyleSheet.create({
   containerBar: {

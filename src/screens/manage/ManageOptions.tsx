@@ -1,49 +1,46 @@
 import React from 'react';
-import {
-  View,
-  Alert,
-  StyleSheet,
-} from 'react-native';
+import {View, Alert, StyleSheet} from 'react-native';
 
-import { ProjectType} from '../../types/Index';
+import {ProjectType} from '../../types/Index';
 import {Color} from '../../assets/GlobalStyles';
 import {useFunding} from '../../context/FundingContext';
 import {useAuth} from '../../context/AuthContext';
 import CustomDialog from '../../component/atom/CustomDialog';
 import ListItem from '../../component/atom/ListItem';
 import CustomSeparator from '../../component/atom/CustomSeparator';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { FeedStackParamList } from '../../navigations/MainNavigation';
-import { feedStyles } from '../feed/GlobalStyle';
-import { useLang } from '../../context/LanguageContext';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {FeedStackParamList} from '../../navigations/MainNavigation';
+import {GlobalStyles} from '../feed/GlobalStyle';
+import {useLang} from '../../context/LanguageContext';
 
-type FeedDetailsScreenNavigationProp = StackNavigationProp<FeedStackParamList, 'FeedDetails'>;
+type FeedDetailsScreenNavigationProp = StackNavigationProp<
+  FeedStackParamList,
+  'FeedDetails'
+>;
 
 interface Props {
   navigation: FeedDetailsScreenNavigationProp;
 }
 
-const ManageOption: React.FC<Props> = ({ navigation,onClose, projects}) => {
+const ManageOption: React.FC<Props> = ({navigation, onClose, projects}) => {
   const {user} = useAuth();
   const {lang} = useLang();
 
-  const {
-    updateFundraisingStatus,
-  } = useFunding();
+  const {updateFundraisingStatus} = useFunding();
 
   const goToEdit = () => {
     onClose();
     navigation.navigate('EditProject', {
-      project: projects
+      project: projects,
     });
   };
 
   const registerMoncashPayment = () => {
     onClose();
     navigation.navigate('MoncashPaymentRegister', {
-      project: projects
+      project: projects,
     });
-  }
+  };
 
   const handleUpdateStatus = (data: ProjectType) => {
     Alert.alert(lang?.warning, lang.are_you_sure, [
@@ -64,29 +61,30 @@ const ManageOption: React.FC<Props> = ({ navigation,onClose, projects}) => {
   const goToManage = () => {
     onClose();
     navigation.navigate('ManageFundrasing', {
-      project: projects
+      project: projects,
     });
-  }
+  };
 
   return (
     <CustomDialog onClose={onClose}>
       <View style={localStyle.width}>
         <ListItem
           text={lang?.close}
-          icon="close-outline" color={Color.black}
+          icon="close-outline"
+          color={Color.black}
           onPress={onClose}
-          containerStyle={[feedStyles.containerList]}
-          iconStyle={feedStyles.customIcon}
+          containerStyle={[GlobalStyles.containerList]}
+          iconStyle={GlobalStyles.customIcon}
         />
         <ListItem
           text={lang?.edit_collet}
-          icon="create-outline" color={Color.black}
+          icon="create-outline"
+          color={Color.black}
           onPress={goToEdit}
-    
-          containerStyle={[feedStyles.containerList]}
-          iconStyle={feedStyles.customIcon}
+          containerStyle={[GlobalStyles.containerList]}
+          iconStyle={GlobalStyles.customIcon}
         />
-            
+
         <ListItem
           text={lang?.deactive_collet}
           icon="trash-outline"
@@ -96,9 +94,8 @@ const ManageOption: React.FC<Props> = ({ navigation,onClose, projects}) => {
               status: 'Canceled',
             });
           }}
-    
-          containerStyle={[feedStyles.containerList]}
-          iconStyle={feedStyles.customIcon}
+          containerStyle={[GlobalStyles.containerList]}
+          iconStyle={GlobalStyles.customIcon}
         />
 
         {user.role === '1' && (
@@ -106,65 +103,59 @@ const ManageOption: React.FC<Props> = ({ navigation,onClose, projects}) => {
             style={{
               width: '100%',
             }}>
-         
             <CustomSeparator />
             <ListItem
               text={lang?.active_collet}
-              icon="checkmark-done-outline" 
+              icon="checkmark-done-outline"
               color={Color.black}
               onPress={() => {
                 handleUpdateStatus({
                   status: 'Active',
                 });
               }}
-        
-              containerStyle={[feedStyles.containerList]}
-              iconStyle={feedStyles.customIcon}
+              containerStyle={[GlobalStyles.containerList]}
+              iconStyle={GlobalStyles.customIcon}
             />
 
             <ListItem
               text={lang?.deactive_collet}
-              icon="airplane-outline" 
+              icon="airplane-outline"
               color={Color.black}
               onPress={() => {
                 handleUpdateStatus({
                   status: 'Canceled',
                 });
               }}
-        
-              containerStyle={[feedStyles.containerList]}
-              iconStyle={feedStyles.customIcon}
+              containerStyle={[GlobalStyles.containerList]}
+              iconStyle={GlobalStyles.customIcon}
             />
-            
+
             <ListItem
               text={lang?.myFundraisings}
               icon="settings-outline"
-              color={Color.black} 
+              color={Color.black}
               onPress={goToManage}
-    
-              containerStyle={[feedStyles.containerList]}
-              iconStyle={feedStyles.customIcon}
+              containerStyle={[GlobalStyles.containerList]}
+              iconStyle={GlobalStyles.customIcon}
             />
-            
+
             <ListItem
               text={lang?.block_redraw_collet}
               icon="cash-outline"
-              color={Color.black} 
+              color={Color.black}
               onPress={() => {
                 handleUpdateStatus({
                   allow_cash_transfer: false,
                 });
               }}
-        
-              containerStyle={[feedStyles.containerList]}
-              iconStyle={feedStyles.customIcon}
+              containerStyle={[GlobalStyles.containerList]}
+              iconStyle={GlobalStyles.customIcon}
             />
             <CustomSeparator />
           </View>
         )}
       </View>
-    </CustomDialog>   
-
+    </CustomDialog>
   );
 };
 

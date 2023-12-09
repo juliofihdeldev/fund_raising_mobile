@@ -1,100 +1,106 @@
 import React from 'react';
-import {
-  FlatList,
-  View,
-  SafeAreaView,
-  Alert,
-} from 'react-native';
+import {FlatList, View, SafeAreaView, Alert} from 'react-native';
 
-import { feedStyles } from '../feed/GlobalStyle';
+import {GlobalStyles} from '../feed/GlobalStyle';
 import firestore from '@react-native-firebase/firestore';
 
 import TextComponent from '../../component/atom/CustomText';
 import UserDonation from '../../component/UserDonation';
 import {useFunding} from '../../context/FundingContext';
 import {currency} from '../../utils/currency';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { FeedStackParamList } from '../../navigations/MainNavigation';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {FeedStackParamList} from '../../navigations/MainNavigation';
 import CustomButton from '../../component/atom/CustomButton';
-import { Color, boxShadow } from '../../assets/GlobalStyles';
-import { DonationType } from '../../types/Index';
+import {Color, boxShadow} from '../../assets/GlobalStyles';
+import {DonationType} from '../../types/Index';
 
 import withLoadingModal from '../../component/HOC/Loading';
 
-type FeedDetailsScreenNavigationProp = StackNavigationProp<FeedStackParamList, 'FeedDetails'>;
+type FeedDetailsScreenNavigationProp = StackNavigationProp<
+  FeedStackParamList,
+  'FeedDetails'
+>;
 
 interface Props {
   navigation: FeedDetailsScreenNavigationProp;
   setLoading: (isLoading: boolean) => void;
 }
 
-const ManageMoncash: React.FC<Props> = ({ navigation, setLoading}) => {
-  const {
-    donations,
-    handleGetDonations
-  } = useFunding();
+const ManageMoncash: React.FC<Props> = ({navigation, setLoading}) => {
+  const {donations, handleGetDonations} = useFunding();
 
-  const [filterDonation] = React.useState(donations.filter(item => item?.status =='Need Approval'))
+  const [filterDonation] = React.useState(
+    donations.filter(item => item?.status == 'Need Approval'),
+  );
 
-  const  handleApprove = async(item: DonationType) => {
-    setLoading(true)
+  const handleApprove = async (item: DonationType) => {
+    setLoading(true);
 
     try {
       await firestore().collection('donations').doc(item.id).update({
-        status: 'Approved'
-      })
+        status: 'Approved',
+      });
 
-      item = {...item, status: 'Approved'}
+      item = {...item, status: 'Approved'};
 
       //update project add the donation item to the project
-      await firestore().collection('fundraising').doc(item.project_id!).update({
-        donation: firestore.FieldValue.arrayUnion(item)
-      })
+      await firestore()
+        .collection('fundraising')
+        .doc(item.project_id!)
+        .update({
+          donation: firestore.FieldValue.arrayUnion(item),
+        });
 
-      setTimeout(() => setLoading(false) , 2000);
+      setTimeout(() => setLoading(false), 2000);
 
-      Alert.alert('Success', 'Depot moncash approuvé avec succès',
+      Alert.alert(
+        'Success',
+        'Depot moncash approuvé avec succès',
         [
           {
             text: 'Ok',
-            onPress: () =>  {
-              handleGetDonations(item.project_id!)
-              navigation.goBack()
-            }
-          }
+            onPress: () => {
+              handleGetDonations(item.project_id!);
+              navigation.goBack();
+            },
+          },
         ],
-        { cancelable: false }) 
-
-            
+        {cancelable: false},
+      );
     } catch (error) {
-      setLoading(false)
-      console.log(error)
-      Alert.alert('Error', 'Une erreur est survenue lors de l\'approbation du depot moncash')
+      setLoading(false);
+      console.log(error);
+      Alert.alert(
+        'Error',
+        "Une erreur est survenue lors de l'approbation du depot moncash",
+      );
     }
-  }
+  };
 
-  const  handleReject = async(item: DonationType) => {
-    setLoading(true)
+  const handleReject = async (item: DonationType) => {
+    setLoading(true);
     await firestore().collection('donations').doc(item.id).update({
-      status: 'Rejected'
-    })
-    setTimeout(() => setLoading(false) , 2000);
-   
-    Alert.alert('Success', 'Depot moncash rejeté avec succès',
+      status: 'Rejected',
+    });
+    setTimeout(() => setLoading(false), 2000);
+
+    Alert.alert(
+      'Success',
+      'Depot moncash rejeté avec succès',
       [
         {
           text: 'Ok',
-          onPress: () =>  {
-            handleGetDonations(item.project_id!)
-            navigation.goBack()
-          }
-        }
+          onPress: () => {
+            handleGetDonations(item.project_id!);
+            navigation.goBack();
+          },
+        },
       ],
-      { cancelable: false })   
-  }
+      {cancelable: false},
+    );
+  };
 
-  const handleApprovePayment = (item:DonationType) => {
-
+  const handleApprovePayment = (item: DonationType) => {
     Alert.alert(
       'Approuver',
       'Voulez-vous vraiment approuver ce dépôt MonCash ?',
@@ -102,15 +108,15 @@ const ManageMoncash: React.FC<Props> = ({ navigation, setLoading}) => {
         {
           text: 'Annuler',
           onPress: () => console.log('Cancel Pressed'),
-          style: 'cancel'
+          style: 'cancel',
         },
-        { text: 'Approver', onPress: () => handleApprove(item) }
+        {text: 'Approver', onPress: () => handleApprove(item)},
       ],
-      { cancelable: false }
-    )
-  }
+      {cancelable: false},
+    );
+  };
 
-  const handleRejectPayment = (item:DonationType) => {
+  const handleRejectPayment = (item: DonationType) => {
     Alert.alert(
       'Rejecter',
       'Voulez-vous vraiment rejeter ce dépôt MonCash ?',
@@ -118,30 +124,29 @@ const ManageMoncash: React.FC<Props> = ({ navigation, setLoading}) => {
         {
           text: 'Annuler',
           onPress: () => console.log('Cancel Pressed'),
-          style: 'cancel'
+          style: 'cancel',
         },
-        { text: 'Oui Rejeter', onPress: () => handleReject(item) }
+        {text: 'Oui Rejeter', onPress: () => handleReject(item)},
       ],
-      { cancelable: false }
-    )
-  }
+      {cancelable: false},
+    );
+  };
 
   return (
-    <SafeAreaView style={feedStyles.container}>
-      <View style={feedStyles.containerDetailsItem}>
-        <View style={feedStyles.projectContainerDetails}>
-          <View style={feedStyles.contentText}>
+    <SafeAreaView style={GlobalStyles.container}>
+      <View style={GlobalStyles.containerDetailsItem}>
+        <View style={GlobalStyles.projectContainerDetails}>
+          <View style={GlobalStyles.contentText}>
             <View>
-              <TextComponent
-                fontFamily='Montserrat-Bold'
-               
-                numberOfLines={4}>
-                {filterDonation.length > 0 && 'Il vous reste à  Valider pour '+
-                      currency(
-                        filterDonation
-                          .reduce((a, b) => a + (b.amount || 0), 0)
-                          ?.toFixed(2),
-                      ) + ' de dépôt MonCash'} 
+              <TextComponent fontFamily="Montserrat-Bold" numberOfLines={4}>
+                {filterDonation.length > 0 &&
+                  'Il vous reste à  Valider pour ' +
+                    currency(
+                      filterDonation
+                        .reduce((a, b) => a + (b.amount || 0), 0)
+                        ?.toFixed(2),
+                    ) +
+                    ' de dépôt MonCash'}
               </TextComponent>
 
               <View
@@ -150,32 +155,31 @@ const ManageMoncash: React.FC<Props> = ({ navigation, setLoading}) => {
                 }}>
                 <TextComponent
                   style={[
-                    feedStyles.goalTextBold,
+                    GlobalStyles.goalTextBold,
                     {
                       marginTop: 12,
                       fontSize: 15,
                     },
                   ]}>
-                  {filterDonation.length> 0 && `${filterDonation.length}  depot moncash est en attente de validation`}
+                  {filterDonation.length > 0 &&
+                    `${filterDonation.length}  depot moncash est en attente de validation`}
                 </TextComponent>
 
-                {
-                  filterDonation.length == 0 && (
-                    <TextComponent
-                      style={[
-                        feedStyles.goalTextBold,
-                        {
-                          marginTop: 12,
-                          fontSize: 15,
-                          fontWeight: 'normal',
-                          justifyContent: 'center',
-                        },
-                      ]}>
-                      {`Aucun depot moncash en attente de validation. \n\nSi pensiez avoir des depot moncash en attente de validation, veuillez vous rapprocher de l'administrateur de la plateforme. 
+                {filterDonation.length == 0 && (
+                  <TextComponent
+                    style={[
+                      GlobalStyles.goalTextBold,
+                      {
+                        marginTop: 12,
+                        fontSize: 15,
+                        fontWeight: 'normal',
+                        justifyContent: 'center',
+                      },
+                    ]}>
+                    {`Aucun depot moncash en attente de validation. \n\nSi pensiez avoir des depot moncash en attente de validation, veuillez vous rapprocher de l'administrateur de la plateforme. 
                     `}
-                    </TextComponent>)
-
-                }
+                  </TextComponent>
+                )}
                 <FlatList
                   horizontal={false}
                   data={filterDonation}
@@ -187,22 +191,23 @@ const ManageMoncash: React.FC<Props> = ({ navigation, setLoading}) => {
                       amount={item?.amount}
                       item={item}
                       contactButton={() => (
-                        <View style={{
-                          flexDirection: 'row',
-                          justifyContent: 'space-between',
-                          width: '100%',
-                        }}>
+                        <View
+                          style={{
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                            width: '100%',
+                          }}>
                           <CustomButton
-                            size='small'
+                            size="small"
                             title="Valider"
-                            onPress={()=>handleApprovePayment(item)}
+                            onPress={() => handleApprovePayment(item)}
                             buttonStyle={[
                               {
                                 position: 'absolute',
                                 right: 74,
                                 top: -56,
                                 backgroundColor: Color.primary,
-                                width:70,
+                                width: 70,
                                 borderRadius: 26,
                                 marginTop: 8,
                               },
@@ -212,16 +217,16 @@ const ManageMoncash: React.FC<Props> = ({ navigation, setLoading}) => {
                           />
 
                           <CustomButton
-                            size='small'
+                            size="small"
                             title="Reject"
-                            onPress={()=>handleRejectPayment(item)}
+                            onPress={() => handleRejectPayment(item)}
                             buttonStyle={[
                               {
                                 position: 'absolute',
                                 right: 0,
                                 top: -56,
                                 backgroundColor: Color.secondary,
-                                width:70,
+                                width: 70,
                                 borderRadius: 26,
                                 marginTop: 8,
                               },
@@ -234,9 +239,8 @@ const ManageMoncash: React.FC<Props> = ({ navigation, setLoading}) => {
                     />
                   )}
                   keyExtractor={item => item.id}
-                  contentContainerStyle={feedStyles.container}
+                  contentContainerStyle={GlobalStyles.container}
                 />
-
               </View>
             </View>
           </View>
@@ -246,6 +250,8 @@ const ManageMoncash: React.FC<Props> = ({ navigation, setLoading}) => {
   );
 };
 
-
-const ManageMoncashWithLoading = withLoadingModal(ManageMoncash, 'Please wait...');
+const ManageMoncashWithLoading = withLoadingModal(
+  ManageMoncash,
+  'Please wait...',
+);
 export default ManageMoncashWithLoading;

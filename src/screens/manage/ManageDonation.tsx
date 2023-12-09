@@ -1,54 +1,53 @@
 import React from 'react';
-import {
-  FlatList,
-  View,
-  SafeAreaView,
-} from 'react-native';
+import {FlatList, View, SafeAreaView} from 'react-native';
 
-import { feedStyles } from '../feed/GlobalStyle';
+import {GlobalStyles} from '../feed/GlobalStyle';
 
 import TextComponent from '../../component/atom/CustomText';
 import UserDonation from '../../component/UserDonation';
 import {useFunding} from '../../context/FundingContext';
 import {currency} from '../../utils/currency';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { FeedStackParamList } from '../../navigations/MainNavigation';
-import { useLang } from '../../context/LanguageContext';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {FeedStackParamList} from '../../navigations/MainNavigation';
+import {useLang} from '../../context/LanguageContext';
+import {FlashList} from '@shopify/flash-list';
 
-type FeedDetailsScreenNavigationProp = StackNavigationProp<FeedStackParamList, 'FeedDetails'>;
+type FeedDetailsScreenNavigationProp = StackNavigationProp<
+  FeedStackParamList,
+  'FeedDetails'
+>;
 
 interface Props {
   navigation: FeedDetailsScreenNavigationProp;
 }
 
-const ManageDonation: React.FC<Props> = ({route, navigation}) => {
-  const {lang} = useLang()
-  
-  const {
-    donations,
-  } = useFunding();
+const ManageDonation: React.FC<Props> = () => {
+  const {lang} = useLang();
+
+  const {donations} = useFunding();
 
   return (
-    <SafeAreaView style={feedStyles.container}>
-      <View style={feedStyles.containerDetailsItem}>
-        <View style={feedStyles.projectContainerDetails}>
-          <View style={feedStyles.contentText}>
+    <SafeAreaView style={GlobalStyles.container}>
+      <View style={GlobalStyles.containerDetailsItem}>
+        <View style={GlobalStyles.projectContainerDetails}>
+          <View style={GlobalStyles.contentText}>
             <View>
               <TextComponent
                 style={[
-                  feedStyles.goalTextBold,
+                  GlobalStyles.goalTextBold,
                   {
                     marginTop: 12,
                     fontSize: 21,
                   },
                 ]}
                 numberOfLines={2}>
-                    Tu as collecté {donations.length &&
-                      currency(
-                        donations
-                          .reduce((a, b) => a + (b.amount || 0), 0)
-                          ?.toFixed(2),
-                      )}
+                Tu as collecté{' '}
+                {donations.length &&
+                  currency(
+                    donations
+                      .reduce((a, b) => a + (b.amount || 0), 0)
+                      ?.toFixed(2),
+                  )}
               </TextComponent>
 
               <View
@@ -57,7 +56,7 @@ const ManageDonation: React.FC<Props> = ({route, navigation}) => {
                 }}>
                 <TextComponent
                   style={[
-                    feedStyles.goalTextBold,
+                    GlobalStyles.goalTextBold,
                     {
                       marginTop: 12,
                       fontSize: 15,
@@ -65,10 +64,10 @@ const ManageDonation: React.FC<Props> = ({route, navigation}) => {
                   ]}>
                   {donations?.length
                     ? `${donations.length} ${lang?.already_make_donation}`
-                    :lang?.no_collect }
+                    : lang?.no_collect}
                 </TextComponent>
 
-                <FlatList
+                <FlashList
                   horizontal={false}
                   data={donations}
                   renderItem={({item}) => (
@@ -78,11 +77,10 @@ const ManageDonation: React.FC<Props> = ({route, navigation}) => {
                       name={item?.user_name}
                       amount={item?.amount}
                       item={item}
-                      
                     />
                   )}
                   keyExtractor={item => item.id}
-                  contentContainerStyle={feedStyles.container}
+                  contentContainerStyle={GlobalStyles.container}
                 />
               </View>
             </View>
@@ -94,4 +92,3 @@ const ManageDonation: React.FC<Props> = ({route, navigation}) => {
 };
 
 export default ManageDonation;
-

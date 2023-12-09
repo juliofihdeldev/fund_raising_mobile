@@ -7,7 +7,8 @@ import {LangContextProvider} from './src/context/LanguageContext';
 import {MD3LightTheme as DefaultTheme} from 'react-native-paper';
 import {FundingContextProvider} from './src/context/FundingContext';
 import {Color} from './src/assets/GlobalStyles';
-import {StatusBar} from 'react-native';
+import {StatusBar, Linking} from 'react-native';
+// import dynamicLinks from '@react-native-firebase/dynamic-links';
 
 const theme = {
   ...DefaultTheme,
@@ -38,23 +39,3 @@ export default function App() {
     </NavigationContainer>
   );
 }
-
-// <NavigationContainer >
-// <ErrorBoundary onError={errorHandler}>
-// <StripeProvider
-// publishableKey="pk_test_5MB9slbqt3eAfweXSOLWH67"
-// urlScheme="poteKoleApp" // required for 3D Secure and merchantIdentifier="merchant.com.potekole">
-// <LangContextProvider>
-// <AuthContextProvider>
-// <FundingContextProvider>
-// <StatusBar
-// backgroundColor={Color.white} // Set the backg barStyle="dark-content" // Set the color of thi
-
-// />
-// <Main />
-// </FundingContextProvider>
-// </AuthContextProvider>
-// </LangContextProvider>
-// </StripeProvider>
-// </ErrorBoundary>
-// </NavigationContainer>

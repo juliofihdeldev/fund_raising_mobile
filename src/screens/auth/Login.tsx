@@ -1,8 +1,6 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {
   View,
-  Image,
-  Text,
   StyleSheet,
   Dimensions,
   TouchableOpacity,
@@ -13,9 +11,11 @@ import auth from '@react-native-firebase/auth';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {useAuth} from '../../context/AuthContext';
 import {Color} from '../../assets/GlobalStyles';
+import CustomImage from '../../component/atom/CustomImage';
+import TextComponent from '../../component/atom/CustomText';
 
-const Login: React.FC = ({navigation}) => {
-  const {login} = useAuth();
+const Login: React.FC = ({navigation}: any) => {
+  const {user} = useAuth();
 
   const handleGoogleLogin = async () => {
     // Handle Google login logic
@@ -26,37 +26,26 @@ const Login: React.FC = ({navigation}) => {
     // Handle phone number sign up logic
     navigation.navigate('PhoneLogin');
   };
-
-  function onAuthStateChanged(user: any) {
+  useEffect(() => {
     if (user) {
-      login();
+      auth().signOut();
     }
-  }
-
-  React.useEffect(() => {
-    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
-    return subscriber; // unsubscribe on unmount
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [user]);
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.containerImage}>
-        <Image
-          source={require('../assets/images/funding.jpg')}
-          style={styles.logo}
-          resizeMode="cover"
-        />
+        <CustomImage image="" style={styles.logo} />
       </View>
       <View style={styles.buttonsContainer}>
         <View style={styles.WelcomeBox}>
-          <Text style={styles.textWelcomeTitle}>
-            è byen jodi a la nati ap remet ou sa demen
-          </Text>
-          <Text style={styles.textWelcome}>
+          <TextComponent fontSize={32} color="white" fontWeight="bold">
+            Fè byen jodi a la nati ap remet ou sa demen
+          </TextComponent>
+          <TextComponent style={styles.textWelcome} color="white">
             Ann mete dekote yon 100 Goud pou moun yo ki ka nan plus bezwen pase
             n.
-          </Text>
+          </TextComponent>
         </View>
 
         <View style={styles.buttonsPhone}>
@@ -69,9 +58,9 @@ const Login: React.FC = ({navigation}) => {
               color="#ffffff"
               style={styles.phoneNumberIcon}
             />
-            <Text style={[styles.signText, {color: '#ffffff'}]}>
+            <TextComponent style={[styles.signText]} color="white">
               Sign Up with Phone Number
-            </Text>
+            </TextComponent>
           </TouchableOpacity>
         </View>
 
@@ -85,7 +74,10 @@ const Login: React.FC = ({navigation}) => {
               color="black"
               style={styles.phoneNumberIcon}
             />
-            <Text style={styles.signText}> Continue without an account </Text>
+            <TextComponent style={styles.signText}>
+              {' '}
+              Continue without an account{' '}
+            </TextComponent>
           </TouchableOpacity>
         </View>
       </View>
@@ -109,9 +101,9 @@ const styles = StyleSheet.create({
     height: Dimensions.get('window').height / 2.2,
   },
   buttonsContainer: {
-    flex: 1,
+    flex: 3,
     width: '100%',
-    backgroundColor: Color.blue,
+    backgroundColor: Color.black,
   },
   WelcomeBox: {
     padding: 26,
@@ -122,14 +114,7 @@ const styles = StyleSheet.create({
   buttonsPhone: {
     marginHorizontal: 32,
   },
-  textWelcomeTitle: {
-    alignItems: 'center',
-    fontSize: 27,
-    lineHeight: 31,
-    fontFamily: 'calibri',
-    fontWeight: 'bold',
-    color: '#ffffff',
-  },
+
   textWelcome: {
     alignItems: 'center',
     marginTop: 16,

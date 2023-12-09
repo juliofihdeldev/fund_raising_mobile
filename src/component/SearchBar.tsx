@@ -1,18 +1,33 @@
 import React from 'react';
 import {View, TextInput, StyleSheet} from 'react-native';
 
-import Ionicons from 'react-native-vector-icons/Ionicons';
 interface SearchBarProps {
   placeholder: string;
+  onChangeText?: (text: string) => void;
+  goBack?: () => void;
+  focus?: boolean;
 }
 
-const SearchBar: React.FC<SearchBarProps> = ({placeholder}) => {
+const SearchBar: React.FC<SearchBarProps> = ({
+  placeholder,
+  onChangeText,
+  focus = true,
+}) => {
   return (
     <View style={styles.container}>
-      <Ionicons name="search" size={20} color="#333" style={styles.icon} />
+      {/* <Ionicons
+        name="search"
+        size={20}
+        color="#333"
+        style={styles.icon}
+        onPress={goBack}
+      /> */}
       <TextInput
+        onChangeText={onChangeText}
         style={styles.input}
         placeholder={placeholder}
+        autoFocus={focus}
+        keyboardType="default"
         placeholderTextColor="#888"
       />
     </View>

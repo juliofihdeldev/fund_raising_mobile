@@ -22,15 +22,8 @@ const CustomHeader: React.FC<SearchBarProps> = ({goToSearch}) => {
         style={styles.logoColor}>
         POTE KOLE
       </TextComponent>
-      <View style={styles.iconStyle}>
-        <Ionicons
-          name="search"
-          size={28}
-          color={Color.black}
-          onPress={goToSearch}
-        />
-        <NotificationIcon count={3} style={styles.notificationIcon} />
-      </View>
+
+      <NotificationIcon count={3} style={styles.notificationIcon} />
     </View>
   );
 };
@@ -64,6 +57,7 @@ const styles = StyleSheet.create({
   },
   notificationIcon: {
     marginLeft: 8,
+    marginEnd: 12,
   },
   iconStyle: {
     flexDirection: 'row',

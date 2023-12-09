@@ -57,7 +57,8 @@ const Profile: React.FC = ({navigation}: any) => {
   useFocusEffect(
     useCallback(() => {
       handleGetUserPayment();
-    }, []),
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [user?.id]),
   );
 
   const openLink = async (link: string) => {
@@ -166,7 +167,10 @@ const Profile: React.FC = ({navigation}: any) => {
               </TextComponent>
               <TextComponent>{user?.email || user.phone}</TextComponent>
 
-              <TextComponent fontSize={21} fontWeight="bold" color={Color.blue}>
+              <TextComponent
+                fontSize={21}
+                fontWeight="bold"
+                color={Color.primary}>
                 {currency(Number(usersPaymentAmount))}
               </TextComponent>
               {user?.name === '' && (
@@ -209,11 +213,7 @@ const Profile: React.FC = ({navigation}: any) => {
         </TextComponent>
         <CustomSeparator />
 
-        <ScrollView
-          style={{
-            flex: 2,
-            padding: 8,
-          }}>
+        <ScrollView>
           {isLoginFn() && (
             <ListItem
               text={lang?.startFundraising}

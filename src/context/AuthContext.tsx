@@ -1,20 +1,26 @@
 import auth from '@react-native-firebase/auth';
-import React, {ReactNode, createContext, useContext, useEffect} from 'react';
-import {Alert} from 'react-native';
+import React, {ReactNode, createContext, useContext} from 'react';
 import firestore from '@react-native-firebase/firestore';
 import messaging from '@react-native-firebase/messaging';
+import {UserType} from '../types/Index';
 
 interface AuthContextProps {
   isLoggedIn: boolean;
+  current_select_user: UserType;
   login: () => void;
   logout: () => void;
   handleSetUser: (user: any) => void;
-  user: {};
+  user: UserType;
   usersPayment: [];
   handleGetUserPayment: () => void;
+  handleCurrentSelectUser: (user: UserType) => void;
+  getUsers: () => void;
+  users: UserType[];
 }
 
-const AuthContext = createContext<AuthContextProps | undefined>(undefined);
+export const AuthContext = createContext<AuthContextProps | undefined>(
+  undefined,
+);
 
 export const useAuth = (): AuthContextProps => {
   const context = useContext(AuthContext);
@@ -27,6 +33,7 @@ export const useAuth = (): AuthContextProps => {
 interface AuthContextProviderProps {
   children: ReactNode;
 }
+
 export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
   children,
 }) => {
@@ -35,14 +42,14 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
   };
 
   let [user, setUser] = React.useState({});
+  let [users, setUsers] = React.useState([]);
   let [usersPayment, setUsersPayment] = React.useState([]);
 
-  const handleGetUserPayment = () => {
-    setUsersPayment([]);
-  };
-
-  const handleSetUser = (user: any) => {
-    setUser(user);
+  let [current_select_user, setCurrentSelectUser] = React.useState<UserType>(
+    {},
+  );
+  const handleSetUser = (user_: UserType) => {
+    setUser(user_);
   };
 
   async function onAuthStateChanged(user_data: any) {
@@ -76,6 +83,8 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
       } catch (error) {
         console.log(error);
       }
+    } else {
+      handleSetUser({});
     }
   }
 
@@ -84,12 +93,37 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
     return subscriber; // unsubscribe on unmount
   }, []);
 
+  const handleGetUserPayment = async () => {
+    // get user payment bu user ID
+    const userPayment = await firestore()
+      .collection('Payments')
+      .where('user_id', '==', user?.id)
+      .get();
+    setUsersPayment(userPayment.docs.map(doc => doc.data()));
+    console.log(
+      'userPayment',
+      userPayment.docs.map(doc => doc.data()),
+    );
+  };
+  const handleCurrentSelectUser = (_user: UserType) => {
+    setCurrentSelectUser(_user);
+  };
+
+  const getUsers = async () => {
+    const _users = await firestore().collection('users').get();
+    setUsers(_users.docs.map(doc => doc.data()));
+  };
+
   const value = {
     logout,
     handleSetUser,
+    getUsers,
     handleGetUserPayment,
+    users,
     user,
+    current_select_user,
     usersPayment,
+    handleCurrentSelectUser,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

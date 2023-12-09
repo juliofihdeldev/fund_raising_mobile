@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { Dimensions, TextInput, StyleSheet, TextInputProps } from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {Dimensions, TextInput, StyleSheet, TextInputProps} from 'react-native';
 
 interface TextAreaInputProps extends TextInputProps {}
 
-const TextAreaInput: React.FC<TextAreaInputProps> = (props) => {
+const TextAreaInput: React.FC<TextAreaInputProps> = props => {
   const minHeight = 42;
   const [height, setHeight] = useState(minHeight);
 
@@ -20,9 +20,9 @@ const TextAreaInput: React.FC<TextAreaInputProps> = (props) => {
 
   return (
     <TextInput
-      testID='textAreaInput'
+      testID="textAreaInput"
       {...props}
-      style={[styles.input, { height }, props.style]}
+      style={[styles.input, {height}, props.style]}
       multiline={true}
       onContentSizeChange={onContentSizeChange}
     />

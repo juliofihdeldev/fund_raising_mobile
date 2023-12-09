@@ -1,25 +1,9 @@
-/* fonts */
-export const FontFamily = {
-  istokWebRegular: 'Istok Web_regular',
-  istokWebBold: 'Istok Web_bold',
-};
-/* font sizes */
-export const FontSize = {
-  size_xs: 12,
-  size_sm: 14,
-};
-// 60% rules of color
-// white 60%
-// primary 30%
-// secondary actionColr:  10%
-/* Colors */
 export const Color = {
-  primary: '#557A46',
-  secondary: '#8C3333',
+  primary: '#0a7002',
+  secondary: '#701a02',
   white: '#fff',
   primarylight: '#7A9D54',
-  secondaryLight: '#8C3333',
-
+  secondaryLight: '#700240',
   darkslategray: '#043010',
   gainsboro: '#d9d9d9',
   black: '#000',
@@ -30,11 +14,6 @@ export const Color = {
   gray_400: 'rgba(255, 255, 255, 0.9)',
   grayLight: '#f2f2f2',
   blue: 'blue',
-};
-/* border radiuses */
-export const Border = {
-  br_base: 16,
-  br_xl: 20,
 };
 
 // box shadow for react native

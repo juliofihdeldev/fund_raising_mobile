@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, StyleSheet, StyleProp, ViewStyle, Text} from 'react-native';
+import {StyleSheet, StyleProp, ViewStyle} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';

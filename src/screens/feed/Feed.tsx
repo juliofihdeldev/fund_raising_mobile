@@ -1,9 +1,12 @@
-import React from 'react';
+import React, {useEffect, useCallback, useRef, useState} from 'react';
 import {
   FlatList,
   View,
   SafeAreaView,
   StyleSheet,
+  RefreshControl,
+  Animated,
+  Linking,
   ScrollView as ReactScrollView,
 } from 'react-native';
 
@@ -20,7 +23,9 @@ import {useLang} from '../../context/LanguageContext';
 import TextComponent from '../../component/atom/CustomText';
 import CustomView from '../../component/atom/CustomView';
 import {useFunding} from '../../context/FundingContext';
+import withLoadingFresh from '../../component/HOC/RefreshLoading';
 
+import {FlashList} from '@shopify/flash-list';
 let category = [
   {
     id: '1',
@@ -61,7 +66,6 @@ let category = [
 
 const Feed: React.FC<ProjectType> = ({navigation}: any) => {
   const [selectedId, setSelectedId] = React.useState(category[0]);
-
   const {fundraising, handleGetFundraising} = useFunding();
   const {lang} = useLang();
 
@@ -70,22 +74,155 @@ const Feed: React.FC<ProjectType> = ({navigation}: any) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const scrollY = new Animated.Value(0);
+  const diffClamp = Animated.diffClamp(scrollY, 0, 124);
+
+  const translateY = diffClamp.interpolate({
+    inputRange: [0, 124],
+    outputRange: [0, -124],
+  });
+
+  const [refreshing, setRefreshing] = React.useState(false);
+
+  const nextPageIdentifierRef = useRef();
+  const [isFirstPageReceived, setIsFirstPageReceived] = useState(false);
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+      handleGetFundraising();
+    }, 1000);
+  }, []);
+
+  const handleDeepLink = useCallback(() => {
+    Linking.addEventListener('url', handleUrl);
+
+    return () => {
+      Linking.removeAllListeners('url');
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const handleUrl = useCallback(
+    (event: any) => {
+      console.log('path', event.url);
+
+      let path = getIdAndPathFromLink(event.url)?.path;
+      let id = getIdAndPathFromLink(event.url)?.id;
+      console.log('[id,path]', [path, id]);
+
+      let project = {
+        item: {
+          id,
+          path,
+        },
+      };
+
+      if (path === '/fundraising') {
+        // Navigate to the detail page with the extracted ID
+        navigation.navigate('FeedDetails', {
+          project: project.item,
+        });
+      }
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  );
+
+  useEffect(() => {
+    handleDeepLink();
+
+    return () => {
+      Linking.removeAllListeners('url');
+    };
+  }, [handleDeepLink, handleUrl]);
+
+  interface IdAndPath {
+    path: string;
+    id: string | null;
+  }
+
+  function getIdAndPathFromLink(link: string): IdAndPath | null {
+    const match = link.match(/\/fundraising\/([^/]+)/);
+
+    if (match && match[1]) {
+      const path = '/fundraising';
+      const id = match[1];
+      return {path, id};
+    }
+
+    return null;
+  }
+
+  const goToSearch = () => {
+    navigation.navigate('Search');
+  };
+  // scrool infinite
+  const fetchNextPage = () => {
+    if (nextPageIdentifierRef.current == null) {
+      // End of data.
+      return;
+    }
+    // handleGetFundraising();
+  };
+
+  const handleDynamicLink = (link: any) => {
+    // Handle dynamic link inside your own application
+    if (link.url === 'https://potekole.page.link/ede') {
+      // ...navigate to your offers screen
+      navigation.navigate('Feed');
+    }
+  };
+
+  //   useEffect(() => {
+  //     const unsubscribe = dynamicLinks().onLink(handleDynamicLink);
+  //     // When the component is unmounted, remove the listener
+  //     return () => unsubscribe();
+  //   }, []);
+  //
+  //   useEffect(() => {
+  //     dynamicLinks()
+  //       .getInitialLink()
+  //       .then((link: any) => {
+  //         if (link.url === 'https://potekole.page.link/ede') {
+  //           // ...set initial route as offers screen
+  //           navigation.navigate('Favorite');
+  //         }
+  //       });
+  //   }, []);
+
   return (
     <SafeAreaView style={GlobalStyles.container}>
-      <CustomHeader />
-      <ScrollView>
-        <CustomView style={styles.flexStartItem}>
-          <CustomButton
-            title={lang.start_fundraising}
-            onPress={() => console.log('Button')}
-            buttonStyle={styles.buttonStyle}
-          />
-        </CustomView>
+      <Animated.View
+        style={[
+          styles.headerStyle,
+          // eslint-disable-next-line react-native/no-inline-styles
+          {
+            backgroundColor: translateY ? '#fff' : 'transparent',
+            transform: [{translateY: translateY}],
+          },
+        ]}>
+        <CustomHeader goToSearch={goToSearch} />
+        <CustomView style={styles.separator} />
+      </Animated.View>
 
-        <CustomView style={GlobalStyles.categoryContainer}>
-          <ReactScrollView alwaysBounceHorizontal={true} horizontal={true}>
+      <ReactScrollView
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            progressBackgroundColor={Color.primary}
+            colors={[Color.white]}
+            titleColor={Color.primary}
+          />
+        }
+        onScroll={e => {
+          scrollY.setValue(e.nativeEvent.contentOffset.y);
+        }}>
+        <CustomView style={styles.categoryContainer}>
+          <ReactScrollView horizontal={true}>
             <FlatList
-              alwaysBounceHorizontal={true}
               horizontal={true}
               data={category}
               renderItem={({item}) => (
@@ -100,7 +237,7 @@ const Feed: React.FC<ProjectType> = ({navigation}: any) => {
                     {
                       backgroundColor:
                         item.id === selectedId.id
-                          ? Color.primary
+                          ? Color.secondary
                           : Color.grayLight,
                     },
                   ]}
@@ -114,7 +251,7 @@ const Feed: React.FC<ProjectType> = ({navigation}: any) => {
           </ReactScrollView>
         </CustomView>
 
-        <CustomView style={GlobalStyles.forestContainer}>
+        <CustomView>
           <View style={styles.sectionStyles}>
             <TextComponent fontSize={19} fontWeight="bold">
               {lang.popular}
@@ -128,10 +265,12 @@ const Feed: React.FC<ProjectType> = ({navigation}: any) => {
               textStyle={{color: Color.primary}}
             />
           </View>
-          {/* <ScrollView horizontal={true}> */}
+
           <FlatList
             horizontal={true}
-            data={fundraising as ProjectType[]}
+            data={fundraising.filter(
+              item => item.is_emergency && item.status === 'Active',
+            )}
             renderItem={project => (
               <View style={GlobalStyles.projectContainer}>
                 <ItemDonation
@@ -147,10 +286,9 @@ const Feed: React.FC<ProjectType> = ({navigation}: any) => {
             keyExtractor={item => item.id}
             contentContainerStyle={GlobalStyles.container}
           />
-          {/* </ScrollView> */}
         </CustomView>
 
-        <CustomView>
+        <ReactScrollView style={styles.mainSectionStyle}>
           <View style={styles.sectionStyles}>
             <TextComponent fontSize={19} fontWeight="bold">
               {selectedId.title}
@@ -165,32 +303,39 @@ const Feed: React.FC<ProjectType> = ({navigation}: any) => {
             />
           </View>
 
-          <FlatList
-            horizontal={false}
-            data={
-              selectedId.name === 'Toutes'
-                ? fundraising
-                : (fundraising.filter(
-                    item => item.category === selectedId?.name,
-                  ) as ProjectType[])
-            }
-            renderItem={project => (
-              <View style={GlobalStyles.projectItem}>
-                <ItemDonationVertical
-                  project={project}
-                  onPress={() => {
-                    navigation.navigate('FeedDetails', {
-                      project: project.item,
-                    });
-                  }}
-                />
-              </View>
-            )}
-            keyExtractor={item => item.id}
-            contentContainerStyle={GlobalStyles.container}
-          />
-        </CustomView>
-      </ScrollView>
+          <ScrollView>
+            <FlashList
+              estimatedItemSize={200}
+              onEndReached={fetchNextPage}
+              onEndReachedThreshold={0.8}
+              horizontal={false}
+              data={
+                selectedId.name === 'Toutes'
+                  ? fundraising.filter(item => item.status === 'Active')
+                  : (fundraising.filter(
+                      item =>
+                        item.category === selectedId?.name &&
+                        item.status === 'Active',
+                    ) as ProjectType[])
+              }
+              renderItem={project => (
+                <View style={GlobalStyles.projectItem}>
+                  <ItemDonationVertical
+                    project={project}
+                    onPress={() => {
+                      navigation.navigate('FeedDetails', {
+                        project: project.item,
+                      });
+                    }}
+                  />
+                </View>
+              )}
+              keyExtractor={item => item.id}
+              contentContainerStyle={GlobalStyles.container}
+            />
+          </ScrollView>
+        </ReactScrollView>
+      </ReactScrollView>
     </SafeAreaView>
   );
 };
@@ -220,5 +365,28 @@ const styles = StyleSheet.create({
     width: '30%',
     borderRadius: 26,
   },
+  headerStyle: {
+    position: 'absolute',
+    zIndex: 1,
+    paddingStart: 8,
+    width: '100%',
+    justifyContent: 'space-between',
+  },
+  mainSectionStyle: {
+    backgroundColor: Color.white,
+  },
+  categoryContainer: {
+    marginTop: 80,
+    marginBottom: 16,
+    backgroundColor: Color.white,
+  },
+  separator: {
+    height: 0,
+    width: '100%',
+    backgroundColor: 'white',
+  },
 });
-export default Feed;
+
+const FeedWithLoading = withLoadingFresh(Feed, 'Please wait...');
+
+export default FeedWithLoading;

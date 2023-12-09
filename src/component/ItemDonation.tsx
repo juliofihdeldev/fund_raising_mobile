@@ -8,6 +8,7 @@ import {ProjectType} from '../types/Index';
 import {currency} from '../utils/currency';
 import CustomImage from './atom/CustomImage';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import ShareComponent from './HOC/ShareComponent';
 
 interface ItemDonationProps {
   onPress: () => void;
@@ -16,7 +17,8 @@ interface ItemDonationProps {
 }
 const handleShare = project => {
   Share.share({
-    message: `Pote kole: ${project?.item.description} ${project?.item.amount} https://www.potekole.com/${project?.item.id}
+    message: `Pote kole: ${project?.item.description} ${project?.item.amount} 
+      https://pote-kole.web.app?id=${project?.item.id}
     `,
   });
 };
@@ -41,13 +43,7 @@ const ItemDonation: React.FC<ItemDonationProps> = ({onPress, project}) => {
             {currency(amount)}
           </TextComponent>
 
-          <Ionicons
-            onPress={() => handleShare(project)}
-            name="share-outline"
-            size={24}
-            color={Color.primary}
-            style={styles.icon}
-          />
+          <ShareComponent item={project?.item} />
         </View>
       </View>
     </TouchableOpacity>

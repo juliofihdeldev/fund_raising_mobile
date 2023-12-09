@@ -3,14 +3,13 @@ import {Color} from '../../assets/GlobalStyles';
 export const GlobalStyles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#ffff',
+    backgroundColor: '#fff',
   },
   projectContainer: {
     backgroundColor: '#FFFFFF',
     width: Dimensions.get('window').width / 1.7,
   },
   projectTitle: {
-
     marginLeft: 8,
     color: '#000000',
     marginBottom: 16,
@@ -123,6 +122,4 @@ export const GlobalStyles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  
-
 });

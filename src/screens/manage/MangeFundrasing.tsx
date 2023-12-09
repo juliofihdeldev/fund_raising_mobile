@@ -1,20 +1,15 @@
 import React from 'react';
-import {
-  View,
-  SafeAreaView,
-  ScrollView,
-} from 'react-native';
+import {View, SafeAreaView, ScrollView} from 'react-native';
 
 import {Color} from '../../assets/GlobalStyles';
 import {useFunding} from '../../context/FundingContext';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { FeedStackParamList } from '../../navigations/MainNavigation';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {FeedStackParamList} from '../../navigations/MainNavigation';
 import Category from '../../component/Category';
 import ManageDonation from './ManageDonation';
 import ManageDetail from './ManageDetail';
 import MangeKindWord from './MangeKindWord';
-import { feedStyles } from '../feed/GlobalStyle';
-import ManageMoncash from './ManageMoncash';
+import {GlobalStyles} from '../feed/GlobalStyle';
 import ManageMoncashWithLoading from './ManageMoncash';
 
 const menu_option = [
@@ -38,24 +33,22 @@ const menu_option = [
     name: 'Moncash',
     icon: 'wallet-outline',
   },
-
 ];
 
-type FeedDetailsScreenNavigationProp = StackNavigationProp<FeedStackParamList, 'FeedDetails'>;
+type FeedDetailsScreenNavigationProp = StackNavigationProp<
+  FeedStackParamList,
+  'FeedDetails'
+>;
 
 interface Props {
   navigation: FeedDetailsScreenNavigationProp;
 }
 
 const ManageFundrasing: React.FC<Props> = ({route, navigation}) => {
-
   const [category, setCategory] = React.useState(menu_option[0]);
 
-  const {
-    handleGetDonations,
-    handleGetProjectByID,
-    handleGetMessagesByID,
-  } = useFunding();
+  const {handleGetDonations, handleGetProjectByID, handleGetMessagesByID} =
+    useFunding();
 
   const {project} = route?.params;
   const {id} = project;
@@ -84,12 +77,11 @@ const ManageFundrasing: React.FC<Props> = ({route, navigation}) => {
 
   navigation.setOptions({
     headerTitle: 'Manage Fundraising',
-
-  })
+  });
 
   return (
-    <SafeAreaView style={feedStyles.container}>
-      <View style={feedStyles.categoryContainer}>
+    <SafeAreaView style={GlobalStyles.container}>
+      <View style={GlobalStyles.categoryContainer}>
         {menu_option.map((cat, index) => (
           <Category
             key={index}
@@ -100,24 +92,28 @@ const ManageFundrasing: React.FC<Props> = ({route, navigation}) => {
               handleCaterogy(cat);
             }}
             style={[
-              feedStyles.category,
+              GlobalStyles.category,
               {
                 backgroundColor:
-                      cat.id == category.id
-                        ? Color.secondary
-                        : Color.secondaryLight,
+                  cat.id == category.id ? Color.primary : Color.secondaryLight,
               },
             ]}
             color={Color.white}
-            styleContainer={[feedStyles.styleContainer]}
+            styleContainer={[GlobalStyles.styleContainer]}
           />
         ))}
       </View>
       <ScrollView>
         {category.id === 'detail' && <ManageDetail navigation={navigation} />}
-        {category.id === 'donation' && <ManageDonation navigation={navigation} />}
-        {category.id === 'kind_word' && <MangeKindWord navigation={navigation} />}
-        {category.id === 'moncash' && <ManageMoncashWithLoading navigation={navigation} />}
+        {category.id === 'donation' && (
+          <ManageDonation navigation={navigation} />
+        )}
+        {category.id === 'kind_word' && (
+          <MangeKindWord navigation={navigation} />
+        )}
+        {category.id === 'moncash' && (
+          <ManageMoncashWithLoading navigation={navigation} />
+        )}
       </ScrollView>
     </SafeAreaView>
   );

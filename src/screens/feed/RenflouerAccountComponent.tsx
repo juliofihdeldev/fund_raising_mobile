@@ -12,9 +12,11 @@ import CashProcessComponent from '../payment/CashProcessComponent';
 import {InAppBrowser} from 'react-native-inappbrowser-reborn';
 import TextAreaInput from '../../component/atom/TextAreaInput';
 import TextComponent from '../../component/atom/CustomText';
-import {Color} from '../../assets/GlobalStyles';
+import {Color, boxShadow} from '../../assets/GlobalStyles';
 import {CustomDialogContext} from '../../component/atom/CustomDialog';
 import axios from 'axios';
+import CustomView from '../../component/atom/CustomView';
+import {Text} from 'react-native-paper';
 
 const RenflouerAccountComponent: React.FC = () => {
   const {handleSetIsVisible} = useContext(CustomDialogContext);
@@ -140,9 +142,10 @@ const RenflouerAccountComponent: React.FC = () => {
               autoFocus={true}
               keyboardType={'numeric'}
               style={{
-                width: '80%',
+                width: '40%',
                 borderColor: 'white',
                 fontSize: 29,
+                fontWeight: 'bold',
                 height: 60,
               }}
             />
@@ -159,67 +162,44 @@ const RenflouerAccountComponent: React.FC = () => {
             </TextComponent>
           </View>
         </View>
+        <CustomView style={styles.separator}>
+          <TextComponent color="#333">
+            Selectionner une option de paiement
+          </TextComponent>
+        </CustomView>
 
         <ListItem
           text="Payer par Carte de credit"
           icon="card-outline"
           fontSize={17}
           onPress={stripeWebPayment}
-          color="white"
-          containerStyle={[
-            GlobalStyles.containerList,
-            {
-              width: '100%',
-              backgroundColor: Color.primary,
-              padding: 12,
-              marginLeft: 0,
-              marginBottom: 12,
-              borderRadius: 12,
-            },
-          ]}
-          iconStyle={[GlobalStyles.customIcon, {color: 'white'}]}
+          color="#333"
+          fontWeight="bold"
+          containerStyle={styles.containerListStyle}
+          iconStyle={styles.iconStyle}
         />
 
         <ListItem
           text="Payer par Moncash"
           icon="card-outline"
-          fontSize={17}
-          //  onPress={() => setOptions('moncash')}
+          fontSize={15}
           onPress={createMoncashPAyment}
-          color="#fff"
-          containerStyle={[
-            GlobalStyles.containerList,
-            {
-              width: '100%',
-              backgroundColor: '#ee352a',
-              padding: 12,
-              marginLeft: 0,
-              marginBottom: 12,
-              borderRadius: 12,
-            },
-          ]}
-          iconStyle={[GlobalStyles.customIcon, {color: 'white'}]}
+          color="#333"
+          fontWeight="bold"
+          containerStyle={styles.containerListStyle}
+          iconStyle={styles.iconStyleMoncash}
         />
 
         <ListItem
           text="Payer par Natcash"
           icon="card-outline"
           fontSize={17}
-          color={'white'}
+          color={'#333'}
           // onPress={createMoncashPAyment}
           onPress={() => setOptions('natcash')}
-          containerStyle={[
-            GlobalStyles.containerList,
-            {
-              width: '100%',
-              backgroundColor: '#ff8a30',
-              padding: 12,
-              marginLeft: 0,
-              marginBottom: 12,
-              borderRadius: 12,
-            },
-          ]}
-          iconStyle={[GlobalStyles.customIcon, {color: 'white'}]}
+          fontWeight="bold"
+          containerStyle={styles.containerListStyle}
+          iconStyle={styles.iconStyleNatcash}
         />
 
         {option == 'moncash' && (
@@ -240,16 +220,43 @@ const RenflouerAccountComponentWithLoading = withLoadingModal(
 
 const styles = StyleSheet.create({
   viewStyle: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
+    flex: 1,
     marginBottom: 8,
-    margin: 4,
     paddingRight: 16,
     width: '98%',
     borderColor: '#999',
-    borderWidth: 1,
+    borderWidth: 0.1,
     borderRadius: 4,
+    margin: 'auto',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
+  containerListStyle: {
+    width: '100%',
+    backgroundColor: 'transparent',
+    paddingVertical: 12,
+    paddingHorizontal: 22,
+    marginLeft: 0,
+    marginBottom: 12,
+    borderRadius: 112,
+    borderWidth: 1,
+    borderColor: '#333',
+  },
+  iconStyle: {
+    color: '#004ABD',
+  },
+  iconStyleMoncash: {
+    color: '#ee352a',
+  },
+  iconStyleNatcash: {
+    color: '#F1822F',
+  },
+  separator: {
+    marginHorizontal: 8,
+    marginVertical: 16,
+    alignItems: 'flex-start',
+  },
+  baseStyle: {},
 });
 export default RenflouerAccountComponentWithLoading;

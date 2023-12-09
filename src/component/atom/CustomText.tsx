@@ -21,7 +21,7 @@ const TextComponent: React.FC<TextProps> = ({
   fontWeight,
   showTextShadow = false,
   style,
-  fontFamily = fontWeight ? 'Montserrat-Bold' : 'Montserrat-Regular',
+  fontFamily = fontWeight === 'bold' ? 'Montserrat-Bold' : 'Montserrat-Regular',
   ...restProps
 }) => {
   const textStyle: TextStyle = {
@@ -40,9 +40,9 @@ const TextComponent: React.FC<TextProps> = ({
 
 const styles = StyleSheet.create({
   textWithShadow: {
-    textShadowColor: 'rgba(0, 0, 0, 0.75)',
+    textShadowColor: 'rgba(0, 0, 0, 0.99)',
     textShadowOffset: {width: -1, height: 1},
-    textShadowRadius: 10,
+    textShadowRadius: 5,
   },
 });
 

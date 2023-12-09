@@ -12,7 +12,7 @@ import {useAuth} from '../context/AuthContext';
 import CustomImage from './atom/CustomImage';
 import {Root, Toast, ALERT_TYPE} from 'react-native-alert-notification';
 import {currency} from '../utils/currency';
-import { useLang } from '../context/LanguageContext';
+import {useLang} from '../context/LanguageContext';
 // Create props interface
 interface ItemDonationUserProps {
   onPress: () => void;
@@ -25,15 +25,16 @@ const ItemDonationUser: React.FC<ItemDonationUserProps> = ({
 }) => {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const {
-    amount,
+    amount = 0,
     image,
     user_name,
     project_name,
     project_image,
-    project_id, id,
+    project_id,
+    id,
   } = funding?.item;
 
-  const {lang}= useLang()
+  const {lang} = useLang();
 
   const [modalVisible, setModalVisible] = useState(false);
   const [mesaj, setMesaj] = useState('');
@@ -41,7 +42,8 @@ const ItemDonationUser: React.FC<ItemDonationUserProps> = ({
   delete currentLoginUser.donations;
 
   const handleSend = async () => {
-    await firestore().collection('messages')
+    await firestore()
+      .collection('messages')
       .add({
         sender: currentLoginUser,
         receiver: {
@@ -80,15 +82,9 @@ const ItemDonationUser: React.FC<ItemDonationUserProps> = ({
             onPress={() => setModalVisible(true)}
           />
           <View style={styles.containerText}>
-            <TextComponent
-              numberOfLines={2}
-            >
-             {project_name} 
-            </TextComponent>
+            <TextComponent numberOfLines={2}>{project_name}</TextComponent>
 
-            <TextComponent fontSize={13} >
-              {user_name}
-            </TextComponent>
+            <TextComponent fontSize={13}>{user_name}</TextComponent>
             <TextComponent fontSize={12} color={Color.black}>
               {currency(Number(amount))}
             </TextComponent>
@@ -235,11 +231,10 @@ const styles = StyleSheet.create({
     bottom: 0,
     position: 'absolute',
     zIndex: 10000,
-    backgroundColor:Color.white,
+    backgroundColor: Color.white,
     padding: 16,
     alignItems: 'center',
   },
-
 
   textStyle: {
     color: 'white',

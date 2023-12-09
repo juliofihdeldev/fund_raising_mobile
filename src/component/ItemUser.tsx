@@ -3,46 +3,41 @@ import {Image, View, StyleSheet} from 'react-native';
 import {TouchableOpacity} from 'react-native';
 import TextComponent from './atom/CustomText';
 import {Color, boxShadow} from '../assets/GlobalStyles';
+import CustomImage from './atom/CustomImage';
+import {UserType} from '../types/Index';
 
 // create props interface
 interface ItemUserProps {
-  onPress: () => void;
-  image: string;
-  name: string;
+  onPress?: () => void;
+  item?: UserType;
   isOrganization?: boolean;
-  address?: string;
-  contactButton: () => React.ReactNode;
+  contactButton?: () => React.ReactNode;
+  showId?: boolean;
 }
 
 const ItemUser: React.FC<ItemUserProps> = ({
   onPress,
-  image,
-  name,
-  address,
+  item,
   isOrganization,
   contactButton,
+  showId = false,
 }) => {
   return (
     <TouchableOpacity onPress={onPress}>
       <View style={[styles.container]}>
-        <Image
-          source={image}
-          style={[styles.imagesStyle, boxShadow]}
-          resizeMode="cover"
-        />
+        <CustomImage image={item?.image} style={[styles.imagesStyle]} />
         <View style={styles.containerText}>
           {isOrganization && (
-            <TextComponent
-              numberOfLines={2}
-              fontSize={13}>
+            <TextComponent numberOfLines={2} fontSize={13}>
               Organizing By
             </TextComponent>
           )}
-          <TextComponent color={Color.black}>
-            {name}
+          <TextComponent color={Color.black}>{item?.name}</TextComponent>
+          <TextComponent fontSize={13} color={Color.black}>
+            {item?.phone}
           </TextComponent>
           <TextComponent fontSize={13} color={Color.black}>
-            {address}
+            {showId && `${item?.id}`}
           </TextComponent>
         </View>
         <View>{contactButton()}</View>

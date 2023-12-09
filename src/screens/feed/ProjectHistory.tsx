@@ -11,6 +11,7 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import {FeedStackParamList} from '../../navigations/MainNavigation';
 import {Color} from '../../assets/GlobalStyles';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import CustomView from '../../component/atom/CustomView';
 
 type HistoryScreenNavigationProp = StackNavigationProp<
   FeedStackParamList,
@@ -63,14 +64,14 @@ const History: React.FC<Props> = ({navigation}) => {
   return (
     <SafeAreaView style={GlobalStyles.container}>
       <ScrollView ref={scrollRef}>
-        <View style={GlobalStyles.forestContainer}>
+        <CustomView style={styles.customViewStyle}>
           {projects?.length === 0 && (
             <EmptyComponent>
               <TextComponent>No Project</TextComponent>
             </EmptyComponent>
           )}
 
-          <TextComponent fontSize={11} style={styles.textStyle}>
+          <TextComponent fontSize={21} style={styles.textStyle}>
             {user?.role !== 1 ? 'All Fundraising' : lang.my_fundraising}
           </TextComponent>
 
@@ -91,7 +92,7 @@ const History: React.FC<Props> = ({navigation}) => {
             keyExtractor={item => item.id}
             contentContainerStyle={GlobalStyles.container}
           />
-        </View>
+        </CustomView>
       </ScrollView>
     </SafeAreaView>
   );
@@ -105,6 +106,11 @@ const styles = StyleSheet.create({
   },
   container: {
     width: 'auto',
+    marginTop: 32,
+    backgroundColor: Color.white,
+  },
+  customViewStyle: {
+    alignItems: 'flex-start',
   },
 });
 export default History;

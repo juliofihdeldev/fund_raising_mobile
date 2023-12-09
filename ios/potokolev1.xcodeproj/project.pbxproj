@@ -10,6 +10,9 @@
 		0085C0C68CA34BB7BA36B1F6 /* Montserrat-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FBAF3CDD5C57469BAF89357D /* Montserrat-BoldItalic.ttf */; };
 		00E356F31AD99517003FC87E /* potokolev1Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* potokolev1Tests.m */; };
 		01AF1A372B0983A200E79E6C /* GoogleService-Info-2.plist in Resources */ = {isa = PBXBuildFile; fileRef = 01AF1A362B0983A200E79E6C /* GoogleService-Info-2.plist */; };
+		01AF969A2B1956380086603A /* potokolev1.app in Resources */ = {isa = PBXBuildFile; fileRef = 13B07F961A680F5B00A75B9A /* potokolev1.app */; };
+		01AF969B2B1956480086603A /* potokolev1Tests.xctest in Resources */ = {isa = PBXBuildFile; fileRef = 00E356EE1AD99517003FC87E /* potokolev1Tests.xctest */; };
+		01AF969C2B1956670086603A /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED297162215061F000B7C4FE /* JavaScriptCore.framework */; };
 		039C09B0ED1947B382961EB7 /* Kenia-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 18D2D8AEA8D341D1BDF7AC09 /* Kenia-Regular.ttf */; };
 		07FD4AF385284B9C9424A363 /* Montserrat-ExtraBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 64373F961FF340CD9B0F41B5 /* Montserrat-ExtraBoldItalic.ttf */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
@@ -105,6 +108,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				01AF969C2B1956670086603A /* JavaScriptCore.framework in Frameworks */,
 				713DF20F020C042683EA2428 /* Pods_potokolev1.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -324,6 +328,7 @@
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				039C09B0ED1947B382961EB7 /* Kenia-Regular.ttf in Resources */,
+				01AF969A2B1956380086603A /* potokolev1.app in Resources */,
 				8E45B682C0C4430E8DEB7344 /* LilitaOne-Regular.ttf in Resources */,
 				23DCC23B425B4BD0843450DF /* Montserrat-Black.ttf in Resources */,
 				FBB85E7D5D694F4DA9B7D28D /* Montserrat-BlackItalic.ttf in Resources */,
@@ -345,6 +350,7 @@
 				E32F45D532A54334B73B78D4 /* Montserrat-Thin.ttf in Resources */,
 				2BA5F75487F641249A57CA00 /* Montserrat-ThinItalic.ttf in Resources */,
 				AB71E8A45D724ED995DE6329 /* Skranji-Bold.ttf in Resources */,
+				01AF969B2B1956480086603A /* potokolev1Tests.xctest in Resources */,
 				236B8ECA30CE425D87C3059C /* Skranji-Regular.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -724,7 +730,7 @@
 					"${PODS_CONFIGURATION_BUILD_DIR}/React-NativeModulesApple/React_NativeModulesApple.framework/Headers",
 					"${PODS_CONFIGURATION_BUILD_DIR}/React-graphics/React_graphics.framework/Headers/react/renderer/graphics/platform/ios",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					/usr/lib/swift,
 					"$(inherited)",
@@ -807,7 +813,7 @@
 					"${PODS_CONFIGURATION_BUILD_DIR}/React-NativeModulesApple/React_NativeModulesApple.framework/Headers",
 					"${PODS_CONFIGURATION_BUILD_DIR}/React-graphics/React_graphics.framework/Headers/react/renderer/graphics/platform/ios",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					/usr/lib/swift,
 					"$(inherited)",

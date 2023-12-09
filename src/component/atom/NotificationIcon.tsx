@@ -15,11 +15,15 @@ const NotificationIcon: React.FC<NotificationIconProps> = ({
   name = 'notifications-outline',
 }) => {
   return (
-    <View style={[styles.container, style]}>
-      <Ionicons name={name} size={24} color="#333" />
-      {count > 0 && (
-        <View style={styles.badgeContainer}>
-          <Text style={styles.badgeText}>{count}</Text>
+    <View
+      style={[styles.container, style]}
+      testID="notification-icon-container">
+      <Ionicons name={name} size={24} color="#333" testID="default-icon" />
+      {count && (
+        <View style={styles.badgeContainer} testID="badge-container">
+          <Text style={styles.badgeText} testID="badge-text">
+            {count}
+          </Text>
         </View>
       )}
     </View>

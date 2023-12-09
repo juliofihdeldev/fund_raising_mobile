@@ -264,9 +264,9 @@ const PaymentForm: React.FC<Props> = ({route, navigation, setLoading}: any) => {
               title="Renflouer son compte"
               onPress={handleShowMenuPayment}
               buttonStyle={{
-                backgroundColor: Color.blue,
-                width: '60%',
-                borderRadius: 12,
+                backgroundColor: Color.secondary,
+                width: '52%',
+                borderRadius: 118,
                 marginTop: 16,
               }}
               textStyle={{color: '#fff'}}

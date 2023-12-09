@@ -1,72 +1,65 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {View, StyleSheet, TextInput, Dimensions, Alert} from 'react-native';
 import {Color} from '../../assets/GlobalStyles';
 import TextComponent from '../../component/atom/CustomText';
 import {useFunding} from '../../context/FundingContext';
-import { useLang } from '../../context/LanguageContext';
+import {useLang} from '../../context/LanguageContext';
 import withLoadingModal from '../../component/HOC/Loading';
 import CustomButton from '../../component/atom/CustomButton';
-import { isNullOrEmpty } from '../../utils/isNullOrEmpty';
+import {isNullOrEmpty} from '../../utils/isNullOrEmpty';
 import UserModalList from '../../component/UserModalList';
-import { useAuth } from '../../context/AuthContext';
+import {useAuth} from '../../context/AuthContext';
 import ItemUser from '../../component/ItemUser';
-import { currency } from '../../utils/currency';
+import {currency} from '../../utils/currency';
 
-const MoncashPaymentRegister: React.FC = ({route, navigation, setLoading})  => {
+const MoncashPaymentRegister: React.FC = ({route, navigation, setLoading}) => {
   const {lang} = useLang();
 
   const [amount, setAmount] = React.useState(0);
-  
-  const{
-    name, 
-    id,
 
-  } = route.params.project;
+  const {name, id} = route.params.project;
 
   const [showMenu, setShowMenu] = React.useState(false);
   const {current_select_user} = useAuth();
 
   navigation.setOptions({
     title: 'Enregistrer Moncash Payment',
-  })
+  });
 
   const handleSelectUser = () => {
     setShowMenu(true);
-  }
+  };
 
   const {handleAddMoncashPayment} = useFunding();
 
-  const runAddMoncashPayment = () => {  
+  const runAddMoncashPayment = () => {
     try {
-      setLoading(true)
-      handleAddMoncashPayment(
-        {
-          amount : Number(amount),
-          project_id: id,
-          user_id: current_select_user?.id,
-          project: route.params.project,
-          project_id: route.params.project.id,
-          tipAmount: 0,
-          user: current_select_user,
-          status: 'Need approval',
-          paymentType: 'moncash',
-        }
-      )
-      setLoading(false)
+      setLoading(true);
+      handleAddMoncashPayment({
+        amount: Number(amount),
+        project_id: id,
+        user_id: current_select_user?.id,
+        project: route.params.project,
+        project_id: route.params.project.id,
+        tipAmount: 0,
+        user: current_select_user,
+        status: 'Need approval',
+        paymentType: 'moncash',
+      });
+      setLoading(false);
       setTimeout(() => {
-        navigation.goBack()
+        navigation.goBack();
       }, 1000);
     } catch (error) {
-      setLoading(false) 
+      setLoading(false);
     }
-    
-  }
+  };
 
   const handleSubmitMoncashPayment = () => {
+    if (isNaN(amount)) return;
 
-    if (isNaN(amount)) return
-
-    Alert.alert(lang?.information,
+    Alert.alert(
+      lang?.information,
       'Èske ou vle enregistre  Payment Moncash sa a?',
       [
         {
@@ -80,13 +73,13 @@ const MoncashPaymentRegister: React.FC = ({route, navigation, setLoading})  => {
             runAddMoncashPayment();
           },
         },
-      ]);
-  }
+      ],
+    );
+  };
 
   return (
     <View style={styles.container}>
-      { showMenu && (
-        <UserModalList onClose={() => setShowMenu(false)} /> )}
+      {showMenu && <UserModalList onClose={() => setShowMenu(false)} />}
 
       <TextComponent
         style={{
@@ -97,7 +90,6 @@ const MoncashPaymentRegister: React.FC = ({route, navigation, setLoading})  => {
       </TextComponent>
 
       <View style={styles.containerPosition}>
-       
         <CustomButton
           title={'Selectionner utilisateur'}
           onPress={handleSelectUser}
@@ -112,28 +104,23 @@ const MoncashPaymentRegister: React.FC = ({route, navigation, setLoading})  => {
         <View
           style={{
             paddingHorizontal: 12,
-          }}
-        >
-          <TextComponent fontSize={15}>  
-            {lang?.selected_user}
-          </TextComponent>
-      
-          {
-            !isNullOrEmpty(current_select_user) && (
-              <ItemUser
-                image={current_select_user?.image}
-                name={current_select_user?.name}
-                address={current_select_user?.id}
-                contactButton={() => null}
-              />)
-          }
+          }}>
+          <TextComponent fontSize={15}>{lang?.selected_user}</TextComponent>
 
+          {!isNullOrEmpty(current_select_user) && (
+            <ItemUser
+              image={current_select_user?.image}
+              name={current_select_user?.name}
+              address={current_select_user?.id}
+              contactButton={() => null}
+            />
+          )}
         </View>
 
         <TextInput
           placeholder="0.00"
           keyboardType="numeric"
-          value={ amount}
+          value={amount}
           onChangeText={amount => setAmount(amount)}
           placeholderTextColor={'#333'}
           style={{
@@ -148,11 +135,10 @@ const MoncashPaymentRegister: React.FC = ({route, navigation, setLoading})  => {
             fontSize: 17,
             paddingLeft: 16,
             fontWeight: 'bold',
-            color:  Color.black,
+            color: Color.black,
             fontFamily: 'Montserrat-Bold',
           }}
         />
-
 
         <TextComponent
           style={{
@@ -161,29 +147,26 @@ const MoncashPaymentRegister: React.FC = ({route, navigation, setLoading})  => {
             color: Color.black,
             padding: 16,
             borderRadius: 8,
-
           }}>
-          {
-            currency(amount)
-          }
+          {currency(amount)}
         </TextComponent>
 
-
         <CustomButton
-          size='small'
+          size="small"
           title={'Enregistrer  Payment'}
           onPress={handleSubmitMoncashPayment}
           disabled={isNullOrEmpty(current_select_user) || amount < 250}
-
           buttonStyle={{
-            backgroundColor: isNullOrEmpty(current_select_user) || amount < 250 ?  'transparent' : Color.primary,
+            backgroundColor:
+              isNullOrEmpty(current_select_user) || amount < 250
+                ? 'transparent'
+                : Color.primary,
             width: 200,
             borderRadius: 26,
             marginTop: 16,
           }}
           textStyle={{color: '#fff'}}
         />
-
       </View>
     </View>
   );
@@ -216,9 +199,8 @@ const styles = StyleSheet.create({
   },
 });
 
-
-
-const MoncashPaymentRegisterWithLoading = withLoadingModal(MoncashPaymentRegister, 'Loading ...');
+const MoncashPaymentRegisterWithLoading = withLoadingModal(
+  MoncashPaymentRegister,
+  'Loading ...',
+);
 export default MoncashPaymentRegisterWithLoading;
-
-

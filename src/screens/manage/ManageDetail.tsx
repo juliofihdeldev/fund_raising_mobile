@@ -1,64 +1,65 @@
 import React from 'react';
-import {
-  View,
-  SafeAreaView,
-  ScrollView,
-  TouchableOpacity,
-} from 'react-native';
-import { feedStyles } from '../feed/GlobalStyle';
+import {View, SafeAreaView, ScrollView, TouchableOpacity} from 'react-native';
+import {GlobalStyles} from '../feed/GlobalStyle';
 import TextComponent from '../../component/atom/CustomText';
 import CustomProgressBar from '../../component/atom/CustomProgressBar';
 import {useFunding} from '../../context/FundingContext';
 import CustomImage from '../../component/atom/CustomImage';
 import {currency} from '../../utils/currency';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { FeedStackParamList } from '../../navigations/MainNavigation';
-import { useLang } from '../../context/LanguageContext';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {FeedStackParamList} from '../../navigations/MainNavigation';
+import {useLang} from '../../context/LanguageContext';
 import ManageOption from './ManageOptions';
 import CustomButton from '../../component/atom/CustomButton';
-import { Color } from '../../assets/GlobalStyles';
+import {Color} from '../../assets/GlobalStyles';
 
-type FeedDetailsScreenNavigationProp = StackNavigationProp<FeedStackParamList, 'FeedDetails'>;
+type FeedDetailsScreenNavigationProp = StackNavigationProp<
+  FeedStackParamList,
+  'FeedDetails'
+>;
 
 interface Props {
   navigation: FeedDetailsScreenNavigationProp;
 }
 
 const ManageDetail: React.FC<Props> = ({navigation}) => {
-  const {lang} = useLang();  
-  const {
-    projects ,
-  } = useFunding();
+  const {lang} = useLang();
+  const {projects} = useFunding();
   const [readMore, setReadMore] = React.useState(false);
   const [showMenu, setShowMenu] = React.useState(false);
+
   const handleSetReadMore = () => {
     setReadMore(!readMore);
   };
   const handleMenu = () => {
     setShowMenu(!showMenu);
-  }
+  };
 
   return (
-    <SafeAreaView style={feedStyles.container}>
-      {showMenu && <ManageOption navigation={navigation} 
-        projects={projects}
-        onClose={() => setShowMenu(false)}
-      />}
+    <SafeAreaView>
+      {showMenu && (
+        <ManageOption
+          navigation={navigation}
+          projects={projects}
+          onClose={() => setShowMenu(false)}
+        />
+      )}
       <ScrollView>
-        <View style={feedStyles.containerDetailsItem}>
-       
-          <View style={feedStyles.projectContainerDetails}>
+        <View style={GlobalStyles.containerDetailsItem}>
+          <View style={GlobalStyles.projectContainerDetails}>
             <View>
-
-              <View style={[feedStyles.imagesView]}>
-                <CustomImage image={projects?.image} style={feedStyles.image} />
+              <View style={[GlobalStyles.imagesView]}>
+                <CustomImage
+                  image={projects?.image}
+                  style={GlobalStyles.image}
+                />
               </View>
 
-              <View style={feedStyles.contentText}>
+              <View style={GlobalStyles.contentText}>
                 <TextComponent
-                  style={[feedStyles.goalTextBold, {marginTop: 12}]}
+                  style={[GlobalStyles.goalTextBold, {marginTop: 12}]}
                   numberOfLines={3}>
-                  {projects?.name} 
+                  {projects?.name}
                 </TextComponent>
                 <CustomProgressBar
                   value={
@@ -68,9 +69,9 @@ const ManageDetail: React.FC<Props> = ({navigation}) => {
                   }
                 />
 
-                <View style={feedStyles.contentTextPrice}>
+                <View style={GlobalStyles.contentTextPrice}>
                   <TextComponent
-                    style={[feedStyles.goalText, {marginTop: 12}]}
+                    style={[GlobalStyles.goalText, {marginTop: 12}]}
                     numberOfLines={2}>
                     {lang?.a_collecte} {currency(projects?.collect)} {lang?.of}{' '}
                     {currency(projects?.amount)} {lang?.it_needs}
@@ -88,31 +89,29 @@ const ManageDetail: React.FC<Props> = ({navigation}) => {
                       borderTopWidth: 1,
                       borderTopColor: '#000',
                     }}>
-                    {lang?.collect_start_date} {projects?.date} - {projects?.category}
+                    {lang?.collect_start_date} {projects?.date} -{' '}
+                    {projects?.category}
                   </TextComponent>
 
                   <TextComponent
                     numberOfLines={readMore ? null : 5}
-                    style={[feedStyles.description, {marginTop: 16}]}>
+                    style={[GlobalStyles.description, {marginTop: 16}]}>
                     {projects?.description}
                   </TextComponent>
 
                   <TouchableOpacity
-                    style={feedStyles.contentTextPrice}
+                    style={GlobalStyles.contentTextPrice}
                     onPress={handleSetReadMore}>
                     <TextComponent fontWeight="bold">
                       {!readMore ? lang?.read_more : lang?.read_less}
                     </TextComponent>
                   </TouchableOpacity>
-
-                 
                 </View>
 
                 <CustomButton
                   title={lang?.menu}
                   onPress={handleMenu}
                   buttonStyle={{
-
                     backgroundColor: Color.primary,
                     width: '20%',
                     borderRadius: 26,
@@ -120,12 +119,10 @@ const ManageDetail: React.FC<Props> = ({navigation}) => {
                   }}
                   textStyle={{color: '#fff'}}
                 />
-                
-            
               </View>
             </View>
           </View>
-        </View>   
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
