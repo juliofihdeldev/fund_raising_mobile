@@ -14,8 +14,8 @@ import {useLang} from './LanguageContext';
 import firebase from '@react-native-firebase/app';
 
 interface FundingContextProps {
-  state: unknown;
-  handleStateManager: (data: unknown) => void;
+  state: ProjectType;
+  handleStateManager: (data: ProjectType) => void;
   handleSaveState: () => void;
   handleGetFundraising: () => void;
   handleGetDonations: (project_id: string) => void;
@@ -33,6 +33,8 @@ interface FundingContextProps {
   donations: DonationType[];
   messages: MessageType[];
   donationsUser: DonationType[];
+  isFileUploaded: boolean;
+  fileUploadedProgress: number;
 }
 
 const FundingContext = createContext<FundingContextProps | undefined>(
@@ -55,6 +57,8 @@ export const FundingContextProvider: React.FC<FundingContextProviderProps> = ({
   children,
 }) => {
   const [state, setState] = React.useState<ProjectType>({} as ProjectType);
+  const [isFileUploaded, setIsFileUploaded] = React.useState<boolean>(false);
+  const [fileUploadedProgress, setFileUploadedProgress] = React.useState(0);
 
   const {user} = useAuth();
   const {lang, _setLoading} = useLang();
@@ -65,9 +69,7 @@ export const FundingContextProvider: React.FC<FundingContextProviderProps> = ({
   );
 
   const [donations, setDonations] = React.useState([]);
-
   const [donationsUser, setDonationsUser] = React.useState([]);
-
   const [messages, setMessages] = React.useState<MessageType>(
     [] as MessageType,
   );
@@ -80,19 +82,32 @@ export const FundingContextProvider: React.FC<FundingContextProviderProps> = ({
   };
 
   async function sendMediaToStorage() {
-    if (state?.image?.length > 0) {
+    if (state?.image?.length! > 0) {
+      setIsFileUploaded(true);
       const reference = storage().ref(
         `fundraising/${new Date().toISOString()}`,
       );
       await reference.putFile(String(state?.image));
-      console.log('Uploaded to the bucket!');
       const downloadURL = await reference.getDownloadURL();
-      console.log(`File available at: ${downloadURL}`);
-
       return downloadURL;
     } else {
       return 'https://ortoday.com/wp-content/uploads/2020/07/eq-1024x640.jpg';
     }
+  }
+
+  async function sendMultipleFiles() {
+    let arrayOfImages = [] as string[];
+
+    const reference = storage().ref(`fundraising/${new Date().toISOString()}`);
+    for (let i = 0; i < state?.list_images?.length!; i++) {
+      // setTimeout(() => console.log('wait fake internet'), 3000);
+      const element = state?.list_images![i];
+      await reference.putFile(String(element));
+      const downloadURL = await reference.getDownloadURL();
+      arrayOfImages.push(downloadURL);
+      setFileUploadedProgress((i / state?.list_images?.length!) * 100);
+    }
+    return arrayOfImages;
   }
 
   const handleGetProjectByID = async (project_id: string) => {
@@ -143,34 +158,36 @@ export const FundingContextProvider: React.FC<FundingContextProviderProps> = ({
   };
 
   const handleSaveState = async () => {
-    _setLoading(true);
-    const img = await sendMediaToStorage();
-
-    const dateValue = new Date().toDateString().toString();
-    const _user = user;
-    delete _user?.donations;
-
-    const formatData: ProjectType = {
-      date: dateValue,
-      name: state?.name,
-      description: state?.description,
-      amount: state?.amount,
-      category: state?.category,
-      collect: 0,
-      status: 'Pending Review',
-      image: img,
-      video_url: state?.video_url,
-      donation: [],
-      isBlocked: false,
-      is_emergency: Math.random() >= 0.5,
-      user: _user,
-    };
-
-    console.log('formatData', formatData);
     try {
+      _setLoading(false);
+      setIsFileUploaded(true);
+      const list_images = await sendMultipleFiles();
+      const img = list_images[0]; // await sendMediaToStorage();
+      const dateValue = new Date().toDateString().toString();
+      const _user = user;
+      delete _user?.donations;
+
+      const formatData: ProjectType = {
+        date: dateValue,
+        name: state?.name,
+        description: state?.description,
+        amount: state?.amount,
+        category: state?.category,
+        collect: 0,
+        status: 'Pending Review',
+        image: img,
+        list_images: list_images,
+        video_url: state?.video_url,
+        donation: [],
+        isBlocked: false,
+        is_emergency: Math.random() >= 0.3,
+        user: _user,
+      };
+
       await ref.add(formatData);
 
       setFundraising((prevState: ProjectType) => [...prevState, formatData]);
+
       _setLoading(false);
 
       Alert.alert(lang?.warning, lang?.fundraising_created, [
@@ -179,9 +196,9 @@ export const FundingContextProvider: React.FC<FundingContextProviderProps> = ({
           onPress: () => null,
         },
       ]);
+      setIsFileUploaded(false);
     } catch (error) {
       _setLoading(false);
-      alert(error);
       console.log('Error  file:', error);
       Alert.alert('Error', JSON.stringify(error), [
         {
@@ -189,6 +206,8 @@ export const FundingContextProvider: React.FC<FundingContextProviderProps> = ({
           onPress: () => null,
         },
       ]);
+      setState({} as ProjectType);
+      setIsFileUploaded(false);
     }
   };
 
@@ -440,6 +459,8 @@ export const FundingContextProvider: React.FC<FundingContextProviderProps> = ({
     handleAddMoncashPayment,
     handleAdduserMoncashPayment,
     updateFundraisingViews,
+    isFileUploaded,
+    fileUploadedProgress,
   };
 
   return (

@@ -8,13 +8,12 @@ import CustomButton from '../../component/atom/CustomButton';
 import {Color} from '../../assets/GlobalStyles';
 import Location from './Location-SP1';
 import withLoadingModal from '../../component/HOC/Loading';
-import { useLang } from '../../context/LanguageContext';
+import {useLang} from '../../context/LanguageContext';
 
 const EditProject: React.FC = ({route, navigation}) => {
-
   const {handleStateManager, updateFundraising, state} = useFunding();
   const {lang} = useLang();
-  const{
+  const {
     name,
     amount,
     location,
@@ -24,6 +23,7 @@ const EditProject: React.FC = ({route, navigation}) => {
     description,
     image,
     user: {},
+    list_images,
   } = route.params.project;
 
   React.useEffect(() => {
@@ -36,13 +36,14 @@ const EditProject: React.FC = ({route, navigation}) => {
       id,
       description,
       image,
+      list_images,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [route.params.project]);
 
   navigation.setOptions({
     title: lang.edit_collet,
-  
+
     headerRight: () => (
       <CustomButton
         title="Anrejistre"
@@ -116,6 +117,5 @@ const styles = StyleSheet.create({
   },
 });
 
-
-const EditProjectWithLoading = withLoadingModal(EditProject,'');
+const EditProjectWithLoading = withLoadingModal(EditProject, '');
 export default EditProjectWithLoading;

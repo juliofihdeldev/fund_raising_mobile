@@ -1,8 +1,11 @@
 import React from 'react';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import Login from '../screens/Login';
+import {createStackNavigator} from '@react-navigation/stack';
 
-const Stack = createNativeStackNavigator();
+import Login from '../screens/auth/Login';
+import PhoneLoginWithLoading from '../screens/auth/PhoneLogin';
+import MainNavigation from './MainNavigation';
+
+const Stack = createStackNavigator();
 
 export default function Auth() {
   return (
@@ -12,6 +15,8 @@ export default function Auth() {
         headerShown: false,
       }}>
       <Stack.Screen name="Login" component={Login} />
+      <Stack.Screen name="PhoneLogin" component={PhoneLoginWithLoading} />
+      <Stack.Screen name="MainNavigation" component={MainNavigation} />
     </Stack.Navigator>
   );
 }

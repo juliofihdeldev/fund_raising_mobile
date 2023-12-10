@@ -209,35 +209,40 @@ const Profile: React.FC = ({navigation}: any) => {
         <CustomSeparator />
 
         <TextComponent color={Color.black} fontWeight="bold">
+          {'Manage'}
+        </TextComponent>
+        <CustomSeparator />
+        {isLoginFn() && (
+          <ListItem
+            text={lang?.startFundraising}
+            icon="card-outline"
+            onPress={goToCreate}
+            fontSize={17}
+            color={Color.black}
+            containerStyle={styles.containerList}
+            iconStyle={styles.customIcon}
+          />
+        )}
+
+        {isLoginFn() && (
+          <ListItem
+            text={lang?.myFundraisings}
+            icon="person-outline"
+            onPress={() => navigation.navigate('History')}
+            fontSize={17}
+            color={Color.black}
+            containerStyle={styles.containerList}
+            iconStyle={styles.customIcon}
+          />
+        )}
+        <CustomSeparator />
+
+        <TextComponent color={Color.black} fontWeight="bold">
           {lang?.settings}
         </TextComponent>
         <CustomSeparator />
 
         <ScrollView>
-          {isLoginFn() && (
-            <ListItem
-              text={lang?.startFundraising}
-              icon="card-outline"
-              onPress={goToCreate}
-              fontSize={17}
-              color={Color.black}
-              containerStyle={styles.containerList}
-              iconStyle={styles.customIcon}
-            />
-          )}
-
-          {isLoginFn() && (
-            <ListItem
-              text={lang?.myFundraisings}
-              icon="person-outline"
-              onPress={() => navigation.navigate('History')}
-              fontSize={17}
-              color={Color.black}
-              containerStyle={styles.containerList}
-              iconStyle={styles.customIcon}
-            />
-          )}
-
           <ListItem
             text={lang?.myTerms}
             icon="document-outline"

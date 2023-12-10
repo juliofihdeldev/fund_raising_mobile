@@ -11,10 +11,7 @@ import RaisingConfirmation from './RaisingConfirmation';
 
 import {useFunding} from '../../context/FundingContext';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {
-  FeedStackParamLis,
-  ProfileStackParamList,
-} from '../../navigations/MainNavigation';
+import {ProfileStackParamList} from '../../navigations/MainNavigation';
 import {useLang} from '../../context/LanguageContext';
 import withLoadingModal from '../../component/HOC/Loading';
 
@@ -50,9 +47,7 @@ const Create: React.FC<Props> = ({navigation}) => {
           text: lang?.confirm,
           onPress: () => {
             handleSaveState();
-            setTimeout(() => {
-              navigation.navigate('History');
-            }, 2000);
+            navigation.navigate('Feed');
           },
         },
         {

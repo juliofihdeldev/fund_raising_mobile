@@ -8,19 +8,19 @@ import {
   PermissionsAndroid,
   Alert,
   Dimensions,
-  Image,
 } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
 import CustomSeparator from '../../component/atom/CustomSeparator';
 import CustomButton from '../../component/atom/CustomButton';
 import {useFunding} from '../../context/FundingContext';
 import {useLang} from '../../context/LanguageContext';
+import MultiplePhotos from '../../component/molecules/MultiplePhotos';
 
 const RaisingMedia: React.FC = () => {
   const {lang} = useLang();
-
   const {state, handleStateManager} = useFunding();
   const [image, setImages] = useState(state?.image || null);
+  const [list_images, setListImages] = useState(state?.list_images || []);
 
   const [permission, setPermission] = useState<boolean>(false);
   const [video_url, setVideo_url] = useState<string>(state?.video_url || '');
@@ -40,6 +40,13 @@ const RaisingMedia: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [image]);
 
+  React.useEffect(() => {
+    handleStateManager({
+      list_images: list_images,
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [list_images]);
+
   const requestCameraPermission = async () => {
     try {
       const granted = await PermissionsAndroid.request(
@@ -52,23 +59,26 @@ const RaisingMedia: React.FC = () => {
           buttonPositive: 'OK',
         },
       );
+      console.log('granted', granted);
+
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
         console.log('Camera permission granted');
         setPermission(true);
-        // You can now access the library or feature that requires the CAMERA permission.
-      } else {
-        Alert.alert(
-          'Camera permission denied',
-          ' You can not upload a video without camera permission',
-          [
-            {
-              text: 'OK',
-              onPress: () => null,
-            },
-          ],
-        );
-        setPermission(false);
       }
+      // You can now access the library or feature that requires the CAMERA permission.
+      // } else {
+      //   Alert.alert(
+      //     'Camera permission denied',
+      //     ' You can not upload a video without camera permission',
+      //     [
+      //       {
+      //         text: 'OK',
+      //         onPress: () => null,
+      //       },
+      //     ],
+      //   );
+      //   setPermission(false);
+      // }
     } catch (error) {
       Alert.alert('Error requesting camera permission:', JSON.stringify(error));
     }
@@ -76,10 +86,7 @@ const RaisingMedia: React.FC = () => {
 
   React.useEffect(() => {
     async function fetchAskpermissios() {
-      // You can await here
-
       await requestCameraPermission();
-      // ...
     }
     fetchAskpermissios();
   }, []); // Or [] if effect doesn't need props or state
@@ -88,9 +95,10 @@ const RaisingMedia: React.FC = () => {
     if (!permission) {
       await requestCameraPermission();
     }
+
     ImagePicker.openPicker({
       mediaType: 'photo',
-      compressImageQuality: 0.8,
+      compressImageQuality: 0.9,
     })
       .then(image => {
         setImages(image);
@@ -99,6 +107,29 @@ const RaisingMedia: React.FC = () => {
         console.log('ImagePicker Error:', error);
         console.log(JSON.stringify(error));
       });
+  };
+
+  const handleSelectMultipleImages = async () => {
+    if (!permission) {
+      await requestCameraPermission();
+    }
+    ImagePicker.openPicker({
+      multiple: true,
+      mediaType: 'photo',
+      compressImageQuality: 0.8,
+    })
+      .then(images => {
+        setListImages(images.map((image: any) => image.path));
+      })
+      .catch(error => {
+        console.log('ImagePicker Error:', error);
+        console.log(JSON.stringify(error));
+      });
+  };
+
+  const onDeletePhoto = (arg: string): void => {
+    const newList = list_images.filter(photo => photo !== arg);
+    setListImages(newList);
   };
 
   return (
@@ -126,12 +157,14 @@ const RaisingMedia: React.FC = () => {
         <View
           style={{
             marginTop: 16,
-            width: '100%',
+            width: '90%',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
           }}>
           {!image ? (
             <CustomButton
               title={lang?.word_add_a_photo}
-              onPress={handleImageSelect}
+              onPress={handleSelectMultipleImages}
               buttonStyle={{
                 backgroundColor: Color.secondary,
                 borderRadius: 26,
@@ -141,7 +174,7 @@ const RaisingMedia: React.FC = () => {
           ) : (
             <CustomButton
               title={lang?.word_change_photo}
-              onPress={handleImageSelect}
+              onPress={handleSelectMultipleImages}
               buttonStyle={{
                 backgroundColor: Color.secondary,
                 borderRadius: 26,
@@ -152,25 +185,30 @@ const RaisingMedia: React.FC = () => {
         </View>
         <CustomSeparator />
 
-        {image?.path ? (
-          <Image
-            source={{uri: image?.path}}
-            style={styles.image}
-            resizeMode="cover"
-          />
-        ) : (
-          <Image
-            source={{uri: lastImage}}
-            style={styles.image}
-            resizeMode="cover"
-          />
-        )}
+        <View style={styles.containePhoto}>
+          <TextComponent style={{color: Color.black}}></TextComponent>
+          {list_images.map((photo, index) => (
+            <MultiplePhotos
+              photo={photo}
+              key={index}
+              onDeletePhoto={() => onDeletePhoto(photo)}
+            />
+          ))}
+        </View>
       </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  containePhoto: {
+    width: '100%',
+    backgroundColor: 'transparent',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    marginTop: 16,
+  },
   container: {
     flex: 1,
     alignItems: 'center',

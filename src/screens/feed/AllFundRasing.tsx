@@ -1,6 +1,6 @@
 import React from 'react';
 import {FlatList, View, SafeAreaView, ScrollView} from 'react-native';
-import {feedStyles} from './GlobalStyle';
+import {GlobalStyles} from './GlobalStyle';
 import {useFunding} from '../../context/FundingContext';
 import ItemDonationVertical from '../../component/ItemDonationVertical';
 import {StackNavigationProp} from '@react-navigation/stack';
@@ -30,9 +30,9 @@ const AllFundraising: React.FC<Props> = ({navigation, route}) => {
   }, []);
 
   return (
-    <SafeAreaView style={feedStyles.container}>
+    <SafeAreaView style={[GlobalStyles.container, {marginTop: 60}]}>
       <ScrollView ref={scrollRef}>
-        <View style={feedStyles.forestContainer}>
+        <View style={GlobalStyles.forestContainer}>
           <FlatList
             data={
               category === 'All Categories'
@@ -46,7 +46,7 @@ const AllFundraising: React.FC<Props> = ({navigation, route}) => {
                   )
             }
             renderItem={project => (
-              <View style={feedStyles.projectItemVertical}>
+              <View style={GlobalStyles.projectItemVertical}>
                 <ItemDonationVertical
                   project={project}
                   onPress={() => {
@@ -58,7 +58,7 @@ const AllFundraising: React.FC<Props> = ({navigation, route}) => {
               </View>
             )}
             keyExtractor={item => item.id}
-            contentContainerStyle={feedStyles.container}
+            contentContainerStyle={GlobalStyles.container}
           />
         </View>
       </ScrollView>

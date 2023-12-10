@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 export type ProjectStatus =
   | 'In Progress'
   | 'Pending Review'
@@ -30,7 +28,7 @@ export interface DonationType {
   id: string;
   description: string;
   amount: number;
-  date: Date;
+  date: string;
   user: UserType;
 }
 
@@ -42,11 +40,11 @@ export interface CategoryType {
 }
 
 export interface ProjectType {
-  id: string;
+  id?: string;
   name: string;
   description: string;
   status: ProjectStatus;
-  date?: Date;
+  date?: string;
   location?: string;
   amount?: number;
   people?: number;
@@ -59,4 +57,27 @@ export interface ProjectType {
   likes?: number;
   category: string;
   view_count?: number;
+  list_images?: Array<string>;
+  video_url: string;
+  hasUpdated?: boolean;
+  collect?: number | string;
+  isBlocked?: boolean;
+  is_emergency?: boolean;
+}
+
+export interface MessageType {
+  id?: string;
+  message?: string;
+  date?: string;
+  user?: UserType;
+  project?: ProjectType;
+}
+
+export interface PaymentType {
+  id: string;
+  amount?: number;
+  type?: string;
+  date?: string;
+  user?: UserType;
+  project?: ProjectType;
 }

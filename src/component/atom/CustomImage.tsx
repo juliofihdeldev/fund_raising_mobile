@@ -1,10 +1,10 @@
 import React from 'react';
 import {StyleProp, ImageStyle, Image} from 'react-native';
-import {defaultImage} from '../../assets/images';
 
 interface CustomImageProps {
   style?: StyleProp<ImageStyle>;
   image?: string;
+  isPlatform?: boolean;
 }
 
 const CustomImage: React.FC<CustomImageProps> = ({style, image}) => {

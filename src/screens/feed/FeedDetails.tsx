@@ -31,6 +31,7 @@ import withLoadingFresh from '../../component/HOC/RefreshLoading';
 import ManageOption from '../manage/ManageOptions';
 import {useAuth} from '../../context/AuthContext';
 import {FlashList} from '@shopify/flash-list';
+import CustomBanner from '../../component/atom/CustomBanner';
 
 const FeedDetails: React.FC<ProjectType> = ({
   route,
@@ -54,6 +55,7 @@ const FeedDetails: React.FC<ProjectType> = ({
     handleGetMessagesByID,
     handleGetProjectByID,
     handleGetDonations,
+    updateFundraisingViews,
   } = useFunding();
 
   const {
@@ -65,6 +67,7 @@ const FeedDetails: React.FC<ProjectType> = ({
     description,
     category,
     view_count = 0,
+    list_images,
   } = projects;
 
   useFocusEffect(
@@ -74,10 +77,13 @@ const FeedDetails: React.FC<ProjectType> = ({
           handleGetProjectByID(id),
           handleGetMessagesByID(id),
           handleGetDonations(id),
+          updateFundraisingViews(id, {
+            view_count: view_count + 1,
+          } as ProjectType),
         ]);
       }
       fetchData();
-    }, [id]),
+    }, [id, view_count]),
   );
 
   const handleSetReadMore = () => {
@@ -115,13 +121,15 @@ https://pote-kole.web.app?id=${id}`,
               transform: [{translateY: translateY}],
             },
           ]}>
-          <CustomBackIcon
-            name="close-outline"
-            style={styles.iconMargin}
-            size={28}
-            color={Color.primary}
-            onPress={() => navigation.goBack()}
-          />
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <CustomBackIcon
+              name="close-outline"
+              style={styles.iconMargin}
+              size={28}
+              color={Color.primary}
+              onPress={() => navigation.goBack()}
+            />
+          </TouchableOpacity>
           <TextComponent
             color="#000"
             numberOfLines={3}
@@ -156,7 +164,12 @@ https://pote-kole.web.app?id=${id}`,
             <View style={GlobalStyles.projectContainerDetails}>
               <View>
                 <View style={[GlobalStyles.imagesView]}>
-                  <CustomImage image={image} style={GlobalStyles.image} />
+                  {list_images?.length ? (
+                    <CustomBanner images={list_images} />
+                  ) : (
+                    <CustomImage image={image} style={GlobalStyles.image} />
+                  )}
+
                   <View style={styles.textContentStyle}>
                     <TextComponent
                       fontSize={19}
@@ -164,6 +177,7 @@ https://pote-kole.web.app?id=${id}`,
                       showTextShadow={true}
                       fontWeight="bold"
                       numberOfLines={2}>
+                      {list_images?.length} photos
                       {name}
                     </TextComponent>
                   </View>
@@ -352,6 +366,6 @@ const styles = StyleSheet.create({
   },
 });
 
-const FeedDetailsWithLoading = withLoadingFresh(FeedDetails, 'Please wait...');
+const FeedDetailsWithLoading = withLoadingFresh(FeedDetails);
 
 export default FeedDetailsWithLoading;

@@ -16,17 +16,22 @@ import PaymentFormWithLoading from '../screens/feed/PaymentForm';
 import FeedDetailsWithLoading from '../screens/feed/FeedDetails';
 import Favorite from '../screens/favoris/Favorite';
 import Search from '../screens/feed/Search';
-import MoncashPaymentRegisterWithLoading from '../screens/manage/MoncashPaymentRegister';
 import UserMoncashPaymentRegisterWithLoading from '../screens/manage/UserPaymentMoncash';
+import AllFundraising from '../screens/feed/AllFundRasing';
+import Login from '../screens/auth/Login';
 
 export type ProfileStackParamList = {
   Profile: undefined;
   ProfileEdit: undefined;
   PhoneLogin: undefined;
   Create: undefined;
+  Feed: undefined;
   EditProject: undefined;
   Search: undefined;
   UserMoncashPaymentRegister: undefined;
+  AllFundraising: undefined;
+  ProfileScreen: undefined;
+  Login: undefined;
 };
 
 export type FeedStackParamList = {
@@ -40,6 +45,9 @@ export type FeedStackParamList = {
   Search: undefined;
   EditProject: undefined;
   ManageFundrasing: undefined;
+  AllFundraising: undefined;
+  Create: undefined;
+  Login: undefined;
 };
 
 const Tab = createMaterialBottomTabNavigator<FeedStackParamList>();
@@ -94,6 +102,29 @@ const FeedStack = () => {
         }}
         component={ManageFundrasing}
       />
+      <Stack.Screen
+        name="Create"
+        component={CreateWithLoading}
+        options={{
+          presentation: 'modal',
+        }}
+      />
+      <Stack.Screen
+        name="AllFundraising"
+        component={AllFundraising}
+        options={{
+          headerShown: false,
+          presentation: 'modal',
+        }}
+      />
+      <Stack.Screen
+        name="Login"
+        component={Login}
+        options={{
+          headerShown: false,
+          presentation: 'modal',
+        }}
+      />
     </Stack.Navigator>
   );
 };
@@ -110,13 +141,43 @@ const ProfileStack = () => {
       />
       <Stack.Screen name="ProfileEdit" component={ProfileEdit} />
       <Stack.Screen name="PhoneLogin" component={PhoneLoginWithLoading} />
-      <Stack.Screen name="Create" component={CreateWithLoading} />
+      <Stack.Screen
+        name="Create"
+        component={CreateWithLoading}
+        options={{
+          presentation: 'modal',
+        }}
+      />
       <Stack.Screen name="EditProject" component={EditProjectWithLoading} />
       <Stack.Screen name="History" component={History} />
       <Stack.Screen name="ManageFundrasing" component={ManageFundrasing} />
       <Stack.Screen
         name="UserMoncashPaymentRegister"
         component={UserMoncashPaymentRegisterWithLoading}
+      />
+      <Stack.Screen
+        name="Feed"
+        component={Feed}
+        options={{
+          headerShown: false,
+          presentation: 'modal',
+        }}
+      />
+      <Stack.Screen
+        name="AllFundraising"
+        component={AllFundraising}
+        options={{
+          headerShown: false,
+          presentation: 'modal',
+        }}
+      />
+      <Stack.Screen
+        name="Login"
+        component={Login}
+        options={{
+          headerShown: false,
+          presentation: 'modal',
+        }}
       />
     </Stack.Navigator>
   );

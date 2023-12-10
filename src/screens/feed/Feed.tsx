@@ -26,53 +26,21 @@ import {useFunding} from '../../context/FundingContext';
 import withLoadingFresh from '../../component/HOC/RefreshLoading';
 
 import {FlashList} from '@shopify/flash-list';
-let category = [
-  {
-    id: '1',
-    title: 'Toutes',
-    name: 'Toutes',
-    iconName: 'grid-outline',
-    iconSize: 32,
-  },
-  {
-    id: '2',
-    title: 'Charite',
-    name: 'Charite',
-    iconName: 'cart-outline',
-    iconSize: 32,
-  },
-  {
-    id: '3',
-    title: 'Sante',
-    name: 'Sante',
-    iconName: 'medkit-outline',
-    iconSize: 32,
-  },
-  {
-    id: '4',
-    title: 'Education',
-    name: 'Education',
-    iconName: 'school-outline',
-    iconSize: 32,
-  },
-  {
-    id: '5',
-    title: 'Nature',
-    name: 'Nature',
-    iconName: 'leaf-outline',
-    iconSize: 32,
-  },
-];
+import CustomProgressBar from '../../component/atom/CustomProgressBar';
+import {category} from '../../utils/category';
+import {getIdAndPathFromLink} from '../../utils/getIdAndPathFromLink';
 
 const Feed: React.FC<ProjectType> = ({navigation}: any) => {
   const [selectedId, setSelectedId] = React.useState(category[0]);
-  const {fundraising, handleGetFundraising} = useFunding();
+  const {
+    fundraising,
+    handleGetFundraising,
+    isFileUploaded,
+    fileUploadedProgress,
+  } = useFunding();
   const {lang} = useLang();
 
-  React.useEffect(() => {
-    handleGetFundraising();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const scrollRef = useRef<ReactScrollView>();
 
   const scrollY = new Animated.Value(0);
   const diffClamp = Animated.diffClamp(scrollY, 0, 124);
@@ -83,9 +51,12 @@ const Feed: React.FC<ProjectType> = ({navigation}: any) => {
   });
 
   const [refreshing, setRefreshing] = React.useState(false);
-
   const nextPageIdentifierRef = useRef();
-  const [isFirstPageReceived, setIsFirstPageReceived] = useState(false);
+
+  React.useEffect(() => {
+    handleGetFundraising();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
@@ -106,8 +77,6 @@ const Feed: React.FC<ProjectType> = ({navigation}: any) => {
 
   const handleUrl = useCallback(
     (event: any) => {
-      console.log('path', event.url);
-
       let path = getIdAndPathFromLink(event.url)?.path;
       let id = getIdAndPathFromLink(event.url)?.id;
       console.log('[id,path]', [path, id]);
@@ -137,23 +106,6 @@ const Feed: React.FC<ProjectType> = ({navigation}: any) => {
       Linking.removeAllListeners('url');
     };
   }, [handleDeepLink, handleUrl]);
-
-  interface IdAndPath {
-    path: string;
-    id: string | null;
-  }
-
-  function getIdAndPathFromLink(link: string): IdAndPath | null {
-    const match = link.match(/\/fundraising\/([^/]+)/);
-
-    if (match && match[1]) {
-      const path = '/fundraising';
-      const id = match[1];
-      return {path, id};
-    }
-
-    return null;
-  }
 
   const goToSearch = () => {
     navigation.navigate('Search');
@@ -192,6 +144,17 @@ const Feed: React.FC<ProjectType> = ({navigation}: any) => {
   //       });
   //   }, []);
 
+  const handleCategory = (item: any) => {
+    // scrool to top when change category
+    scrollRef.current?.scrollTo({
+      y: 490,
+      x: 0,
+      animated: true,
+    });
+
+    setSelectedId(item);
+  };
+
   return (
     <SafeAreaView style={GlobalStyles.container}>
       <Animated.View
@@ -206,8 +169,8 @@ const Feed: React.FC<ProjectType> = ({navigation}: any) => {
         <CustomHeader goToSearch={goToSearch} />
         <CustomView style={styles.separator} />
       </Animated.View>
-
       <ReactScrollView
+        ref={scrollRef}
         refreshControl={
           <RefreshControl
             refreshing={refreshing}
@@ -231,7 +194,7 @@ const Feed: React.FC<ProjectType> = ({navigation}: any) => {
                   title={item.title}
                   fontSize={13}
                   iconSize={item.iconSize}
-                  onPress={() => setSelectedId(item)}
+                  onPress={() => handleCategory(item as any)}
                   style={[
                     GlobalStyles.category,
                     {
@@ -260,67 +223,24 @@ const Feed: React.FC<ProjectType> = ({navigation}: any) => {
             <CustomButton
               title={lang.view_all}
               textTextColor={Color.primary}
-              onPress={() => console.log('Button')}
-              buttonStyle={styles.actionButtonStyles}
-              textStyle={{color: Color.primary}}
-            />
-          </View>
-
-          <FlatList
-            horizontal={true}
-            data={fundraising.filter(
-              item => item.is_emergency && item.status === 'Active',
-            )}
-            renderItem={project => (
-              <View style={GlobalStyles.projectContainer}>
-                <ItemDonation
-                  project={project}
-                  onPress={() => {
-                    navigation.navigate('FeedDetails', {
-                      project: project.item,
-                    });
-                  }}
-                />
-              </View>
-            )}
-            keyExtractor={item => item.id}
-            contentContainerStyle={GlobalStyles.container}
-          />
-        </CustomView>
-
-        <ReactScrollView style={styles.mainSectionStyle}>
-          <View style={styles.sectionStyles}>
-            <TextComponent fontSize={19} fontWeight="bold">
-              {selectedId.title}
-            </TextComponent>
-
-            <CustomButton
-              title={lang.view_all}
-              textTextColor={Color.primary}
-              onPress={() => console.log('Button')}
-              buttonStyle={styles.actionButtonStyles}
-              textStyle={{color: Color.primary}}
-            />
-          </View>
-
-          <ScrollView>
-            <FlashList
-              estimatedItemSize={200}
-              onEndReached={fetchNextPage}
-              onEndReachedThreshold={0.8}
-              horizontal={false}
-              data={
-                selectedId.name === 'Toutes'
-                  ? fundraising.filter(item => item.status === 'Active')
-                  : (fundraising.filter(
-                      item =>
-                        item.category === selectedId?.name &&
-                        item.status === 'Active',
-                    ) as ProjectType[])
+              onPress={() =>
+                navigation.navigate('AllFundraising', {
+                  category: 'All Categories',
+                })
               }
+              buttonStyle={styles.actionButtonStyles}
+              textStyle={{color: Color.primary}}
+            />
+          </View>
+          <ReactScrollView horizontal={true}>
+            <FlatList
+              horizontal={true}
+              data={fundraising.filter(
+                item => item.is_emergency && item.status === 'Active',
+              )}
               renderItem={project => (
-                <View style={GlobalStyles.projectItem}>
-                  <ItemDonationVertical
+                <View style={GlobalStyles.projectContainer}>
+                  <ItemDonation
                     project={project}
                     onPress={() => {
                       navigation.navigate('FeedDetails', {
@@ -333,9 +253,67 @@ const Feed: React.FC<ProjectType> = ({navigation}: any) => {
               keyExtractor={item => item.id}
               contentContainerStyle={GlobalStyles.container}
             />
-          </ScrollView>
+          </ReactScrollView>
+        </CustomView>
+
+        <ReactScrollView style={styles.mainSectionStyle}>
+          <View style={styles.sectionStyles}>
+            <TextComponent fontSize={19} fontWeight="bold">
+              {selectedId.title}
+            </TextComponent>
+
+            <CustomButton
+              title={lang.view_all}
+              textTextColor={Color.primary}
+              onPress={() =>
+                navigation.navigate('AllFundraising', {
+                  category: selectedId.name,
+                })
+              }
+              buttonStyle={styles.actionButtonStyles}
+              textStyle={{color: Color.primary}}
+            />
+          </View>
+
+          <FlashList
+            estimatedItemSize={300}
+            onEndReached={fetchNextPage}
+            onEndReachedThreshold={0.8}
+            horizontal={false}
+            data={
+              selectedId.name === 'Toutes'
+                ? fundraising.filter(item => item.status === 'Active')
+                : (fundraising.filter(
+                    item =>
+                      item.category === selectedId?.name &&
+                      item.status === 'Active',
+                  ) as ProjectType[])
+            }
+            renderItem={project => (
+              <View style={GlobalStyles.projectItem}>
+                <ItemDonationVertical
+                  project={project}
+                  onPress={() => {
+                    navigation.navigate('FeedDetails', {
+                      project: project.item,
+                    });
+                  }}
+                />
+              </View>
+            )}
+            keyExtractor={item => item.id}
+            contentContainerStyle={GlobalStyles.container}
+          />
         </ReactScrollView>
       </ReactScrollView>
+      {isFileUploaded && (
+        <CustomView>
+          <TextComponent fontSize={13}>
+            Please wait {fileUploadedProgress}
+          </TextComponent>
+          <CustomProgressBar value={fileUploadedProgress} />
+        </CustomView>
+      )}
     </SafeAreaView>
   );
 };
@@ -362,7 +340,7 @@ const styles = StyleSheet.create({
   },
   actionButtonStyles: {
     backgroundColor: 'transparent',
-    width: '30%',
+
     borderRadius: 26,
   },
   headerStyle: {
@@ -387,6 +365,6 @@ const styles = StyleSheet.create({
   },
 });
 
-const FeedWithLoading = withLoadingFresh(Feed, 'Please wait...');
+const FeedWithLoading = withLoadingFresh(Feed);
 
 export default FeedWithLoading;

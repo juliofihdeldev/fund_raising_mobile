@@ -5,46 +5,45 @@ import {
   Dimensions,
   TouchableOpacity,
   SafeAreaView,
+  Image,
 } from 'react-native';
-import auth from '@react-native-firebase/auth';
 
 import Icon from 'react-native-vector-icons/Ionicons';
-import {useAuth} from '../../context/AuthContext';
 import {Color} from '../../assets/GlobalStyles';
-import CustomImage from '../../component/atom/CustomImage';
 import TextComponent from '../../component/atom/CustomText';
+import {explore, tell_story} from '../../assets/images';
 
 const Login: React.FC = ({navigation}: any) => {
-  const {user} = useAuth();
-
-  const handleGoogleLogin = async () => {
-    // Handle Google login logic
-    navigation.navigate('PhoneLogin');
-  };
-
   const handlePhoneNumberSignUp = () => {
     // Handle phone number sign up logic
     navigation.navigate('PhoneLogin');
   };
-  useEffect(() => {
-    if (user) {
-      auth().signOut();
-    }
-  }, [user]);
 
+  const handleGoogleLogin = async () => {
+    // Handle Google login logic
+
+    navigation.navigate('MainNavigation');
+  };
+
+  const handleMoreInformation = () => {
+    navigation.navigate('OnBoarding');
+  };
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.containerImage}>
-        <CustomImage image="" style={styles.logo} />
+        <Image source={tell_story} style={styles.logo} resizeMode="contain" />
       </View>
       <View style={styles.buttonsContainer}>
         <View style={styles.WelcomeBox}>
-          <TextComponent fontSize={32} color="white" fontWeight="bold">
+          <TextComponent fontSize={32} color="#000" fontWeight="bold">
             Fè byen jodi a la nati ap remet ou sa demen
           </TextComponent>
-          <TextComponent style={styles.textWelcome} color="white">
+          <TextComponent style={styles.textWelcome} color="#000">
             Ann mete dekote yon 100 Goud pou moun yo ki ka nan plus bezwen pase
             n.
+          </TextComponent>
+          <TextComponent style={styles.textWelcome} color="#000">
+            Imajine w a 100 Goud ou ka sove vi yon moun ki nan bezwen.
           </TextComponent>
         </View>
 
@@ -64,17 +63,33 @@ const Login: React.FC = ({navigation}: any) => {
           </TouchableOpacity>
         </View>
 
-        <View style={styles.buttonsGoogle}>
+        <View style={styles.buttonsPhone}>
           <TouchableOpacity
-            style={[styles.signButton, {backgroundColor: '#ffffff'}]}
-            onPress={handleGoogleLogin}>
+            style={[styles.signButton, {backgroundColor: Color.secondaryLight}]}
+            onPress={handleMoreInformation}>
             <Icon
-              name="logo-google"
+              name="help-circle"
               size={24}
-              color="black"
+              color="#ffffff"
               style={styles.phoneNumberIcon}
             />
-            <TextComponent style={styles.signText}>
+            <TextComponent style={[styles.signText]} color="white">
+              More information about the app
+            </TextComponent>
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.buttonsGoogle}>
+          <TouchableOpacity
+            style={[styles.signButton, {backgroundColor: Color.primary}]}
+            onPress={handleGoogleLogin}>
+            <Icon
+              name="person-circle"
+              size={24}
+              color="#fff"
+              style={styles.phoneNumberIcon}
+            />
+            <TextComponent style={styles.signText} color="#fff">
               {' '}
               Continue without an account{' '}
             </TextComponent>
@@ -103,7 +118,7 @@ const styles = StyleSheet.create({
   buttonsContainer: {
     flex: 3,
     width: '100%',
-    backgroundColor: Color.black,
+    backgroundColor: Color.white,
   },
   WelcomeBox: {
     padding: 26,

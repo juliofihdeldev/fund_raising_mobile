@@ -191,7 +191,7 @@ const PhoneLogin: React.FC = ({navigation, setLoading}: any) => {
                   color="#ffffff"
                   style={[styles.phoneNumberIcon]}
                 />
-                <TextComponent style={[styles.signText]}>
+                <TextComponent color="#ffffff" style={[styles.signText]}>
                   {' '}
                   Envoyer{' '}
                 </TextComponent>
@@ -292,7 +292,8 @@ const PhoneLogin: React.FC = ({navigation, setLoading}: any) => {
                   },
                 ]}
                 onPress={() => confirmCode()}>
-                <Text
+                <TextComponent
+                  color="#fff"
                   style={[
                     styles.signText,
                     {
@@ -301,7 +302,7 @@ const PhoneLogin: React.FC = ({navigation, setLoading}: any) => {
                     },
                   ]}>
                   Envoyer
-                </Text>
+                </TextComponent>
               </TouchableOpacity>
             </View>
           </View>
