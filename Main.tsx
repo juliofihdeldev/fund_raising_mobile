@@ -2,8 +2,9 @@ import React from 'react';
 import MainNavigation from './src/navigations/MainNavigation';
 import {createStackNavigator} from '@react-navigation/stack';
 import OnBoarding from './src/screens/onboarding/Onboarding';
-import Login from './src/screens/auth/Login';
+import Login from './src/screens/auth/Welcome';
 import PhoneLoginWithLoading from './src/screens/auth/PhoneLogin';
+import Welcome from './src/screens/auth/Welcome';
 
 const Stack = createStackNavigator();
 
@@ -11,8 +12,8 @@ const IntoStackNavigation = () => {
   return (
     <Stack.Navigator initialRouteName="Login">
       <Stack.Screen
-        name="Login"
-        component={Login}
+        name="Welcome"
+        component={Welcome}
         options={{
           headerShown: false,
           presentation: 'modal',

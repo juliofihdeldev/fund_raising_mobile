@@ -18,7 +18,7 @@ import Favorite from '../screens/favoris/Favorite';
 import Search from '../screens/feed/Search';
 import UserMoncashPaymentRegisterWithLoading from '../screens/manage/UserPaymentMoncash';
 import AllFundraising from '../screens/feed/AllFundRasing';
-import Login from '../screens/auth/Login';
+import Welcome from '../screens/auth/Welcome';
 
 export type ProfileStackParamList = {
   Profile: undefined;
@@ -31,7 +31,7 @@ export type ProfileStackParamList = {
   UserMoncashPaymentRegister: undefined;
   AllFundraising: undefined;
   ProfileScreen: undefined;
-  Login: undefined;
+  Welcome: undefined;
 };
 
 export type FeedStackParamList = {
@@ -47,7 +47,7 @@ export type FeedStackParamList = {
   ManageFundrasing: undefined;
   AllFundraising: undefined;
   Create: undefined;
-  Login: undefined;
+  Welcome: undefined;
 };
 
 const Tab = createMaterialBottomTabNavigator<FeedStackParamList>();
@@ -118,8 +118,8 @@ const FeedStack = () => {
         }}
       />
       <Stack.Screen
-        name="Login"
-        component={Login}
+        name="Welcome"
+        component={Welcome}
         options={{
           headerShown: false,
           presentation: 'modal',
@@ -164,6 +164,14 @@ const ProfileStack = () => {
         }}
       />
       <Stack.Screen
+        name="FeedDetails"
+        options={{
+          // headerShown: false,
+          presentation: 'modal',
+        }}
+        component={FeedDetailsWithLoading}
+      />
+      <Stack.Screen
         name="AllFundraising"
         component={AllFundraising}
         options={{
@@ -172,8 +180,8 @@ const ProfileStack = () => {
         }}
       />
       <Stack.Screen
-        name="Login"
-        component={Login}
+        name="Welcome"
+        component={Welcome}
         options={{
           headerShown: false,
           presentation: 'modal',

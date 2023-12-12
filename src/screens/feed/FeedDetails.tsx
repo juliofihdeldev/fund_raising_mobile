@@ -83,7 +83,7 @@ const FeedDetails: React.FC<ProjectType> = ({
         ]);
       }
       fetchData();
-    }, [id, view_count]),
+    }, [id]),
   );
 
   const handleSetReadMore = () => {
@@ -121,15 +121,14 @@ https://pote-kole.web.app?id=${id}`,
               transform: [{translateY: translateY}],
             },
           ]}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <CustomBackIcon
-              name="close-outline"
-              style={styles.iconMargin}
-              size={28}
-              color={Color.primary}
-              onPress={() => navigation.goBack()}
-            />
-          </TouchableOpacity>
+          <CustomBackIcon
+            name="close-outline"
+            style={styles.iconMargin}
+            size={28}
+            color={Color.primary}
+            onPress={() => navigation.goBack()}
+          />
+
           <TextComponent
             color="#000"
             numberOfLines={3}

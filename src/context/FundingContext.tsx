@@ -58,7 +58,7 @@ export const FundingContextProvider: React.FC<FundingContextProviderProps> = ({
 }) => {
   const [state, setState] = React.useState<ProjectType>({} as ProjectType);
   const [isFileUploaded, setIsFileUploaded] = React.useState<boolean>(false);
-  const [fileUploadedProgress, setFileUploadedProgress] = React.useState(0);
+  const [fileUploadedProgress, setFileUploadedProgress] = React.useState(10);
 
   const {user} = useAuth();
   const {lang, _setLoading} = useLang();

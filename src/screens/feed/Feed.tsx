@@ -29,6 +29,7 @@ import {FlashList} from '@shopify/flash-list';
 import CustomProgressBar from '../../component/atom/CustomProgressBar';
 import {category} from '../../utils/category';
 import {getIdAndPathFromLink} from '../../utils/getIdAndPathFromLink';
+import CustomImage from '../../component/atom/CustomImage';
 
 const Feed: React.FC<ProjectType> = ({navigation}: any) => {
   const [selectedId, setSelectedId] = React.useState(category[0]);
@@ -37,6 +38,7 @@ const Feed: React.FC<ProjectType> = ({navigation}: any) => {
     handleGetFundraising,
     isFileUploaded,
     fileUploadedProgress,
+    state,
   } = useFunding();
   const {lang} = useLang();
 
@@ -87,6 +89,13 @@ const Feed: React.FC<ProjectType> = ({navigation}: any) => {
           path,
         },
       };
+
+      if (id === 'checkout') {
+        navigation.navigate('Feed', {
+          // project: project.item,
+        });
+        return;
+      }
 
       if (path === '/fundraising') {
         // Navigate to the detail page with the extracted ID
@@ -307,10 +316,31 @@ const Feed: React.FC<ProjectType> = ({navigation}: any) => {
         </ReactScrollView>
       </ReactScrollView>
       {isFileUploaded && (
-        <CustomView>
-          <TextComponent fontSize={13}>
-            Please wait {fileUploadedProgress}
-          </TextComponent>
+        <CustomView
+          style={{
+            height: 40,
+            padding: 10,
+            alignItems: 'flex-start',
+            justifyContent: 'flex-start',
+            marginBottom: 22,
+          }}>
+          <View
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'flex-start',
+              justifyContent: 'flex-start',
+              width: '94%',
+              padding: 4,
+            }}>
+            <CustomImage
+              image={state?.list_images && state?.list_images[0]}
+              style={{width: 30, height: 30}}
+            />
+            <TextComponent fontSize={13} style={{marginLeft: 12}}>
+              Laissez l'application ouverte pour terminer la publication...
+            </TextComponent>
+          </View>
           <CustomProgressBar value={fileUploadedProgress} />
         </CustomView>
       )}

@@ -16,7 +16,6 @@ import {Color, boxShadow} from '../../assets/GlobalStyles';
 import {CustomDialogContext} from '../../component/atom/CustomDialog';
 import axios from 'axios';
 import CustomView from '../../component/atom/CustomView';
-import {Text} from 'react-native-paper';
 
 const RenflouerAccountComponent: React.FC = () => {
   const {handleSetIsVisible} = useContext(CustomDialogContext);
@@ -91,7 +90,7 @@ const RenflouerAccountComponent: React.FC = () => {
     }
     try {
       let link = `https://pote-kole.web.app/stripe_pay.html?amount=${value}&user_id=${user?.id}&phone=${user?.phone}&name=${user?.name}`;
-      const url = link ?? 'https://github.com/proyecto26';
+      const url = link ?? 'https://pote-kole.web.app';
       if (await InAppBrowser.isAvailable()) {
         await InAppBrowser.open(url, {
           showTitle: true,
@@ -120,6 +119,10 @@ const RenflouerAccountComponent: React.FC = () => {
     } catch (error) {
       Alert.alert(error.message);
     }
+  };
+
+  const stripePayment = async () => {
+    // create stripe payment in react native
   };
 
   return (
@@ -172,7 +175,8 @@ const RenflouerAccountComponent: React.FC = () => {
           text="Payer par Carte de credit"
           icon="card-outline"
           fontSize={17}
-          onPress={stripeWebPayment}
+          // onPress={stripeWebPayment}
+          onPress={stripePayment}
           color="#333"
           fontWeight="bold"
           containerStyle={styles.containerListStyle}

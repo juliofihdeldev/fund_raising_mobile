@@ -1,7 +1,7 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 
-import Login from '../screens/auth/Login';
+import Login from '../screens/auth/Welcome';
 import PhoneLoginWithLoading from '../screens/auth/PhoneLogin';
 import MainNavigation from './MainNavigation';
 

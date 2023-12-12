@@ -1,6 +1,6 @@
 import React from 'react';
 import {render, fireEvent} from '@testing-library/react-native';
-import Login from '../Login';
+import Login from '../Welcome';
 import {AuthContext, AuthContextProvider} from '../../../context/AuthContext';
 import {NavigationContainer} from '@react-navigation/native';
 

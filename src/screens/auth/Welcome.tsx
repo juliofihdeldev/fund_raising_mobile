@@ -13,7 +13,7 @@ import {Color} from '../../assets/GlobalStyles';
 import TextComponent from '../../component/atom/CustomText';
 import {explore, tell_story} from '../../assets/images';
 
-const Login: React.FC = ({navigation}: any) => {
+const Welcome: React.FC = ({navigation}: any) => {
   const handlePhoneNumberSignUp = () => {
     // Handle phone number sign up logic
     navigation.navigate('PhoneLogin');
@@ -36,13 +36,16 @@ const Login: React.FC = ({navigation}: any) => {
       <View style={styles.buttonsContainer}>
         <View style={styles.WelcomeBox}>
           <TextComponent fontSize={32} color="#000" fontWeight="bold">
+            PoteKOLE
+          </TextComponent>
+          <TextComponent fontSize={23} color="#000" fontWeight="bold">
             Fè byen jodi a la nati ap remet ou sa demen
           </TextComponent>
-          <TextComponent style={styles.textWelcome} color="#000">
+          <TextComponent fontSize={17} style={styles.textWelcome} color="#000">
             Ann mete dekote yon 100 Goud pou moun yo ki ka nan plus bezwen pase
             n.
           </TextComponent>
-          <TextComponent style={styles.textWelcome} color="#000">
+          <TextComponent fontSize={17} style={styles.textWelcome} color="#000">
             Imajine w a 100 Goud ou ka sove vi yon moun ki nan bezwen.
           </TextComponent>
         </View>
@@ -57,8 +60,8 @@ const Login: React.FC = ({navigation}: any) => {
               color="#ffffff"
               style={styles.phoneNumberIcon}
             />
-            <TextComponent style={[styles.signText]} color="white">
-              Sign Up with Phone Number
+            <TextComponent color="white">
+              S'inscrire avec votre telephone
             </TextComponent>
           </TouchableOpacity>
         </View>
@@ -73,8 +76,8 @@ const Login: React.FC = ({navigation}: any) => {
               color="#ffffff"
               style={styles.phoneNumberIcon}
             />
-            <TextComponent style={[styles.signText]} color="white">
-              More information about the app
+            <TextComponent color="white">
+              Plus d'informations sur PoteKOLE
             </TextComponent>
           </TouchableOpacity>
         </View>
@@ -89,9 +92,8 @@ const Login: React.FC = ({navigation}: any) => {
               color="#fff"
               style={styles.phoneNumberIcon}
             />
-            <TextComponent style={styles.signText} color="#fff">
-              {' '}
-              Continue without an account{' '}
+            <TextComponent color="#fff">
+              Continue sans creer de compte
             </TextComponent>
           </TouchableOpacity>
         </View>
@@ -155,4 +157,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Login;
+export default Welcome;

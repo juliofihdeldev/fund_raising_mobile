@@ -179,7 +179,7 @@ const PaymentForm: React.FC<Props> = ({route, navigation, setLoading}: any) => {
         .add({
           to: user_name,
           message: {
-            subject: `Donation for ${save_donation_object?.project_name}`,
+            subject: `Donation pour ${save_donation_object?.project_name}`,
             html: `<p>Hi ${user.name},</p>
         <p>You have received a donation of ${amount} gourdes from you for the ${save_donation_object.project_name}.</p>
         <p>Thank you for using Potekole.</p>
@@ -199,6 +199,7 @@ const PaymentForm: React.FC<Props> = ({route, navigation, setLoading}: any) => {
   };
 
   const onClose = () => {
+    alert('clooos');
     setMonCashMenu(false);
   };
 
@@ -223,7 +224,7 @@ const PaymentForm: React.FC<Props> = ({route, navigation, setLoading}: any) => {
                   user.name
                 } d'avoir aidez  ${user_name} avec ${currency(
                   Number(value),
-                )} Pour sa collect de fond.`}
+                )} Pour sa collect de fonds.`}
               />
             }
             actionItems={[]}

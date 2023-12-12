@@ -3,7 +3,7 @@ import {AppRegistry} from 'react-native';
 import App from './App';
 import {name as appName} from './app.json';
 import Build from './src/screens/Build';
-import Login from './src/screens/auth/Login';
+import Login from './src/screens/auth/Welcome';
 import {AuthContextProvider} from './src/context/AuthContext';
 import {NavigationContainer} from '@react-navigation/native';
 import {LogBox} from 'react-native';

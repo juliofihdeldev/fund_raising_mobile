@@ -16,12 +16,12 @@ interface CustomViewProps {
   onClose?: () => void;
 }
 
-// create context for that component to update isVisible props
+// reate context for that component to update isVisible props
 export const CustomDialogContext = React.createContext(false);
 
 const CustomDialog: React.FC<CustomViewProps> = ({children, onClose}) => {
   const handleSetIsVisible = () => {
-    onClose;
+    onClose();
   };
 
   return (
