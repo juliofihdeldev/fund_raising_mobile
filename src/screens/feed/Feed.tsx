@@ -16,12 +16,11 @@ import Category from '../../component/Category';
 import {Color} from '../../assets/GlobalStyles';
 import ItemDonationVertical from '../../component/ItemDonationVertical';
 import {GlobalStyles} from './GlobalStyle';
-import {ScrollView} from 'react-native-virtualized-view';
 import CustomHeader from '../../component/CustomHeader';
 import CustomButton from '../../component/atom/CustomButton';
 import {useLang} from '../../context/LanguageContext';
 import TextComponent from '../../component/atom/CustomText';
-import CustomView from '../../component/atom/CustomView';
+
 import {useFunding} from '../../context/FundingContext';
 import withLoadingFresh from '../../component/HOC/RefreshLoading';
 
@@ -176,7 +175,7 @@ const Feed: React.FC<ProjectType> = ({navigation}: any) => {
           },
         ]}>
         <CustomHeader goToSearch={goToSearch} />
-        <CustomView style={styles.separator} />
+        <View style={styles.separator} />
       </Animated.View>
       <ReactScrollView
         ref={scrollRef}
@@ -192,7 +191,7 @@ const Feed: React.FC<ProjectType> = ({navigation}: any) => {
         onScroll={e => {
           scrollY.setValue(e.nativeEvent.contentOffset.y);
         }}>
-        <CustomView style={styles.categoryContainer}>
+        <View style={styles.categoryContainer}>
           <ReactScrollView horizontal={true}>
             <FlatList
               horizontal={true}
@@ -221,9 +220,9 @@ const Feed: React.FC<ProjectType> = ({navigation}: any) => {
               contentContainerStyle={GlobalStyles.container}
             />
           </ReactScrollView>
-        </CustomView>
+        </View>
 
-        <CustomView>
+        <View>
           <View style={styles.sectionStyles}>
             <TextComponent fontSize={19} fontWeight="bold">
               {lang.popular}
@@ -263,7 +262,7 @@ const Feed: React.FC<ProjectType> = ({navigation}: any) => {
               contentContainerStyle={GlobalStyles.container}
             />
           </ReactScrollView>
-        </CustomView>
+        </View>
 
         <ReactScrollView style={styles.mainSectionStyle}>
           <View style={styles.sectionStyles}>
@@ -316,7 +315,7 @@ const Feed: React.FC<ProjectType> = ({navigation}: any) => {
         </ReactScrollView>
       </ReactScrollView>
       {isFileUploaded && (
-        <CustomView
+        <View
           style={{
             height: 40,
             padding: 10,
@@ -342,7 +341,7 @@ const Feed: React.FC<ProjectType> = ({navigation}: any) => {
             </TextComponent>
           </View>
           <CustomProgressBar value={fileUploadedProgress} />
-        </CustomView>
+        </View>
       )}
     </SafeAreaView>
   );

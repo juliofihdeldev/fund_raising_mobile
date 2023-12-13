@@ -11,7 +11,7 @@ interface SearchBarProps {
   navigation?: unknown;
 }
 
-const CustomHeader: React.FC<SearchBarProps> = ({goToSearch}) => {
+const CustomHeader: React.FC<SearchBarProps> = () => {
   // how to show an env variable
   return (
     <View style={styles.searchContainer}>
@@ -29,43 +29,21 @@ const CustomHeader: React.FC<SearchBarProps> = ({goToSearch}) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    height: 50,
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#f0f0f0',
-    borderRadius: 16,
-    paddingVertical: 4,
-    paddingHorizontal: 16,
-  },
   icon: {
     marginRight: 8,
   },
   searchContainer: {
     marginTop: 2,
-    padding: 8,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    paddingHorizontal: 8,
   },
-  headerContainer: {
-    padding: 8,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
+
   notificationIcon: {
     marginLeft: 8,
-    marginEnd: 12,
   },
-  iconStyle: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    width: '30%',
-    marginEnd: 16,
-  },
+
   logoColor: {
     color: Color.primary,
   },

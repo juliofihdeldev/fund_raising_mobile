@@ -27,6 +27,7 @@ import {useFocusEffect} from '@react-navigation/native';
 import ActionSheet from '../../component/HOC/ActionSheet';
 import ThankYou from '../../component/HOC/ThankYou';
 import Modal from 'react-native-modal';
+import CustomView from '../../component/atom/CustomView';
 
 // Use a local emulator in development
 // if (__DEV__) {
@@ -181,9 +182,9 @@ const PaymentForm: React.FC<Props> = ({route, navigation, setLoading}: any) => {
           message: {
             subject: `Donation pour ${save_donation_object?.project_name}`,
             html: `<p>Hi ${user.name},</p>
-        <p>You have received a donation of ${amount} gourdes from you for the ${save_donation_object.project_name}.</p>
+        <p>You have received a donation of ${amount} gourdes for the ${save_donation_object.project_name}.</p>
         <p>Thank you for using Potekole.</p>
-        <p>Potekole Team</p>`,
+        <p>PoteKOLE Team</p>`,
           },
         });
 
@@ -199,7 +200,6 @@ const PaymentForm: React.FC<Props> = ({route, navigation, setLoading}: any) => {
   };
 
   const onClose = () => {
-    alert('clooos');
     setMonCashMenu(false);
   };
 
@@ -251,7 +251,7 @@ const PaymentForm: React.FC<Props> = ({route, navigation, setLoading}: any) => {
         )}
 
         <ScrollView>
-          <View style={GlobalStyles.contentText}>
+          <CustomView style={{alignItems: 'flex-start', margin: 12}}>
             <TextComponent
               fontFamily="Montserrat-Bold"
               style={{
@@ -266,7 +266,7 @@ const PaymentForm: React.FC<Props> = ({route, navigation, setLoading}: any) => {
               onPress={handleShowMenuPayment}
               buttonStyle={{
                 backgroundColor: Color.secondary,
-                width: '52%',
+
                 borderRadius: 118,
                 marginTop: 16,
               }}
@@ -452,7 +452,7 @@ const PaymentForm: React.FC<Props> = ({route, navigation, setLoading}: any) => {
               }}
               textStyle={{color: '#fff'}}
             />
-          </View>
+          </CustomView>
         </ScrollView>
       </SafeAreaView>
     </Root>

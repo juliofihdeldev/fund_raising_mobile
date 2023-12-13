@@ -303,7 +303,7 @@ const Profile: React.FC = ({navigation}: any) => {
               icon="exit-outline"
               onPress={() =>
                 Alert.alert(lang?.logout, lang?.are_you_sure, [
-                  {text: 'OK', onPress: () => handleLogout()},
+                  {text: 'Sign out', onPress: () => handleLogout()},
                   {
                     text: 'Cancel',
                     onPress: () => console.log('Cancel Pressed'),

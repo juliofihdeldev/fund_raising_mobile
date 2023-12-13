@@ -25,6 +25,7 @@ import {Color} from '../../assets/GlobalStyles';
 import withLoadingModal from '../../component/HOC/Loading';
 import {useLang} from '../../context/LanguageContext';
 import messaging from '@react-native-firebase/messaging';
+import {isNullOrEmpty} from '../../utils/isNullOrEmpty';
 
 const CELL_COUNT = 6;
 
@@ -51,6 +52,12 @@ const PhoneLogin: React.FC = ({navigation, setLoading}: any) => {
     value,
     setValue,
   });
+
+  useEffect(() => {
+    if (!isNullOrEmpty(user)) {
+      navigation.navigate('MainNavigation');
+    }
+  }, []);
 
   async function onAuthStateChanged(user_data: any) {
     setLoading(false);
@@ -111,10 +118,11 @@ const PhoneLogin: React.FC = ({navigation, setLoading}: any) => {
     try {
       setLoading(true);
       await confirm.confirm(valueConfirm);
+
       Alert.alert(lang?.success, lang.sucess_login_message, [
         {
           text: 'OK',
-          onPress: () => navigation.goBack(),
+          onPress: () => navigation.navigate('MainNavigation'),
         },
       ]);
     } catch (error) {

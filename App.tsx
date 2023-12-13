@@ -12,6 +12,7 @@ import {StatusBar} from 'react-native';
 // import dynamicLinks from '@react-native-firebase/dynamic-links';
 import {ErrorBoundary} from 'react-error-boundary';
 import {StripeProvider} from '@stripe/stripe-react-native';
+import ErrorComponent from './src/component/molecules/ErrorComponent';
 
 const theme = {
   ...DefaultTheme,
@@ -26,13 +27,8 @@ const theme = {
   },
 };
 
-function fallbackRender({error, resetErrorBoundary}) {
-  return (
-    <View>
-      <Text>Something went wrong:</Text>
-      <Text style={{color: 'red'}}>{error.message}</Text>
-    </View>
-  );
+function fallbackRender({error}: any) {
+  return <ErrorComponent title="Error" description={error} />;
 }
 
 export default function App() {
@@ -47,7 +43,7 @@ export default function App() {
           <LangContextProvider>
             <AuthContextProvider>
               <FundingContextProvider>
-                <StatusBar backgroundColor={Color.white} />
+                <StatusBar backgroundColor={'#eee'} />
                 <Main />
               </FundingContextProvider>
             </AuthContextProvider>

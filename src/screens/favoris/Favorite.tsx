@@ -13,13 +13,12 @@ import ItemDonationVertical from '../../component/ItemDonationVertical';
 import {Root} from 'react-native-alert-notification';
 import CustomHeader from '../../component/CustomHeader';
 import TextComponent from '../../component/atom/CustomText';
-import {Color} from '../../assets/GlobalStyles';
+
 import {StackNavigationProp} from '@react-navigation/stack';
 import {FeedStackParamList} from '../../navigations/MainNavigation';
 import {useLang} from '../../context/LanguageContext';
 import {GlobalStyles} from '../feed/GlobalStyle';
 import {ScrollView} from 'react-native-virtualized-view';
-import CustomView from '../../component/atom/CustomView';
 import {FlashList} from '@shopify/flash-list';
 
 type FavoriteScreenNavigationProp = StackNavigationProp<
@@ -53,7 +52,7 @@ const Favorite: React.FC<Props> = ({navigation}) => {
 
   return (
     <Root>
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView style={GlobalStyles.container}>
         <Animated.View
           style={[
             styles.headerStyle,
@@ -65,7 +64,7 @@ const Favorite: React.FC<Props> = ({navigation}) => {
           ]}>
           <CustomHeader />
         </Animated.View>
-        <CustomView>
+        <View>
           <ScrollView
             style={{marginTop: 86}}
             onScroll={e => {
@@ -78,7 +77,7 @@ const Favorite: React.FC<Props> = ({navigation}) => {
               Your Donnations
             </TextComponent>
 
-            <ReactScrollView alwaysBounceHorizontal={true} horizontal={true}>
+            <ReactScrollView alwaysBounceHorizontal={true}>
               <FlashList
                 horizontal={true}
                 data={donationsUser.map(el => {
@@ -93,7 +92,7 @@ const Favorite: React.FC<Props> = ({navigation}) => {
                       funding={funding as any}
                       onPress={() => {
                         navigation.navigate('FeedDetails', {
-                          project: funding?.item,
+                          project: funding.item,
                         });
                       }}
                     />
@@ -117,12 +116,12 @@ const Favorite: React.FC<Props> = ({navigation}) => {
                 </TextComponent>
 
                 <FlashList
-                  horizontal={false}
+                  estimatedItemSize={300}
                   data={fundraising.filter(
                     item => item.is_emergency && item.status === 'Active',
                   )}
                   renderItem={funding => (
-                    <View style={GlobalStyles.projectItem}>
+                    <View style={[GlobalStyles.projectItem, {marginRight: 24}]}>
                       <ItemDonationVertical
                         project={funding as any}
                         onPress={() => {
@@ -139,25 +138,17 @@ const Favorite: React.FC<Props> = ({navigation}) => {
               </ReactScrollView>
             )}
           </ScrollView>
-        </CustomView>
+        </View>
       </SafeAreaView>
     </Root>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'column',
-    height: '100%',
-    borderRadius: 16,
-    paddingBottom: 16,
-    alignItems: 'flex-start',
-    marginLeft: 4,
-  },
   headerStyle: {
     position: 'absolute',
     zIndex: 1,
-    paddingStart: 8,
+
     width: '100%',
     justifyContent: 'space-between',
   },

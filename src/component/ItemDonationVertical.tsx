@@ -31,6 +31,7 @@ const ItemDonationVertical: React.FC<ItemDonationVerticalProps> = ({
   } = project?.item;
 
   let pourcetage = (collect * 100) / amount;
+
   return (
     <TouchableOpacity onPress={onPress}>
       <View style={[styles.container]}>

@@ -53,7 +53,13 @@ const CashProcessComponent: React.FC<Props> = ({onClose, type}: any) => {
           />
 
           <ListItem
-            text={`1- Wap voye kod transaksyon an pou nou sou +509 3777 0000. Avek ID User w lan  ki se ${user.id} \n\n2- Epi Nimewo telefòn ou konnekte sou app lan ${user.phone} `}
+            text={`1- Wap voye kod transaksyon an pou nou sou ${
+              type === 'moncash' ? '+509 3777 0000' : '+509 3333 0000'
+            } . Avek ID User w lan  ki se ${
+              user.id
+            } \n\n2- Epi Nimewo telefòn ou konnekte sou app lan se ${
+              user.phone
+            } `}
             icon="warning-outline"
             color={Color.black}
             fontSize={17}

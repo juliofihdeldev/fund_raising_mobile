@@ -76,7 +76,12 @@ const ManageFundrasing: React.FC<Props> = ({route, navigation}) => {
   };
 
   navigation.setOptions({
-    headerTitle: 'Manage Fundraising',
+    title: 'Back to Profile',
+    headerTitleStyle: {
+      color: Color.black,
+      fontSize: 15,
+      fontFamily: 'Montserrat-Bold',
+    },
   });
 
   return (

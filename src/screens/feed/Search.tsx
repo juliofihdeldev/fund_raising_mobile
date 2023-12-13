@@ -52,12 +52,12 @@ const Search: React.FC<Props> = ({navigation}) => {
       setFiltered([]);
       return;
     }
-    const filtered = fundraising.filter(
+    const filtered_data = fundraising.filter(
       el =>
         el?.name?.toLowerCase().includes(searchValue.toLowerCase()) &&
         el.status === 'Active',
     );
-    setFiltered(filtered);
+    setFiltered(filtered_data);
   };
 
   const onChangeText = (text: string) => {
@@ -77,7 +77,7 @@ const Search: React.FC<Props> = ({navigation}) => {
   };
 
   return (
-    <SafeAreaView style={GlobalStyles.container}>
+    <SafeAreaView>
       <View style={GlobalStyles.searchContainer}>
         <View style={styles.searchContainer} />
         <SearchBar
@@ -88,15 +88,6 @@ const Search: React.FC<Props> = ({navigation}) => {
         />
         {searchValue && (
           <Ionicons
-            name="close-outline"
-            size={20}
-            color="#333"
-            style={styles.iconStyle}
-            onPress={clearSearch}
-          />
-        )}
-        {searchValue && (
-          <Ionicons
             name="search-outline"
             size={20}
             color="#333"
@@ -104,17 +95,25 @@ const Search: React.FC<Props> = ({navigation}) => {
             onPress={handleSearch}
           />
         )}
+        {searchValue && (
+          <Ionicons
+            name="close-outline"
+            size={20}
+            color="#333"
+            style={styles.iconStyle}
+            onPress={clearSearch}
+          />
+        )}
       </View>
 
-      <ScrollView ref={scrollRef}>
-        <CustomView style={styles.container}>
-          <TextComponent
-            style={styles.textStyle}
-            fontSize={14}
-            fontWeight="bold">
-            Result for {searchValue}
-          </TextComponent>
+      <View>
+        <TextComponent style={styles.textStyle} fontSize={19} fontWeight="bold">
+          Result for {searchValue}
+        </TextComponent>
+        <View style={{width: '100%', height: '100%'}}>
           <FlashList
+            horizontal={false}
+            estimatedItemSize={300}
             data={filtered}
             renderItem={project => (
               <View style={styles.projectItemVertical}>
@@ -131,31 +130,31 @@ const Search: React.FC<Props> = ({navigation}) => {
             keyExtractor={item => item.id}
             contentContainerStyle={GlobalStyles.container}
           />
-        </CustomView>
-      </ScrollView>
+        </View>
+      </View>
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   projectItemVertical: {
-    marginTop: 32,
+    width: '100%',
+    padding: 12,
   },
   container: {
     alignItems: 'flex-start',
-    marginLeft: 8,
-    marginRight: 8,
+    width: '100%',
   },
   searchContainer: {
     marginTop: 82,
   },
-
   iconStyle: {
     marginLeft: 16,
     fontSize: 32,
   },
   textStyle: {
-    fontSize: 18,
+    marginLeft: 12,
+    marginBottom: 12,
   },
 });
 

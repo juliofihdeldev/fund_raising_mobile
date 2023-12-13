@@ -1,5 +1,5 @@
 export type LangType = {
-  [key: string]: string;
+  [key: string]: any;
 };
 
 export const fr: LangType = {
@@ -141,6 +141,8 @@ export const fr: LangType = {
   dark_mode: 'Mode sombre',
   popular: 'Les plus populaire',
   addMoney: 'Renflouer mon Compte',
+  continue_without_creating_an_account: 'Continuer sans créer de compte',
+  sign_up_with_phone_number: "S'inscrire avec votre telephone",
 };
 
 Object.freeze(fr);

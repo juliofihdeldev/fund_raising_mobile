@@ -32,7 +32,7 @@ const ItemDonationUser: React.FC<ItemDonationUserProps> = ({
     project_image,
     project_id,
     id,
-  } = funding?.item;
+  } = funding.item;
 
   const {lang} = useLang();
 
@@ -83,8 +83,9 @@ const ItemDonationUser: React.FC<ItemDonationUserProps> = ({
           />
           <View style={styles.containerText}>
             <TextComponent numberOfLines={2}>{project_name}</TextComponent>
-
-            <TextComponent fontSize={13}>{user_name}</TextComponent>
+            <TextComponent color="#000" fontSize={13}>
+              {user_name}
+            </TextComponent>
             <TextComponent fontSize={12} color={Color.black}>
               {currency(Number(amount))}
             </TextComponent>
@@ -182,8 +183,8 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     borderRadius: 16,
-    backgroundColor: Color.white,
     width: 260,
+    height: 100,
     paddingBottom: 16,
     alignItems: 'flex-start',
     marginLeft: 4,

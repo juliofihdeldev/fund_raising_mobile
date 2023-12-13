@@ -113,7 +113,7 @@ const FeedStack = () => {
         name="AllFundraising"
         component={AllFundraising}
         options={{
-          headerShown: false,
+          // headerShown: false,
           presentation: 'modal',
         }}
       />
@@ -175,7 +175,7 @@ const ProfileStack = () => {
         name="AllFundraising"
         component={AllFundraising}
         options={{
-          headerShown: false,
+          // headerShown: false,
           presentation: 'modal',
         }}
       />

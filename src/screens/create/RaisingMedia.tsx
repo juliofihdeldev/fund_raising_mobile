@@ -134,7 +134,7 @@ const RaisingMedia: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <View style={{}}>
+      <View>
         <TextComponent
           style={{
             color: Color.black,
@@ -157,7 +157,6 @@ const RaisingMedia: React.FC = () => {
         <View
           style={{
             marginTop: 16,
-            width: '90%',
             flexDirection: 'row',
             justifyContent: 'space-between',
           }}>
@@ -168,6 +167,7 @@ const RaisingMedia: React.FC = () => {
               buttonStyle={{
                 backgroundColor: Color.secondary,
                 borderRadius: 26,
+                marginLeft: 8,
               }}
               textStyle={{color: '#fff'}}
             />
@@ -178,6 +178,7 @@ const RaisingMedia: React.FC = () => {
               buttonStyle={{
                 backgroundColor: Color.secondary,
                 borderRadius: 26,
+                marginLeft: 8,
               }}
               textStyle={{color: '#fff'}}
             />
@@ -206,12 +207,15 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     flexDirection: 'row',
     flexWrap: 'wrap',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     marginTop: 16,
   },
   container: {
     flex: 1,
-    alignItems: 'center',
+    width: '100%',
+
+    paddingHorizontal: 8,
+    alignItems: 'flex-start',
   },
   button: {
     backgroundColor: 'blue',

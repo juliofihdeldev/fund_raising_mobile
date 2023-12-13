@@ -29,7 +29,7 @@ const CustomView: React.FC<CustomViewProps> = ({
 const styles = StyleSheet.create({
   container: {
     paddingVertical: 4,
-    paddingHorizontal: 4,
+    paddingHorizontal: 0,
     alignItems: 'center',
     justifyContent: 'center',
   },

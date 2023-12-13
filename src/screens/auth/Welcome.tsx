@@ -11,7 +11,10 @@ import {
 import Icon from 'react-native-vector-icons/Ionicons';
 import {Color} from '../../assets/GlobalStyles';
 import TextComponent from '../../component/atom/CustomText';
-import {explore, tell_story} from '../../assets/images';
+import {tell_story} from '../../assets/images';
+import {useLang} from '../../context/LanguageContext';
+import {useAuth} from '../../context/AuthContext';
+import {isNullOrEmpty} from '../../utils/isNullOrEmpty';
 
 const Welcome: React.FC = ({navigation}: any) => {
   const handlePhoneNumberSignUp = () => {
@@ -25,9 +28,20 @@ const Welcome: React.FC = ({navigation}: any) => {
     navigation.navigate('MainNavigation');
   };
 
-  const handleMoreInformation = () => {
-    navigation.navigate('OnBoarding');
-  };
+  // const handleMoreInformation = () => {
+  //   navigation.navigate('OnBoarding');
+  // };
+  //
+  const {lang} = useLang();
+
+  const {user} = useAuth();
+
+  useEffect(() => {
+    if (!isNullOrEmpty(user)) {
+      navigation.navigate('MainNavigation');
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.containerImage}>
@@ -42,8 +56,7 @@ const Welcome: React.FC = ({navigation}: any) => {
             Fè byen jodi a la nati ap remet ou sa demen
           </TextComponent>
           <TextComponent fontSize={17} style={styles.textWelcome} color="#000">
-            Ann mete dekote yon 100 Goud pou moun yo ki ka nan plus bezwen pase
-            n.
+            Ann sere yon 100 Goud pou moun yo ki ka nan plus bezwen pase n.
           </TextComponent>
           <TextComponent fontSize={17} style={styles.textWelcome} color="#000">
             Imajine w a 100 Goud ou ka sove vi yon moun ki nan bezwen.
@@ -61,12 +74,12 @@ const Welcome: React.FC = ({navigation}: any) => {
               style={styles.phoneNumberIcon}
             />
             <TextComponent color="white">
-              S'inscrire avec votre telephone
+              {lang.sign_up_with_phone_number}
             </TextComponent>
           </TouchableOpacity>
         </View>
 
-        <View style={styles.buttonsPhone}>
+        {/* <View style={styles.buttonsPhone}>
           <TouchableOpacity
             style={[styles.signButton, {backgroundColor: Color.secondaryLight}]}
             onPress={handleMoreInformation}>
@@ -80,7 +93,7 @@ const Welcome: React.FC = ({navigation}: any) => {
               Plus d'informations sur PoteKOLE
             </TextComponent>
           </TouchableOpacity>
-        </View>
+        </View> */}
 
         <View style={styles.buttonsGoogle}>
           <TouchableOpacity
@@ -93,7 +106,7 @@ const Welcome: React.FC = ({navigation}: any) => {
               style={styles.phoneNumberIcon}
             />
             <TextComponent color="#fff">
-              Continue sans creer de compte
+              {lang.continue_without_creating_an_account}
             </TextComponent>
           </TouchableOpacity>
         </View>

@@ -249,7 +249,8 @@ const RenflouerAccountComponent: React.FC = () => {
           text="Payer par Moncash"
           icon="card-outline"
           fontSize={15}
-          onPress={createMoncashPAyment}
+          // onPress={createMoncashPAyment}
+          onPress={() => setOptions('moncash')}
           color="#333"
           fontWeight="bold"
           containerStyle={styles.containerListStyle}

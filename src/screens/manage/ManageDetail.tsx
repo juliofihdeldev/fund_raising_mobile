@@ -12,6 +12,7 @@ import {useLang} from '../../context/LanguageContext';
 import ManageOption from './ManageOptions';
 import CustomButton from '../../component/atom/CustomButton';
 import {Color} from '../../assets/GlobalStyles';
+import CustomBanner from '../../component/atom/CustomBanner';
 
 type FeedDetailsScreenNavigationProp = StackNavigationProp<
   FeedStackParamList,
@@ -49,10 +50,14 @@ const ManageDetail: React.FC<Props> = ({navigation}) => {
           <View style={GlobalStyles.projectContainerDetails}>
             <View>
               <View style={[GlobalStyles.imagesView]}>
-                <CustomImage
-                  image={projects?.image}
-                  style={GlobalStyles.image}
-                />
+                {projects.list_images?.length ? (
+                  <CustomBanner images={projects.list_images} />
+                ) : (
+                  <CustomImage
+                    image={projects?.image}
+                    style={GlobalStyles.image}
+                  />
+                )}
               </View>
 
               <View style={GlobalStyles.contentText}>

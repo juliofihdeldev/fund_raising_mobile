@@ -6,7 +6,9 @@ import {
   Animated,
   StyleSheet,
   Share,
+  Alert,
 } from 'react-native';
+
 import {Root} from 'react-native-alert-notification';
 import {DonationType, ProjectType} from '../../types/Index';
 import {GlobalStyles} from './GlobalStyle';
@@ -26,7 +28,6 @@ import {formatDate} from '../../utils/dateFormat';
 import {currency} from '../../utils/currency';
 import {useFunding} from '../../context/FundingContext';
 import {useFocusEffect} from '@react-navigation/native';
-
 import withLoadingFresh from '../../component/HOC/RefreshLoading';
 import ManageOption from '../manage/ManageOptions';
 import {useAuth} from '../../context/AuthContext';
@@ -40,6 +41,7 @@ const FeedDetails: React.FC<ProjectType> = ({
 }: any) => {
   const [readMore, setReadMore] = React.useState(false);
   const [showMenu, setShowMenu] = React.useState(false);
+  const {lang} = useLang();
 
   const {user} = useAuth();
   const handleMenu = () => {
@@ -104,8 +106,30 @@ const FeedDetails: React.FC<ProjectType> = ({
 
   const sharedFundraising = () => {
     Share.share({
-      message: `Pote kole: ${description} ${currency(amount)}  
+      message: `Pote kole: ${name} ${currency(amount)}  
 https://pote-kole.web.app?id=${id}`,
+    });
+  };
+
+  const handleNavigatePayment = () => {
+    if (!user) {
+      Alert.alert(
+        lang.warning,
+        lang.must_login,
+        [
+          {
+            text: 'Cancel',
+            onPress: () => console.log('Cancel Pressed'),
+            style: 'cancel',
+          },
+          {text: 'OK', onPress: () => navigation.navigate('PhoneLogin')},
+        ],
+        {cancelable: false},
+      );
+      return;
+    }
+    navigation.navigate('Payment', {
+      project: projects,
     });
   };
 
@@ -133,8 +157,9 @@ https://pote-kole.web.app?id=${id}`,
             color="#000"
             numberOfLines={3}
             style={styles.titleStyle}>
-            {projects?.user?.name} has raised {currency(collect)} of{' '}
-            {currency(amount)} goal • {donations?.length} donations
+            {projects?.user?.name} {lang.a_collecte} {currency(collect)}{' '}
+            {lang.of} {currency(amount)} {lang.it_needs} • {donations?.length}{' '}
+            {lang.donations}
           </TextComponent>
 
           {user?.id === projects?.user?.id && (
@@ -195,11 +220,7 @@ https://pote-kole.web.app?id=${id}`,
 
                   <CustomButton
                     title={useLang().lang.make_donnation}
-                    onPress={() =>
-                      navigation.navigate('Payment', {
-                        project: route?.params?.project,
-                      })
-                    }
+                    onPress={handleNavigatePayment}
                     buttonStyle={styles.buttonStyle}
                   />
 

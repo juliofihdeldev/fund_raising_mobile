@@ -100,10 +100,6 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
       .where('user_id', '==', user?.id)
       .get();
     setUsersPayment(userPayment.docs.map(doc => doc.data()));
-    console.log(
-      'userPayment',
-      userPayment.docs.map(doc => doc.data()),
-    );
   };
   const handleCurrentSelectUser = (_user: UserType) => {
     setCurrentSelectUser(_user);

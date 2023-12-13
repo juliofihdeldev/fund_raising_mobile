@@ -12,6 +12,7 @@ import {FeedStackParamList} from '../../navigations/MainNavigation';
 import {Color} from '../../assets/GlobalStyles';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import CustomView from '../../component/atom/CustomView';
+import {FlashList} from '@shopify/flash-list';
 
 type HistoryScreenNavigationProp = StackNavigationProp<
   FeedStackParamList,
@@ -32,10 +33,13 @@ const History: React.FC<Props> = ({navigation}) => {
 
   const {user} = useAuth();
 
-  const scrollRef = React.useRef<ScrollView>(null);
-
   navigation.setOptions({
     title: 'Back to Profile',
+    headerTitleStyle: {
+      color: Color.black,
+      fontSize: 16,
+      fontFamily: 'Montserrat-Bold',
+    },
     headerLeft: () => (
       <Ionicons
         name="close"
@@ -62,38 +66,36 @@ const History: React.FC<Props> = ({navigation}) => {
   }, [navigation]);
 
   return (
-    <SafeAreaView style={GlobalStyles.container}>
-      <ScrollView ref={scrollRef}>
-        <CustomView style={styles.customViewStyle}>
-          {projects?.length === 0 && (
-            <EmptyComponent>
-              <TextComponent>No Project</TextComponent>
-            </EmptyComponent>
-          )}
+    <SafeAreaView style={[styles.container]}>
+      <CustomView style={styles.customViewStyle}>
+        {projects?.length === 0 && (
+          <EmptyComponent>
+            <TextComponent>No Project</TextComponent>
+          </EmptyComponent>
+        )}
+      </CustomView>
+      <TextComponent fontSize={21} style={styles.textStyle}>
+        {user?.role !== 1 ? 'All Fundraising' : lang.my_fundraising}
+      </TextComponent>
 
-          <TextComponent fontSize={21} style={styles.textStyle}>
-            {user?.role !== 1 ? 'All Fundraising' : lang.my_fundraising}
-          </TextComponent>
-
-          <FlatList
-            data={user.role == 1 ? fundraising : projects}
-            renderItem={project => (
-              <View style={styles.container}>
-                <ItemDonationVertical
-                  project={project}
-                  onPress={() => {
-                    navigation.navigate('ManageFundrasing', {
-                      project: project?.item,
-                    });
-                  }}
-                />
-              </View>
-            )}
-            keyExtractor={item => item.id}
-            contentContainerStyle={GlobalStyles.container}
-          />
-        </CustomView>
-      </ScrollView>
+      <FlashList
+        estimatedItemSize={300}
+        data={user.role == 1 ? fundraising : projects}
+        renderItem={project => (
+          <View style={[GlobalStyles.projectItem, {marginRight: 24}]}>
+            <ItemDonationVertical
+              project={project}
+              onPress={() => {
+                navigation.navigate('ManageFundrasing', {
+                  project: project?.item,
+                });
+              }}
+            />
+          </View>
+        )}
+        keyExtractor={item => item.id}
+        contentContainerStyle={GlobalStyles.container}
+      />
     </SafeAreaView>
   );
 };
@@ -103,10 +105,11 @@ const styles = StyleSheet.create({
     color: Color.black,
     marginLeft: 16,
     marginTop: 16,
+    marginBottom: 18,
   },
   container: {
-    width: 'auto',
-    marginTop: 32,
+    flex: 1,
+    paddingHorizontal: 8,
     backgroundColor: Color.white,
   },
   customViewStyle: {

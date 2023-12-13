@@ -4,6 +4,7 @@ export const GlobalStyles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
+    paddingHorizontal: 4,
   },
   projectContainer: {
     backgroundColor: '#FFFFFF',

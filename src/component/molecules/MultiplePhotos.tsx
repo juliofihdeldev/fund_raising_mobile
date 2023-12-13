@@ -2,7 +2,6 @@ import React from 'react';
 import {View, TouchableOpacity, StyleSheet} from 'react-native';
 import CustomImage from '../atom/CustomImage';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import TextComponent from '../atom/CustomText';
 
 interface MultiplePhotosProps {
   photo: string;
@@ -31,8 +30,8 @@ const styles = StyleSheet.create({
     margin: 8,
   },
   photo: {
-    width: 120,
-    height: 120,
+    width: 115,
+    height: 115,
     borderRadius: 8,
   },
   deleteButton: {

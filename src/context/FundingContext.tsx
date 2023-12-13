@@ -94,22 +94,27 @@ export const FundingContextProvider: React.FC<FundingContextProviderProps> = ({
       return 'https://ortoday.com/wp-content/uploads/2020/07/eq-1024x640.jpg';
     }
   }
+  const [arrayOfImages, setArrayOfImages] = React.useState<string[]>([]);
 
   async function sendMultipleFiles() {
-    let arrayOfImages = [] as string[];
+    try {
+      for (let i = 0; i < state?.list_images?.length!; i++) {
+        const element = state?.list_images![i];
+        const reference = storage().ref(
+          `fundraising/${new Date().toISOString()}_${i}`,
+        );
+        await reference.putFile(String(element));
+        const downloadURL = await reference.getDownloadURL();
+        setArrayOfImages(prevState => [...prevState, downloadURL]);
+        setFileUploadedProgress((i / state?.list_images?.length!) * 100);
 
-    const reference = storage().ref(`fundraising/${new Date().toISOString()}`);
-    for (let i = 0; i < state?.list_images?.length!; i++) {
-      // setTimeout(() => console.log('wait fake internet'), 3000);
-      const element = state?.list_images![i];
-      await reference.putFile(String(element));
-      const downloadURL = await reference.getDownloadURL();
-      arrayOfImages.push(downloadURL);
-      setFileUploadedProgress((i / state?.list_images?.length!) * 100);
+        // Delay for 200ms
+        // await new Promise(resolve => setTimeout(resolve, 200));
+      }
+    } catch (error) {
+      console.error('Error  file:', error);
     }
-    return arrayOfImages;
   }
-
   const handleGetProjectByID = async (project_id: string) => {
     _setLoading(true);
     let project: ProjectType = {} as ProjectType;
@@ -158,11 +163,15 @@ export const FundingContextProvider: React.FC<FundingContextProviderProps> = ({
   };
 
   const handleSaveState = async () => {
+    _setLoading(false);
+    setIsFileUploaded(true);
+    await sendMultipleFiles();
+
     try {
-      _setLoading(false);
-      setIsFileUploaded(true);
-      const list_images = await sendMultipleFiles();
-      const img = list_images[0]; // await sendMediaToStorage();
+      const img = arrayOfImages && arrayOfImages[0]; // await sendMediaToStorage();
+
+      console.log('list_images >>>>>>>>>>>>>', arrayOfImages);
+
       const dateValue = new Date().toDateString().toString();
       const _user = user;
       delete _user?.donations;
@@ -176,7 +185,7 @@ export const FundingContextProvider: React.FC<FundingContextProviderProps> = ({
         collect: 0,
         status: 'Pending Review',
         image: img,
-        list_images: list_images,
+        list_images: arrayOfImages,
         video_url: state?.video_url,
         donation: [],
         isBlocked: false,
@@ -185,9 +194,7 @@ export const FundingContextProvider: React.FC<FundingContextProviderProps> = ({
       };
 
       await ref.add(formatData);
-
       setFundraising((prevState: ProjectType) => [...prevState, formatData]);
-
       _setLoading(false);
 
       Alert.alert(lang?.warning, lang?.fundraising_created, [
@@ -197,15 +204,22 @@ export const FundingContextProvider: React.FC<FundingContextProviderProps> = ({
         },
       ]);
       setIsFileUploaded(false);
+      setState({} as ProjectType);
     } catch (error) {
+      console.error('**************Error:', error);
       _setLoading(false);
-      console.log('Error  file:', error);
-      Alert.alert('Error', JSON.stringify(error), [
-        {
-          text: 'OK',
-          onPress: () => null,
-        },
-      ]);
+
+      Alert.alert(
+        'Error Connection',
+        ` Connection loss, Please try later ${JSON.stringify(error)}`,
+        [
+          {
+            text: 'OK',
+            onPress: () => null,
+          },
+        ],
+      );
+
       setState({} as ProjectType);
       setIsFileUploaded(false);
     }
@@ -243,12 +257,16 @@ export const FundingContextProvider: React.FC<FundingContextProviderProps> = ({
     } catch (error) {
       console.error('Error:', error);
 
-      Alert.alert('Error', JSON.stringify(error), [
-        {
-          text: 'OK',
-          onPress: () => null,
-        },
-      ]);
+      Alert.alert(
+        'Error Connection',
+        ` Connection loss, Please try later ${JSON.stringify(error)}`,
+        [
+          {
+            text: 'OK',
+            onPress: () => null,
+          },
+        ],
+      );
     }
     _setLoading(false);
   };
@@ -296,7 +314,7 @@ export const FundingContextProvider: React.FC<FundingContextProviderProps> = ({
     });
 
     setFundraising(fundraisingArray);
-    console.log('renderTime');
+
     _setLoading(false);
   };
 
