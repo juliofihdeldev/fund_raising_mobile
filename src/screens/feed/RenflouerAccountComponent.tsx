@@ -1,6 +1,6 @@
 //disabling eslint for this file
 /* eslint-disable  */
-import React, {useState, useContext} from 'react';
+import React, {useState, useContext, useEffect} from 'react';
 import {View, Alert, Linking, StyleSheet} from 'react-native';
 import {GlobalStyles} from './GlobalStyle';
 import ListItem from '../../component/atom/ListItem';
@@ -16,6 +16,7 @@ import {Color, boxShadow} from '../../assets/GlobalStyles';
 import {CustomDialogContext} from '../../component/atom/CustomDialog';
 import axios from 'axios';
 import CustomView from '../../component/atom/CustomView';
+import {useStripe} from '@stripe/stripe-react-native';
 
 const RenflouerAccountComponent: React.FC = () => {
   const {handleSetIsVisible} = useContext(CustomDialogContext);
@@ -23,6 +24,7 @@ const RenflouerAccountComponent: React.FC = () => {
   const {user, usersPayment, handleGetUserPayment} = useAuth();
   const [value, setValue] = useState('12500');
   const [option, setOptions] = useState('');
+  const {initPaymentSheet, presentPaymentSheet} = useStripe();
 
   const createMoncashPAyment = async () => {
     _setLoading(true);
@@ -121,8 +123,68 @@ const RenflouerAccountComponent: React.FC = () => {
     }
   };
 
+  const fetchPaymentSheetParams = async () => {
+    let data = {
+      user: {
+        email: user?.email,
+        name: user?.name,
+        phone: user?.phone,
+        address: {
+          line1: user?.address,
+          city: user?.city,
+          country: 'htg',
+        },
+      },
+      phone: user?.phone,
+      name: user?.name,
+      amount: value,
+      tipAmount: 0,
+      user_id: user?.id,
+      date: new Date().getUTCMilliseconds(),
+    };
+
+    let url = `https://create-payment-intent-q7q3rskmgq-uc.a.run.app`;
+    const response = await fetch(url, {
+      method: 'POST',
+      body: JSON.stringify(data),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    const {paymentIntent, ephemeralKey, customer} = await response.json();
+
+    return {
+      paymentIntent,
+      ephemeralKey,
+      customer,
+    };
+  };
+
+  const initializePaymentSheet = async () => {
+    const {paymentIntent, ephemeralKey, customer, publishableKey} =
+      await fetchPaymentSheetParams();
+
+    const {error} = await initPaymentSheet({
+      merchantDisplayName: 'PoteKOLE.',
+      customerId: customer,
+      customerEphemeralKeySecret: ephemeralKey,
+      paymentIntentClientSecret: paymentIntent,
+      // Set `allowsDelayedPaymentMethods` to true if your business can handle payment
+      //methods that complete payment after a delay, like SEPA Debit and Sofort.
+      allowsDelayedPaymentMethods: true,
+      defaultBillingDetails: {
+        name: 'Jane Doe',
+      },
+    });
+
+    if (!error) {
+      _setLoading(true);
+    }
+  };
+
   const stripePayment = async () => {
     // create stripe payment in react native
+    initializePaymentSheet();
   };
 
   return (
@@ -174,9 +236,9 @@ const RenflouerAccountComponent: React.FC = () => {
         <ListItem
           text="Payer par Carte de credit"
           icon="card-outline"
-          fontSize={17}
-          // onPress={stripeWebPayment}
-          onPress={stripePayment}
+          fontSize={15}
+          onPress={stripeWebPayment}
+          // onPress={stripePayment}
           color="#333"
           fontWeight="bold"
           containerStyle={styles.containerListStyle}
@@ -197,7 +259,7 @@ const RenflouerAccountComponent: React.FC = () => {
         <ListItem
           text="Payer par Natcash"
           icon="card-outline"
-          fontSize={17}
+          fontSize={15}
           color={'#333'}
           // onPress={createMoncashPAyment}
           onPress={() => setOptions('natcash')}

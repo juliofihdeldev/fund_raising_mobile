@@ -62,10 +62,10 @@ const Feed: React.FC<ProjectType> = ({navigation}: any) => {
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
-    setTimeout(() => {
-      setRefreshing(false);
-      handleGetFundraising();
-    }, 1000);
+    // setTimeout(() => {
+    handleGetFundraising();
+    setRefreshing(false);
+    // }, 250);
   }, []);
 
   const handleDeepLink = useCallback(() => {

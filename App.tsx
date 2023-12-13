@@ -11,6 +11,7 @@ import {Color} from './src/assets/GlobalStyles';
 import {StatusBar} from 'react-native';
 // import dynamicLinks from '@react-native-firebase/dynamic-links';
 import {ErrorBoundary} from 'react-error-boundary';
+import {StripeProvider} from '@stripe/stripe-react-native';
 
 const theme = {
   ...DefaultTheme,
@@ -36,17 +37,23 @@ function fallbackRender({error, resetErrorBoundary}) {
 
 export default function App() {
   return (
-    <NavigationContainer theme={theme}>
-      <ErrorBoundary fallbackRender={fallbackRender}>
-        <LangContextProvider>
-          <AuthContextProvider>
-            <FundingContextProvider>
-              <StatusBar backgroundColor={Color.white} />
-              <Main />
-            </FundingContextProvider>
-          </AuthContextProvider>
-        </LangContextProvider>
-      </ErrorBoundary>
-    </NavigationContainer>
+    <StripeProvider
+      publishableKey="pk_test_5MB9slbqt3eAefweXS0LWH67"
+      urlScheme="your-url-scheme" // required for 3D Secure and bank redirects
+      merchantIdentifier="org.potekole.ede" // required for Apple Pay
+    >
+      <NavigationContainer theme={theme}>
+        <ErrorBoundary fallbackRender={fallbackRender}>
+          <LangContextProvider>
+            <AuthContextProvider>
+              <FundingContextProvider>
+                <StatusBar backgroundColor={Color.white} />
+                <Main />
+              </FundingContextProvider>
+            </AuthContextProvider>
+          </LangContextProvider>
+        </ErrorBoundary>
+      </NavigationContainer>
+    </StripeProvider>
   );
 }
