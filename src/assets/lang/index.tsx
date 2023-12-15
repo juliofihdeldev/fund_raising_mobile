@@ -67,7 +67,7 @@ export const fr: LangType = {
   myFundraisings: 'Managements des collectes',
   collect_start_date: 'Démarrer le',
   make_donnation: 'Faire un Don',
-  a_collecte: 'Ont collecté',
+  a_collecte: 'a collecté',
   of: 'sur',
   read_more: 'Lire plus',
   read_less: 'Lire moins',

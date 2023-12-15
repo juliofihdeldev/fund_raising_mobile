@@ -58,7 +58,7 @@ export const FundingContextProvider: React.FC<FundingContextProviderProps> = ({
 }) => {
   const [state, setState] = React.useState<ProjectType>({} as ProjectType);
   const [isFileUploaded, setIsFileUploaded] = React.useState<boolean>(false);
-  const [fileUploadedProgress, setFileUploadedProgress] = React.useState(10);
+  const [fileUploadedProgress, setFileUploadedProgress] = React.useState(5);
 
   const {user} = useAuth();
   const {lang, _setLoading} = useLang();
@@ -97,6 +97,7 @@ export const FundingContextProvider: React.FC<FundingContextProviderProps> = ({
   const [arrayOfImages, setArrayOfImages] = React.useState<string[]>([]);
 
   async function sendMultipleFiles() {
+    let _arrayOfImages: string[] = [];
     try {
       for (let i = 0; i < state?.list_images?.length!; i++) {
         const element = state?.list_images![i];
@@ -105,12 +106,16 @@ export const FundingContextProvider: React.FC<FundingContextProviderProps> = ({
         );
         await reference.putFile(String(element));
         const downloadURL = await reference.getDownloadURL();
-        setArrayOfImages(prevState => [...prevState, downloadURL]);
+        _arrayOfImages.push(downloadURL);
+        // setArrayOfImages(prevState => [...prevState, downloadURL]);
         setFileUploadedProgress((i / state?.list_images?.length!) * 100);
 
         // Delay for 200ms
         // await new Promise(resolve => setTimeout(resolve, 200));
       }
+
+      setArrayOfImages(_arrayOfImages);
+      return _arrayOfImages;
     } catch (error) {
       console.error('Error  file:', error);
     }
@@ -165,13 +170,10 @@ export const FundingContextProvider: React.FC<FundingContextProviderProps> = ({
   const handleSaveState = async () => {
     _setLoading(false);
     setIsFileUploaded(true);
-    await sendMultipleFiles();
+    let _arrayOfImages = await sendMultipleFiles();
 
     try {
-      const img = arrayOfImages && arrayOfImages[0]; // await sendMediaToStorage();
-
-      console.log('list_images >>>>>>>>>>>>>', arrayOfImages);
-
+      const img = _arrayOfImages && _arrayOfImages[0]; // await sendMediaToStorage();
       const dateValue = new Date().toDateString().toString();
       const _user = user;
       delete _user?.donations;
@@ -185,16 +187,16 @@ export const FundingContextProvider: React.FC<FundingContextProviderProps> = ({
         collect: 0,
         status: 'Pending Review',
         image: img,
-        list_images: arrayOfImages,
+        list_images: _arrayOfImages,
         video_url: state?.video_url,
         donation: [],
         isBlocked: false,
-        is_emergency: Math.random() >= 0.3,
+        is_emergency: Math.random() >= 0.7,
         user: _user,
       };
 
       await ref.add(formatData);
-      setFundraising((prevState: ProjectType) => [...prevState, formatData]);
+      // setFundraising((prevState: ProjectType) => [...prevState, formatData]);
       _setLoading(false);
 
       Alert.alert(lang?.warning, lang?.fundraising_created, [

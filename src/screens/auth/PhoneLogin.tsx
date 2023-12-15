@@ -118,7 +118,6 @@ const PhoneLogin: React.FC = ({navigation, setLoading}: any) => {
     try {
       setLoading(true);
       await confirm.confirm(valueConfirm);
-
       Alert.alert(lang?.success, lang.sucess_login_message, [
         {
           text: 'OK',
