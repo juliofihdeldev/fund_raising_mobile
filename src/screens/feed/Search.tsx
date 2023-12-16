@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  FlatList,
-  View,
-  SafeAreaView,
-  ScrollView,
-  StyleSheet,
-} from 'react-native';
+import {View, SafeAreaView, ScrollView, StyleSheet} from 'react-native';
 import {ProjectType} from '../../types/Index';
 import SearchBar from '../../component/SearchBar';
 import {GlobalStyles} from './GlobalStyle';
@@ -15,7 +9,7 @@ import ItemDonationVertical from '../../component/ItemDonationVertical';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {FeedStackParamList} from '../../navigations/MainNavigation';
 import TextComponent from '../../component/atom/CustomText';
-import CustomView from '../../component/atom/CustomView';
+
 import {FlashList} from '@shopify/flash-list';
 
 type SearchScreenNavigationProp = StackNavigationProp<
