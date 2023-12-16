@@ -1,30 +1,24 @@
 import React from 'react';
-import {View, StyleSheet, Share} from 'react-native';
+import {View, StyleSheet} from 'react-native';
 import {TouchableOpacity} from 'react-native';
 import CustomProgressBar from './atom/CustomProgressBar';
 import TextComponent from './atom/CustomText';
-import {Color, boxShadow} from '../assets/GlobalStyles';
+import {boxShadow} from '../assets/GlobalStyles';
 import {ProjectType} from '../types/Index';
 import {currency} from '../utils/currency';
 import CustomImage from './atom/CustomImage';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import ShareComponent from './HOC/ShareComponent';
 
 interface ItemDonationProps {
   onPress: () => void;
-
   project: ProjectType;
 }
-const handleShare = project => {
-  Share.share({
-    message: `Pote kole: ${project?.item.description} ${project?.item.amount} 
-      https://pote-kole.web.app?id=${project?.item.id}
-    `,
-  });
-};
 
 const ItemDonation: React.FC<ItemDonationProps> = ({onPress, project}) => {
-  let {amount, description, image, user} = project?.item;
+  let {amount, description, image, collect} = project?.item;
+
+  const percentageCollect = (Number(collect) * 100) / amount;
+
   return (
     <TouchableOpacity style={[styles.container, boxShadow]} onPress={onPress}>
       <View style={styles.imagesView}>
@@ -33,7 +27,7 @@ const ItemDonation: React.FC<ItemDonationProps> = ({onPress, project}) => {
 
       <View style={styles.contentText}>
         <TextComponent numberOfLines={2}>{description}</TextComponent>
-        <CustomProgressBar value={65} />
+        <CustomProgressBar value={percentageCollect} />
 
         <View style={styles.contentTextPrice}>
           <TextComponent

@@ -12,7 +12,7 @@ const CustomBanner: React.FC<CustomBannerProps> = ({images}) => {
   return (
     <ImageSlider
       data={data}
-      autoPlay={true}
+      autoPlay={false}
       onItemChanged={item => console.log('item', item)}
       timer={3000}
       caroselImageStyle={{

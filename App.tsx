@@ -1,7 +1,7 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 // import Main from './Main';
-import {View, Text} from 'react-native';
+import {useColorScheme} from 'react-native';
 import {AuthContextProvider} from './src/context/AuthContext';
 import Main from './Main';
 import {LangContextProvider} from './src/context/LanguageContext';
@@ -13,7 +13,7 @@ import {StatusBar} from 'react-native';
 import {ErrorBoundary} from 'react-error-boundary';
 import {StripeProvider} from '@stripe/stripe-react-native';
 import ErrorComponent from './src/component/molecules/ErrorComponent';
-
+import SplashScreen from 'react-native-splash-screen';
 const theme = {
   ...DefaultTheme,
   // Specify custom property
@@ -32,6 +32,14 @@ function fallbackRender({error}: any) {
 }
 
 export default function App() {
+  const isDarkMode = useColorScheme() === 'dark';
+  const backgroundStyle = {
+    backgroundColor: isDarkMode ? Color.grayLight : Color.grayLight,
+  };
+  useEffect(() => {
+    SplashScreen.hide();
+  }, []);
+
   return (
     <StripeProvider
       publishableKey="pk_test_5MB9slbqt3eAefweXS0LWH67"
@@ -43,7 +51,10 @@ export default function App() {
           <LangContextProvider>
             <AuthContextProvider>
               <FundingContextProvider>
-                <StatusBar backgroundColor={'#eee'} />
+                <StatusBar
+                  barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+                  backgroundColor={backgroundStyle.backgroundColor}
+                />
                 <Main />
               </FundingContextProvider>
             </AuthContextProvider>

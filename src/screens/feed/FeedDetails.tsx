@@ -133,6 +133,12 @@ https://pote-kole.web.app?id=${id}`,
     });
   };
 
+  const collectAmount = donations
+    ?.reduce((a, b) => a + (b.amount || 0), 0)
+    ?.toFixed(2);
+
+  const percentageCollect = (Number(collectAmount) * 100) / amount;
+
   return (
     <Root>
       <SafeAreaView style={GlobalStyles.container}>
@@ -208,13 +214,14 @@ https://pote-kole.web.app?id=${id}`,
                 </View>
 
                 <View style={[GlobalStyles.contentText]}>
-                  <CustomProgressBar value={65} />
+                  <CustomProgressBar value={percentageCollect} />
 
                   <View
                     style={[GlobalStyles.contentTextPrice, {marginTop: 12}]}>
                     <TextComponent numberOfLines={2}>
-                      {projects?.user?.name} has raised {currency(collect)} of{' '}
-                      {currency(amount)} goal • {donations?.length} donations
+                      {projects?.user?.name} {lang.a_collecte}{' '}
+                      {currency(collect)} {lang.of} {currency(amount)}{' '}
+                      {lang.it_needs} • {donations?.length} {lang.donations}
                     </TextComponent>
                   </View>
 
