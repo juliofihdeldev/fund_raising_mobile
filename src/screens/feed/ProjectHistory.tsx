@@ -116,7 +116,7 @@ const History: React.FC<Props> = ({navigation}) => {
         data={
           user.role == 1
             ? fundraising.filter(el => el.status === status.name)
-            : projects
+            : projects.filter(el => el.status === status.name)
         }
         renderItem={project => (
           <View style={[GlobalStyles.projectItem, {marginRight: 24}]}>
