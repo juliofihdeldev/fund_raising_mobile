@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
-import {FlatList, View, SafeAreaView, StyleSheet} from 'react-native';
-import {ScrollView} from 'react-native-virtualized-view';
+import {View, SafeAreaView, StyleSheet} from 'react-native';
+
 import {GlobalStyles} from './GlobalStyle';
 import {useFunding} from '../../context/FundingContext';
 import ItemDonationVertical from '../../component/ItemDonationVertical';
@@ -13,6 +13,8 @@ import {Color} from '../../assets/GlobalStyles';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import CustomView from '../../component/atom/CustomView';
 import {FlashList} from '@shopify/flash-list';
+import {filter_fundraising} from '../../utils/filter_fundraising';
+import Category from '../../component/Category';
 
 type HistoryScreenNavigationProp = StackNavigationProp<
   FeedStackParamList,
@@ -32,6 +34,7 @@ const History: React.FC<Props> = ({navigation}) => {
   } = useFunding();
 
   const {user} = useAuth();
+  const [status, setStatus] = React.useState(filter_fundraising[0]);
 
   navigation.setOptions({
     title: 'Back to Profile',
@@ -64,6 +67,9 @@ const History: React.FC<Props> = ({navigation}) => {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [navigation]);
+  const handleCaterogy = (cat: any) => {
+    setStatus(cat);
+  };
 
   return (
     <SafeAreaView style={[styles.container]}>
@@ -78,9 +84,40 @@ const History: React.FC<Props> = ({navigation}) => {
         {user?.role !== 1 ? 'All Fundraising' : lang.my_fundraising}
       </TextComponent>
 
+      <View style={GlobalStyles.categoryContainer}>
+        {filter_fundraising.map((cat, index) => (
+          <Category
+            key={index}
+            iconName={cat.icon}
+            title={cat.name}
+            iconSize={32}
+            onPress={() => {
+              handleCaterogy(cat);
+            }}
+            style={[
+              GlobalStyles.category,
+              {
+                backgroundColor:
+                  cat.id == status.id ? Color.primary : Color.secondaryLight,
+              },
+            ]}
+            color={Color.white}
+            styleContainer={[GlobalStyles.styleContainer]}
+          />
+        ))}
+      </View>
+      <View
+        style={{
+          marginTop: 16,
+        }}
+      />
       <FlashList
         estimatedItemSize={300}
-        data={user.role == 1 ? fundraising : projects}
+        data={
+          user.role == 1
+            ? fundraising.filter(el => el.status === status.name)
+            : projects
+        }
         renderItem={project => (
           <View style={[GlobalStyles.projectItem, {marginRight: 24}]}>
             <ItemDonationVertical
