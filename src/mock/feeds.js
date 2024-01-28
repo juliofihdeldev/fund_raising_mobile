@@ -1,0 +1,85 @@
+const projects = [
+  {
+    id: '1',
+    name: 'Literacy in Nicaragua',
+    description:
+      "Want to join me in making a difference? I'm raising money to benefit CREA help young children in Nicaragua learn to read. Any donation will help make an impact. Thanks in advance for your contribution!",
+    status: 'In Progress',
+    people: 10,
+    image: 'https://example.com/project1.jpg',
+    video: 'https://example.com/project1.mp4',
+    link: 'https://example.com/project1',
+    social_link: 'https://example.com/project1/social',
+    date: '2021-05-05',
+    location: 'New York',
+    amount: 1000,
+    donation: [
+      {
+        id: '1',
+        amount: 100,
+        donor: 'John Doe',
+      },
+      {
+        id: '2',
+        amount: 50,
+        donor: 'Jane Smith',
+      },
+    ],
+    user: {
+      id: 'user1',
+      name: '  Michelle Chackerian',
+      email: 'john@example.com',
+      password: 'password',
+      city: 'New York',
+      state: 'NY',
+    },
+  },
+  {
+    id: '2',
+    name: 'Project 2',
+    description: 'This is the second project.',
+    status: 'Completed',
+    people: 5,
+    image: 'https://example.com/project2.jpg',
+    video: 'https://example.com/project2.mp4',
+    link: 'https://example.com/project2',
+    social_link: 'https://example.com/project2/social',
+    date: '2021-06-05',
+    location: 'New York',
+    amount: 10000,
+    donation: [
+      {
+        id: '3',
+        amount: 200,
+        donor: 'Alice Johnson',
+      },
+    ],
+    user: {
+      id: 'user2',
+      name: 'Alice',
+      email: 'alice@example.com',
+      city: 'Los Angeles',
+      state: 'CA',
+    },
+  },
+  {
+    id: '3',
+    name: 'Project 3',
+    description: 'This is the third project.',
+    status: 'Pending',
+    people: 2,
+    image: 'https://example.com/project3.jpg',
+    video: 'https://example.com/project3.mp4',
+    link: 'https://example.com/project3',
+    social_link: 'https://example.com/project3/social',
+    donation: [],
+    user: {
+      id: 'user3',
+      name: 'Bob',
+      email: 'bob@example.com',
+      password: 'password',
+    },
+  },
+];
+
+export {projects};

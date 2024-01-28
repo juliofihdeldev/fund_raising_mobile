@@ -1,118 +1,65 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
+import React, {useEffect} from 'react';
+import {NavigationContainer} from '@react-navigation/native';
+// import Main from './Main';
+import {useColorScheme} from 'react-native';
+import {AuthContextProvider} from './src/context/AuthContext';
+import Main from './Main';
+import {LangContextProvider} from './src/context/LanguageContext';
+import {MD3LightTheme as DefaultTheme} from 'react-native-paper';
+import {FundingContextProvider} from './src/context/FundingContext';
+import {Color} from './src/assets/GlobalStyles';
+import {StatusBar} from 'react-native';
+import {ErrorBoundary} from 'react-error-boundary';
+// import {StripeProvider} from '@stripe/stripe-react-native';
+import ErrorComponent from './src/component/molecules/ErrorComponent';
+// import SplashScreen from 'react-native-splash-screen';
+const theme = {
+  ...DefaultTheme,
+  // Specify custom property
+  myOwnProperty: true,
+  // Specify custom property in nested object
+  colors: {
+    // this will turn the 'pill to yellow'
+    // to make it 'transparent, you can make it same color as your background
+    ...DefaultTheme.colors,
+    secondaryContainer: 'transparent',
+  },
+};
 
-import React from 'react';
-import type {PropsWithChildren} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
-
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
-
-function Section({children, title}: SectionProps): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
+function fallbackRender({error}: any) {
+  return <ErrorComponent title="Error" description={error} />;
 }
 
-function App(): React.JSX.Element {
+export default function App() {
   const isDarkMode = useColorScheme() === 'dark';
-
   const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+    backgroundColor: isDarkMode ? Color.grayLight : Color.grayLight,
   };
+  useEffect(() => {
+    // SplashScreen.hide();
+  }, []);
 
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+    // <StripeProvider
+    //   publishableKey="pk_test_5MB9slbqt3eAefweXS0LWH67"
+    //   urlScheme="your-url-scheme" // required for 3D Secure and bank redirects
+    //   merchantIdentifier="org.potekole.ede" // required for Apple Pay
+    // >
+    <NavigationContainer theme={theme}>
+      <ErrorBoundary fallbackRender={fallbackRender}>
+        <LangContextProvider>
+          <AuthContextProvider>
+            <FundingContextProvider>
+              <StatusBar
+                barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+                backgroundColor={backgroundStyle.backgroundColor}
+              />
+              <Main />
+            </FundingContextProvider>
+          </AuthContextProvider>
+        </LangContextProvider>
+      </ErrorBoundary>
+    </NavigationContainer>
+    // </StripeProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-});
-
-export default App;
