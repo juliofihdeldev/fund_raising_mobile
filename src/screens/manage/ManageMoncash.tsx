@@ -36,7 +36,7 @@ const ManageMoncash: React.FC<Props> = ({navigation, setLoading}) => {
     setLoading(true);
 
     try {
-      //       await firestore().collection('donations').doc(item.id).update({
+      //       await firestore().collection('donations').doc(item?.id?.toString()).update({
       //         status: 'Approved',
       //       });
       //
@@ -78,7 +78,7 @@ const ManageMoncash: React.FC<Props> = ({navigation, setLoading}) => {
 
   const handleReject = async (item: DonationType) => {
     setLoading(true);
-    await firestore().collection('donations').doc(item.id).update({
+    await firestore().collection('donations').doc(item?.id?.toString()).update({
       status: 'Rejected',
     });
     setTimeout(() => setLoading(false), 2000);
@@ -237,7 +237,7 @@ const ManageMoncash: React.FC<Props> = ({navigation, setLoading}) => {
                       )}
                     />
                   )}
-                  keyExtractor={item => item.id}
+                  keyExtractor={item => item?.id?.toString()}
                   contentContainerStyle={GlobalStyles.container}
                 />
               </View>

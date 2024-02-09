@@ -19,7 +19,6 @@ import {useAuth} from '../context/AuthContext';
 import {isNullOrEmpty} from '../utils/isNullOrEmpty';
 import TextComponent from './atom/CustomText';
 import withLoadingModal from './HOC/Loading';
-import {FlashList} from '@shopify/flash-list';
 
 interface CustomViewProps {
   children?: React.ReactNode;
@@ -123,7 +122,7 @@ const UserModalList: React.FC<CustomViewProps> = ({
                 marginBottom: 16,
               }}>
               {
-                <FlashList
+                <FlatList
                   data={filteredUsers}
                   renderItem={({item}) => (
                     <ItemUser

@@ -12,6 +12,10 @@ import {StatusBar} from 'react-native';
 import {ErrorBoundary} from 'react-error-boundary';
 // import {StripeProvider} from '@stripe/stripe-react-native';
 import ErrorComponent from './src/component/molecules/ErrorComponent';
+import {enableFreeze} from 'react-native-screens';
+import {enableScreens} from 'react-native-screens';
+enableScreens(true);
+
 // import SplashScreen from 'react-native-splash-screen';
 const theme = {
   ...DefaultTheme,
@@ -30,10 +34,12 @@ function fallbackRender({error}: any) {
   return <ErrorComponent title="Error" description={error} />;
 }
 
+enableFreeze(true);
+
 export default function App() {
   const isDarkMode = useColorScheme() === 'dark';
   const backgroundStyle = {
-    backgroundColor: isDarkMode ? Color.grayLight : Color.grayLight,
+    backgroundColor: isDarkMode ? Color.white : Color.white,
   };
   useEffect(() => {
     // SplashScreen.hide();

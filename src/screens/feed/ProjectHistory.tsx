@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useCallback} from 'react';
 import {View, SafeAreaView, StyleSheet} from 'react-native';
 
 import {GlobalStyles} from './GlobalStyle';
@@ -12,9 +12,11 @@ import {FeedStackParamList} from '../../navigations/MainNavigation';
 import {Color} from '../../assets/GlobalStyles';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import CustomView from '../../component/atom/CustomView';
-import {FlashList} from '@shopify/flash-list';
+
 import {filter_fundraising} from '../../utils/filter_fundraising';
 import Category from '../../component/Category';
+import {FlatList} from 'react-native';
+import {useLang} from '../../context/LanguageContext';
 
 type HistoryScreenNavigationProp = StackNavigationProp<
   FeedStackParamList,
@@ -33,9 +35,10 @@ const History: React.FC<Props> = ({navigation}) => {
     handleGetFundraising,
   } = useFunding();
 
+  //
   const {user} = useAuth();
   const [status, setStatus] = React.useState(filter_fundraising[0]);
-
+  const {lang} = useLang();
   navigation.setOptions({
     title: 'Back to Profile',
     headerTitleStyle: {
@@ -58,18 +61,31 @@ const History: React.FC<Props> = ({navigation}) => {
 
   useEffect(() => {
     if (user) {
-      if (user.role == 1) {
-        handleGetFundraising();
+      if (user?.role == 1) {
+        handleGetFundraisingWithCallback();
       } else {
-        handleGetProjectByUserId(user.id!);
+        handleGetProjectWithCallback();
       }
     }
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [navigation]);
+
+  const handleGetFundraisingWithCallback = useCallback(() => {
+    handleGetFundraising();
+  }, [handleGetFundraising]);
+
+  const handleGetProjectWithCallback = useCallback(() => {
+    handleGetProjectByUserId(user.id!);
+  }, [handleGetProjectByUserId, user.id]);
+
   const handleCaterogy = (cat: any) => {
     setStatus(cat);
   };
+
+  let data =
+    user?.role == 1
+      ? fundraising?.filter(f => f?.status === status?.name)
+      : projects?.filter(p => p?.status === status?.name);
 
   return (
     <SafeAreaView style={[styles.container]}>
@@ -80,8 +96,9 @@ const History: React.FC<Props> = ({navigation}) => {
           </EmptyComponent>
         )}
       </CustomView>
+
       <TextComponent fontSize={21} style={styles.textStyle}>
-        {user?.role !== 1 ? 'All Fundraising' : lang.my_fundraising}
+        {user?.role !== 1 ? 'All Fundraising' : lang?.my_fundraising}
       </TextComponent>
 
       <View style={GlobalStyles.categoryContainer}>
@@ -111,13 +128,9 @@ const History: React.FC<Props> = ({navigation}) => {
           marginTop: 16,
         }}
       />
-      <FlashList
-        estimatedItemSize={300}
-        data={
-          user.role == 1
-            ? fundraising.filter(el => el.status === status.name)
-            : projects.filter(el => el.status === status.name)
-        }
+
+      <FlatList
+        data={data}
         renderItem={project => (
           <View style={[GlobalStyles.projectItem, {marginRight: 24}]}>
             <ItemDonationVertical
@@ -130,7 +143,7 @@ const History: React.FC<Props> = ({navigation}) => {
             />
           </View>
         )}
-        keyExtractor={item => item.id}
+        keyExtractor={item => item?.id?.toString()}
         contentContainerStyle={GlobalStyles.container}
       />
     </SafeAreaView>

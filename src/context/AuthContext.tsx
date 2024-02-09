@@ -1,6 +1,5 @@
 import React, {ReactNode, createContext, useContext} from 'react';
-
-import {app, auth, db} from '../../firebaseConfig';
+import {auth, db} from '../../firebaseConfig';
 import {
   collection,
   doc,
@@ -21,6 +20,7 @@ import {onAuthStateChanged} from 'firebase/auth';
 
 import {UserType} from '../types/Index';
 import {Alert} from 'react-native';
+import {useLang} from './LanguageContext';
 
 interface AuthContextProps {
   isLoggedIn: boolean;
@@ -65,9 +65,16 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
   let [users, setUsers] = React.useState([]);
   let [usersPayment, setUsersPayment] = React.useState([]);
 
+  const {_setLoading} = useLang();
+
   let [current_select_user, setCurrentSelectUser] =
     React.useState<UserType>(null);
+
   const handleSetUser = (user_: UserType) => {
+    if (user_ === null) {
+      setUser({});
+      return;
+    }
     setUser(user_);
   };
 
@@ -125,6 +132,7 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
     setUsers(_users.docs.map(doc => doc.data()));
   };
   const login = async (data: any) => {
+    _setLoading(true);
     let {email, password} = data;
     try {
       const auth = getAuth();
@@ -140,8 +148,10 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
       console.log(error);
       Alert.alert(error.message);
     }
+    _setLoading(false);
   };
   const createAccount = async (data: any) => {
+    _setLoading(true);
     let {email, password} = data;
     try {
       const auth = getAuth();
@@ -159,6 +169,7 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
       console.log(error);
       Alert.alert(error.message);
     }
+    _setLoading(false);
   };
 
   const value = {

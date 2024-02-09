@@ -4,11 +4,11 @@ import {Color} from '../../assets/GlobalStyles';
 import TextComponent from '../../component/atom/CustomText';
 import TextAreaInput from '../../component/atom/TextAreaInput';
 import {useFunding} from '../../context/FundingContext';
-import { useLang } from '../../context/LanguageContext';
+import {useLang} from '../../context/LanguageContext';
 
 const RaisingStory: React.FC = ({}) => {
   const {state, handleStateManager} = useFunding();
-  const {lang} =useLang()
+  const {lang} = useLang();
   const [name, setName] = React.useState(state?.name || '');
   const [description, setDescription] = React.useState(
     state?.description || '',
@@ -40,7 +40,8 @@ const RaisingStory: React.FC = ({}) => {
             marginTop: 32,
             marginLeft: 8,
           }}>
-          {lang?.word_why_do_you_need_this_fundraising}  </TextComponent>
+          {lang?.word_why_do_you_need_this_fundraising}{' '}
+        </TextComponent>
         <TextAreaInput
           placeholder={lang?.ecrivez_ici}
           maxLength={200}
@@ -51,7 +52,6 @@ const RaisingStory: React.FC = ({}) => {
             fontFamily: 'Montserrat-Bold',
             color: Color.black,
             width: '96%',
-
           }}
         />
 

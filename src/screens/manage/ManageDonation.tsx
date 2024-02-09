@@ -10,7 +10,6 @@ import {currency} from '../../utils/currency';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {FeedStackParamList} from '../../navigations/MainNavigation';
 import {useLang} from '../../context/LanguageContext';
-import {FlashList} from '@shopify/flash-list';
 
 type FeedDetailsScreenNavigationProp = StackNavigationProp<
   FeedStackParamList,
@@ -67,7 +66,7 @@ const ManageDonation: React.FC<Props> = () => {
                     : lang?.no_collect}
                 </TextComponent>
 
-                <FlashList
+                <FlatList
                   horizontal={false}
                   data={donations}
                   renderItem={({item}) => (
@@ -79,7 +78,7 @@ const ManageDonation: React.FC<Props> = () => {
                       item={item}
                     />
                   )}
-                  keyExtractor={item => item.id}
+                  keyExtractor={item => item?.id?.toString()}
                   contentContainerStyle={GlobalStyles.container}
                 />
               </View>

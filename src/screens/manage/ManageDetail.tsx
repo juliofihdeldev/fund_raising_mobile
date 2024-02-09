@@ -118,7 +118,7 @@ const ManageDetail: React.FC<Props> = ({navigation}) => {
                   onPress={handleMenu}
                   buttonStyle={{
                     backgroundColor: Color.primary,
-                    width: '20%',
+                    width: '25%',
                     borderRadius: 26,
                     marginTop: 16,
                   }}

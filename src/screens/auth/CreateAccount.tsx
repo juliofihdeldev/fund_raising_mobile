@@ -11,13 +11,12 @@ import {
 } from 'react-native';
 
 import Icon from 'react-native-vector-icons/Ionicons';
-import {GoogleAuthProvider} from 'firebase/auth';
+
 // import { auth } from "../../../firebaseConfig";
 import {Color} from '../../assets/GlobalStyles';
 // google provider
 import TextComponent from '../../component/atom/CustomText';
 import {blurBackground, tell_story} from '../../assets/images';
-import TextAreaInput from '../../component/atom/TextAreaInput';
 import {useAuth} from '../../context/AuthContext';
 import withLoadingModal from '../../component/HOC/Loading';
 import {isNullOrEmpty} from '../../utils/isNullOrEmpty';
@@ -178,34 +177,6 @@ const CreateAccountComponent = ({navigation}) => {
               />
               <TextComponent color="#fff">Login with apple</TextComponent>
             </TouchableOpacity>
-
-            <AppleAuthentication.AppleAuthenticationButton
-              buttonType={
-                AppleAuthentication.AppleAuthenticationButtonType.SIGN_IN
-              }
-              buttonStyle={
-                AppleAuthentication.AppleAuthenticationButtonStyle.BLACK
-              }
-              cornerRadius={5}
-              style={styles.button}
-              onPress={async () => {
-                try {
-                  const credential = await AppleAuthentication.signInAsync({
-                    requestedScopes: [
-                      AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
-                      AppleAuthentication.AppleAuthenticationScope.EMAIL,
-                    ],
-                  });
-                  // signed in
-                } catch (e) {
-                  if (e.code === 'ERR_REQUEST_CANCELED') {
-                    // handle that the user canceled the sign-in flow
-                  } else {
-                    // handle other errors
-                  }
-                }
-              }}
-            />
           </View>
         </View>
       </ImageBackground>

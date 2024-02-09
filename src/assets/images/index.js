@@ -19,6 +19,8 @@ let collect_money = require('./collect_money.png');
 let explore = require('./explore.png');
 let share_with_friend = require('./share_with_friend.png');
 let tell_story = require('./tell_story.png');
+let blurBackground = require('./backBlur.jpg');
+let logol = require('./logol.png');
 
 export {
   box_fun,
@@ -42,4 +44,6 @@ export {
   explore,
   share_with_friend,
   tell_story,
+  blurBackground,
+  logol,
 };

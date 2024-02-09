@@ -16,7 +16,6 @@ import Category from '../../component/Category';
 import {Color} from '../../assets/GlobalStyles';
 import ItemDonationVertical from '../../component/ItemDonationVertical';
 import {GlobalStyles} from './GlobalStyle';
-import CustomHeader from '../../component/CustomHeader';
 import CustomButton from '../../component/atom/CustomButton';
 import {useLang} from '../../context/LanguageContext';
 import TextComponent from '../../component/atom/CustomText';
@@ -24,7 +23,6 @@ import TextComponent from '../../component/atom/CustomText';
 import {useFunding} from '../../context/FundingContext';
 import withLoadingFresh from '../../component/HOC/RefreshLoading';
 
-import {FlashList} from '@shopify/flash-list';
 import CustomProgressBar from '../../component/atom/CustomProgressBar';
 import {category} from '../../utils/category';
 import {getIdAndPathFromLink} from '../../utils/getIdAndPathFromLink';
@@ -39,32 +37,30 @@ const Feed: React.FC<ProjectType> = ({navigation}: any) => {
     fileUploadedProgress,
     state,
   } = useFunding();
-  const {lang} = useLang();
+
+  const {lang, _setLoading} = useLang();
 
   const scrollRef = useRef<ReactScrollView>();
 
   const scrollY = new Animated.Value(0);
   const diffClamp = Animated.diffClamp(scrollY, 0, 124);
 
-  const translateY = diffClamp.interpolate({
-    inputRange: [0, 124],
-    outputRange: [0, -124],
-  });
-
   const [refreshing, setRefreshing] = React.useState(false);
   const nextPageIdentifierRef = useRef();
 
-  React.useEffect(() => {
+  useEffect(() => {
+    _setLoading(false);
     handleGetFundraising();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const onRefresh = React.useCallback(() => {
+  const onRefresh = useCallback(() => {
     setRefreshing(true);
     // setTimeout(() => {
     handleGetFundraising();
     setRefreshing(false);
     // }, 250);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleDeepLink = useCallback(() => {
@@ -115,9 +111,6 @@ const Feed: React.FC<ProjectType> = ({navigation}: any) => {
     };
   }, [handleDeepLink, handleUrl]);
 
-  const goToSearch = () => {
-    navigation.navigate('Search');
-  };
   // scrool infinite
   const fetchNextPage = () => {
     if (nextPageIdentifierRef.current == null) {
@@ -127,33 +120,7 @@ const Feed: React.FC<ProjectType> = ({navigation}: any) => {
     // handleGetFundraising();
   };
 
-  const handleDynamicLink = (link: any) => {
-    // Handle dynamic link inside your own application
-    if (link.url === 'https://potekole.page.link/ede') {
-      // ...navigate to your offers screen
-      navigation.navigate('Feed');
-    }
-  };
-
-  //   useEffect(() => {
-  //     const unsubscribe = dynamicLinks().onLink(handleDynamicLink);
-  //     // When the component is unmounted, remove the listener
-  //     return () => unsubscribe();
-  //   }, []);
-  //
-  //   useEffect(() => {
-  //     dynamicLinks()
-  //       .getInitialLink()
-  //       .then((link: any) => {
-  //         if (link.url === 'https://potekole.page.link/ede') {
-  //           // ...set initial route as offers screen
-  //           navigation.navigate('Favorite');
-  //         }
-  //       });
-  //   }, []);
-
   const handleCategory = useCallback((item: any) => {
-    // scrool to top when change category
     scrollRef.current?.scrollTo({
       y: 490,
       x: 0,
@@ -165,18 +132,6 @@ const Feed: React.FC<ProjectType> = ({navigation}: any) => {
 
   return (
     <SafeAreaView style={GlobalStyles.container}>
-      <Animated.View
-        style={[
-          styles.headerStyle,
-          // eslint-disable-next-line react-native/no-inline-styles
-          {
-            backgroundColor: translateY ? '#fff' : 'transparent',
-            transform: [{translateY: translateY}],
-          },
-        ]}>
-        <CustomHeader goToSearch={goToSearch} />
-        <View style={styles.separator} />
-      </Animated.View>
       <ReactScrollView
         ref={scrollRef}
         refreshControl={
@@ -207,16 +162,20 @@ const Feed: React.FC<ProjectType> = ({navigation}: any) => {
                     GlobalStyles.category,
                     {
                       backgroundColor:
-                        item.id === selectedId.id
+                        item?.id?.toString() === selectedId.id
                           ? Color.secondary
                           : Color.grayLight,
                     },
                   ]}
-                  color={item.id === selectedId.id ? Color.white : Color.black}
+                  color={
+                    item?.id?.toString() === selectedId.id
+                      ? Color.white
+                      : Color.black
+                  }
                   styleContainer={GlobalStyles.styleContainer}
                 />
               )}
-              keyExtractor={item => item.id!}
+              keyExtractor={item => item?.id?.toString()!}
               contentContainerStyle={GlobalStyles.container}
             />
           </ReactScrollView>
@@ -258,7 +217,7 @@ const Feed: React.FC<ProjectType> = ({navigation}: any) => {
                   />
                 </View>
               )}
-              keyExtractor={item => item.id!}
+              keyExtractor={item => item?.id?.toString()!}
               contentContainerStyle={GlobalStyles.container}
             />
           </ReactScrollView>
@@ -283,8 +242,7 @@ const Feed: React.FC<ProjectType> = ({navigation}: any) => {
             />
           </View>
 
-          <FlashList
-            estimatedItemSize={300}
+          <FlatList
             onEndReached={fetchNextPage}
             onEndReachedThreshold={0.8}
             horizontal={false}
@@ -309,7 +267,7 @@ const Feed: React.FC<ProjectType> = ({navigation}: any) => {
                 />
               </View>
             )}
-            keyExtractor={item => item.id!}
+            keyExtractor={item => item?.id?.toString()!}
             contentContainerStyle={GlobalStyles.container}
           />
         </ReactScrollView>
@@ -368,7 +326,6 @@ const styles = StyleSheet.create({
     backgroundColor: Color.white,
   },
   categoryContainer: {
-    marginTop: 80,
     marginBottom: 16,
     backgroundColor: Color.white,
   },
@@ -378,7 +335,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   headerPublication: {
-    height: 40,
+    height: 60,
     padding: 10,
     alignItems: 'flex-start',
     justifyContent: 'flex-start',
@@ -393,12 +350,12 @@ const styles = StyleSheet.create({
     padding: 4,
   },
   imageSize: {
-    width: 30,
-    height: 30,
+    width: 40,
+    height: 40,
   },
-  imageMargin: {marginLeft: 12},
+  imageMargin: {marginLeft: 12, marginTop: 4, marginEnd: 14},
 });
 
-const FeedWithLoading = withLoadingFresh(Feed);
+const FeedWithLoading = withLoadingFresh(Feed, '', false);
 
 export default FeedWithLoading;

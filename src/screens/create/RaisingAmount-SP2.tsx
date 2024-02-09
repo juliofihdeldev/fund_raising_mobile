@@ -58,6 +58,7 @@ const RaisingAmount: React.FC = () => {
             fontSize: 23,
             color: Color.black,
             marginLeft: 16,
+            marginTop: 16,
           }}>
           {currency(state?.amount)}
         </TextComponent>

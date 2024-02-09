@@ -46,7 +46,7 @@ const EditProject: React.FC = ({route, navigation}) => {
 
     headerRight: () => (
       <CustomButton
-        title="Anrejistre"
+        title="Enregistrer"
         onPress={saveChanges}
         buttonStyle={{
           backgroundColor: Color.primary,

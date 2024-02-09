@@ -39,7 +39,9 @@ const ShareComponent = ({item}: any) => {
 
   const handleShareLegacy = useCallback(() => {
     Share.share({
-      message: `Pote Kole: ${item.name} https://pote-kole.web.app?id=${item.id}
+      message: `Pote Kole: ${
+        item.name
+      } https://pote-kole.web.app?id=${item?.id?.toString()}
     `,
     });
   }, [item]);

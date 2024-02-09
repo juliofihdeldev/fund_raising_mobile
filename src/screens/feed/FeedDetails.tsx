@@ -7,6 +7,7 @@ import {
   StyleSheet,
   Share,
   Alert,
+  FlatList,
 } from 'react-native';
 
 import {Root} from 'react-native-alert-notification';
@@ -31,7 +32,7 @@ import {useFocusEffect} from '@react-navigation/native';
 import withLoadingFresh from '../../component/HOC/RefreshLoading';
 import ManageOption from '../manage/ManageOptions';
 import {useAuth} from '../../context/AuthContext';
-import {FlashList} from '@shopify/flash-list';
+
 import CustomBanner from '../../component/atom/CustomBanner';
 
 const FeedDetails: React.FC<ProjectType> = ({
@@ -142,13 +143,13 @@ https://pote-kole.web.app?id=${id}`,
   return (
     <Root>
       <SafeAreaView style={GlobalStyles.container}>
-        <Animated.View
+        <View
           style={[
             styles.headerStyle,
             // eslint-disable-next-line react-native/no-inline-styles
             {
               backgroundColor: translateY ? '#fff' : 'transparent',
-              transform: [{translateY: translateY}],
+              // transform: [{translateY: translateY}],
             },
           ]}>
           <CustomBackIcon
@@ -176,7 +177,7 @@ https://pote-kole.web.app?id=${id}`,
               onPress={handleMenu}
             />
           )}
-        </Animated.View>
+        </View>
 
         {showMenu && (
           <ManageOption
@@ -296,13 +297,13 @@ https://pote-kole.web.app?id=${id}`,
                       </TextComponent>
                     )}
 
-                    <FlashList
+                    <FlatList
                       horizontal={false}
                       data={donations as DonationType[]}
                       renderItem={({item}) => (
                         <UserDonation item={item} onPress={() => {}} />
                       )}
-                      keyExtractor={item => item.id}
+                      keyExtractor={item => item?.id?.toString()}
                       contentContainerStyle={GlobalStyles.container}
                     />
                   </View>
@@ -316,11 +317,11 @@ https://pote-kole.web.app?id=${id}`,
                     {lang.word_support} ({messages?.length})
                   </TextComponent>
 
-                  <FlashList
+                  <FlatList
                     horizontal={false}
                     data={messages as any}
                     renderItem={({item}) => <UserCommentItem item={item} />}
-                    keyExtractor={item => item.id}
+                    keyExtractor={item => item?.id?.toString()}
                     contentContainerStyle={GlobalStyles.container}
                   />
                 </View>

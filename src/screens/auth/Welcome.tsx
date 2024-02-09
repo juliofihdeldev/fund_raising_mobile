@@ -11,15 +11,16 @@ import {
 import Icon from 'react-native-vector-icons/Ionicons';
 import {Color} from '../../assets/GlobalStyles';
 import TextComponent from '../../component/atom/CustomText';
-import {tell_story} from '../../assets/images';
+import {logol, tell_story} from '../../assets/images';
 import {useLang} from '../../context/LanguageContext';
 import {useAuth} from '../../context/AuthContext';
 import {isNullOrEmpty} from '../../utils/isNullOrEmpty';
+import withLoadingModal from '../../component/HOC/Loading';
 
-const Welcome: React.FC = ({navigation}: any) => {
+const WelcomeWithLoading: React.FC = ({navigation}: any) => {
   const {user} = useAuth();
 
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoadingState] = useState(false);
 
   const handleSignUp = () => {
     if (isLoading) return;
@@ -39,15 +40,18 @@ const Welcome: React.FC = ({navigation}: any) => {
     navigation.navigate('OnBoarding');
   };
 
-  const {lang} = useLang();
+  const {lang, _setLoading} = useLang();
 
   useLayoutEffect(() => {
-    setIsLoading(true);
+    _setLoading(false);
+    setIsLoadingState(true);
     if (!isNullOrEmpty(user)) {
-      setIsLoading(false);
+      setIsLoadingState(false);
       navigation.navigate('MainNavigation');
     } else {
-      setIsLoading(false);
+      setTimeout(() => {
+        setIsLoadingState(false);
+      }, 3000);
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -55,56 +59,66 @@ const Welcome: React.FC = ({navigation}: any) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.containerImage}>
-        <Image source={tell_story} style={styles.logo} resizeMode="contain" />
-      </View>
-      <View style={styles.buttonsContainer}>
-        <View style={styles.WelcomeBox}>
-          <TextComponent fontSize={32} color="#000" fontWeight="bold">
-            PoteKOLE
-          </TextComponent>
-          <TextComponent
-            fontSize={23}
-            color="#000"
-            fontWeight="bold"
-            style={styles.signText}>
-            Fè byen jodi a la nati ap remet ou sa demen
-          </TextComponent>
-          <TextComponent
-            fontSize={17}
-            color="#000"
-            fontWeight="bold"
-            style={styles.signText}>
-            Ann sere yon 100 Goud pou moun yo ki ka nan plus bezwen pase n.
-          </TextComponent>
-          <TextComponent
-            fontSize={17}
-            color="#000"
-            fontWeight="bold"
-            style={styles.signText}>
-            Imajine w a 100 Goud ou ka sove vi yon moun ki nan bezwen.
-          </TextComponent>
+      {isLoading ? (
+        <View style={styles.containerImage}>
+          <Image source={logol} style={styles.logo} resizeMode="contain" />
         </View>
-
-        <View style={styles.buttonsPhone}>
-          <TouchableOpacity
-            disabled={isLoading}
-            style={[styles.signButton, {backgroundColor: '#112E38'}]}
-            onPress={handleSignUp}>
-            <Icon
-              name="call"
-              size={24}
-              color="#ffffff"
-              style={styles.phoneNumberIcon}
+      ) : (
+        <View>
+          <View style={styles.containerImage}>
+            <Image
+              source={tell_story}
+              style={styles.logo}
+              resizeMode="contain"
             />
-            <TextComponent color="white">
-              {/* {lang.sign_up_with_phone_number} */}
-              Creer un compte
-            </TextComponent>
-          </TouchableOpacity>
-        </View>
+          </View>
+          <View style={styles.buttonsContainer}>
+            <View style={styles.WelcomeBox}>
+              <TextComponent fontSize={32} color="#000" fontWeight="bold">
+                PoteKOLE
+              </TextComponent>
+              <TextComponent
+                fontSize={23}
+                color="#000"
+                fontWeight="bold"
+                style={styles.signText}>
+                Fè byen jodi a la nati ap remet ou sa demen
+              </TextComponent>
+              <TextComponent
+                fontSize={17}
+                color="#000"
+                fontWeight="bold"
+                style={styles.signText}>
+                Ann sere yon 100 Goud pou moun yo ki ka nan plus bezwen pase n.
+              </TextComponent>
+              <TextComponent
+                fontSize={17}
+                color="#000"
+                fontWeight="bold"
+                style={styles.signText}>
+                Imajine w a 100 Goud ou ka sove vi yon moun ki nan bezwen.
+              </TextComponent>
+            </View>
 
-        {/* <View style={styles.buttonsPhone}>
+            <View style={styles.buttonsPhone}>
+              <TouchableOpacity
+                disabled={isLoading}
+                style={[styles.signButton, {backgroundColor: '#112E38'}]}
+                onPress={handleSignUp}>
+                <Icon
+                  name="call"
+                  size={24}
+                  color="#ffffff"
+                  style={styles.phoneNumberIcon}
+                />
+                <TextComponent color="white">
+                  {/* {lang.sign_up_with_phone_number} */}
+                  Creer un compte
+                </TextComponent>
+              </TouchableOpacity>
+            </View>
+
+            {/* <View style={styles.buttonsPhone}>
 					<TouchableOpacity
 						style={[
 							styles.signButton,
@@ -124,23 +138,25 @@ const Welcome: React.FC = ({navigation}: any) => {
 					</TouchableOpacity>
 				</View> */}
 
-        <View style={styles.buttonsGoogle}>
-          <TouchableOpacity
-            disabled={isLoading}
-            style={[styles.signButton, {backgroundColor: Color.primary}]}
-            onPress={handleGoogleLogin}>
-            <Icon
-              name="person-circle"
-              size={24}
-              color="#fff"
-              style={styles.phoneNumberIcon}
-            />
-            <TextComponent color="#fff">
-              {lang.continue_without_creating_an_account}
-            </TextComponent>
-          </TouchableOpacity>
+            <View style={styles.buttonsGoogle}>
+              <TouchableOpacity
+                disabled={isLoading}
+                style={[styles.signButton, {backgroundColor: Color.primary}]}
+                onPress={handleGoogleLogin}>
+                <Icon
+                  name="person-circle"
+                  size={24}
+                  color="#fff"
+                  style={styles.phoneNumberIcon}
+                />
+                <TextComponent color="#fff">
+                  {lang.continue_without_creating_an_account}
+                </TextComponent>
+              </TouchableOpacity>
+            </View>
+          </View>
         </View>
-      </View>
+      )}
     </SafeAreaView>
   );
 };
@@ -157,8 +173,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   logo: {
-    width: Dimensions.get('window').width,
-    height: Dimensions.get('window').height / 2.2,
+    width: Dimensions.get('window').width / 1.5,
+    height: Dimensions.get('window').height - 60,
   },
   buttonsContainer: {
     flex: 3,
@@ -199,4 +215,5 @@ const styles = StyleSheet.create({
   },
 });
 
+const Welcome = withLoadingModal(WelcomeWithLoading, 'Loading', true);
 export default Welcome;

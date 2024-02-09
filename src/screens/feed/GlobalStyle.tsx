@@ -20,6 +20,7 @@ export const GlobalStyles = StyleSheet.create({
     padding: 8,
     flexDirection: 'row',
     alignItems: 'center',
+    backgroundColor: '#FFFFFF',
     justifyContent: 'space-between',
   },
   headerContainer: {

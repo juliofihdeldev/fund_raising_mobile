@@ -13,7 +13,6 @@ import {Color} from '../../assets/GlobalStyles';
 import TextAreaInput from '../../component/atom/TextAreaInput';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-
 const MessageDetail: React.FC<any> = ({navigation}) => {
   const {user} = useAuth();
   const scrollRef = React.useRef<ScrollView>(null);
@@ -100,7 +99,7 @@ const MessageDetail: React.FC<any> = ({navigation}) => {
               </View>
             </View>
           )}
-          keyExtractor={item => item.id}
+          keyExtractor={item => item?.id?.toString()}
         />
       </ScrollView>
 

@@ -1,5 +1,12 @@
 import React, {useCallback} from 'react';
-import {View, StyleSheet, Alert, TouchableOpacity, Linking} from 'react-native';
+import {
+  View,
+  StyleSheet,
+  Alert,
+  TouchableOpacity,
+  Linking,
+  SafeAreaView,
+} from 'react-native';
 import {useAuth} from '../../context/AuthContext';
 import TextComponent from '../../component/atom/CustomText';
 import {Color} from '../../assets/GlobalStyles';
@@ -115,159 +122,161 @@ const Profile: React.FC = ({navigation}: any) => {
 
   return (
     <Root>
-      <View style={styles.container}>
-        {monCashMenu && (
-          <CustomDialog onClose={onClose}>
-            <View style={localStyle.width}>
-              <ListItem
-                text="Fermer"
-                icon="close-outline"
-                color={Color.black}
-                onPress={onClose}
-                fontSize={19}
-                containerStyle={[styles.container]}
-                iconStyle={[styles.customIcon, {color: Color.black}]}
-              />
-              <RenflouerAccountComponentWithLoading />
-            </View>
-          </CustomDialog>
-        )}
+      <SafeAreaView style={{flex: 1}}>
+        <View style={styles.container}>
+          {monCashMenu && (
+            <CustomDialog onClose={onClose}>
+              <View style={localStyle.width}>
+                <ListItem
+                  text="Fermer"
+                  icon="close-outline"
+                  color={Color.black}
+                  onPress={onClose}
+                  fontSize={19}
+                  containerStyle={[styles.container]}
+                  iconStyle={[styles.customIcon, {color: Color.black}]}
+                />
+                <RenflouerAccountComponentWithLoading />
+              </View>
+            </CustomDialog>
+          )}
 
-        <View style={styles.containerProfile}>
-          {!isLoginFn() ? (
-            <View>
-              <TextComponent
-                fontSize={25}
-                color={Color.secondary}
-                fontWeight="bold">
-                {lang?.hiStranger}
-              </TextComponent>
-              <TextComponent fontSize={15}>
-                {lang?.Kreye_kont_komanse_kolekte}
-              </TextComponent>
-              <CustomButton
-                title={lang.login}
-                onPress={() => navigation.navigate('PhoneLogin')}
-                buttonStyle={{
-                  backgroundColor: Color.secondary,
-                  marginTop: 16,
-                  borderRadius: 26,
-                  width: 150,
-                }}
-                textStyle={{color: '#fff'}}
-              />
-            </View>
-          ) : (
-            <View>
-              <TextComponent
-                fontSize={27}
-                color={Color.secondary}
-                fontWeight="bold">
-                {lang.hi}, {user?.name || lang?.stranger}
-              </TextComponent>
-              <TextComponent>{user?.email || user.phone}</TextComponent>
-
-              <TextComponent
-                fontSize={21}
-                fontWeight="bold"
-                color={Color.primary}>
-                {currency(Number(usersPaymentAmount))}
-              </TextComponent>
-              {user?.name === '' && (
+          <View style={styles.containerProfile}>
+            {!isLoginFn() ? (
+              <View>
+                <TextComponent
+                  fontSize={25}
+                  color={Color.secondary}
+                  fontWeight="bold">
+                  {lang?.hiStranger}
+                </TextComponent>
+                <TextComponent fontSize={15}>
+                  {lang?.Kreye_kont_komanse_kolekte}
+                </TextComponent>
                 <CustomButton
-                  title={lang?.edit_account}
-                  onPress={() => navigation.navigate('ProfileEdit')}
+                  title={lang.login}
+                  onPress={() => navigation.navigate('SignUp')}
+                  buttonStyle={{
+                    backgroundColor: Color.secondary,
+                    marginTop: 16,
+                    borderRadius: 26,
+                    width: 150,
+                  }}
+                  textStyle={{color: '#fff'}}
+                />
+              </View>
+            ) : (
+              <View>
+                <TextComponent
+                  fontSize={27}
+                  color={Color.secondary}
+                  fontWeight="bold">
+                  {user?.name || lang?.stranger}
+                </TextComponent>
+                <TextComponent>{user?.email || user.phone}</TextComponent>
+
+                <TextComponent
+                  fontSize={21}
+                  fontWeight="bold"
+                  color={Color.primary}>
+                  {currency(Number(usersPaymentAmount))}
+                </TextComponent>
+                {user?.name === '' && (
+                  <CustomButton
+                    title={lang?.edit_account}
+                    onPress={() => navigation.navigate('ProfileEdit')}
+                    buttonStyle={{
+                      backgroundColor: Color.primary,
+                      marginTop: 16,
+                      borderRadius: 26,
+                      width: '80%',
+                    }}
+                    textStyle={{color: '#fff'}}
+                  />
+                )}
+                <CustomButton
+                  title={lang?.addMoney}
+                  onPress={handleAddMoney}
                   buttonStyle={{
                     backgroundColor: Color.primary,
                     marginTop: 16,
                     borderRadius: 26,
-                    width: '80%',
                   }}
                   textStyle={{color: '#fff'}}
                 />
-              )}
-              <CustomButton
-                title={lang?.addMoney}
-                onPress={handleAddMoney}
-                buttonStyle={{
-                  backgroundColor: Color.primary,
-                  marginTop: 16,
-                  borderRadius: 26,
-                }}
-                textStyle={{color: '#fff'}}
-              />
-            </View>
-          )}
+              </View>
+            )}
+            {isLoginFn() && (
+              <TouchableOpacity
+                onPress={() => navigation.navigate('ProfileEdit')}>
+                <CustomImage image={user?.image} style={styles.profile} />
+              </TouchableOpacity>
+            )}
+          </View>
+
+          <CustomSeparator />
+
+          <TextComponent color={Color.black} fontWeight="bold">
+            Manage
+          </TextComponent>
+          <CustomSeparator />
           {isLoginFn() && (
-            <TouchableOpacity
-              onPress={() => navigation.navigate('ProfileEdit')}>
-              <CustomImage image={user?.image} style={styles.profile} />
-            </TouchableOpacity>
+            <ListItem
+              text={lang?.startFundraising}
+              icon="card-outline"
+              onPress={goToCreate}
+              fontSize={17}
+              color={Color.black}
+              containerStyle={styles.containerList}
+              iconStyle={styles.customIcon}
+            />
           )}
-        </View>
 
-        <CustomSeparator />
+          {isLoginFn() && (
+            <ListItem
+              text={lang?.myFundraisings}
+              icon="person-outline"
+              onPress={() => navigation.navigate('History')}
+              fontSize={17}
+              color={Color.black}
+              containerStyle={styles.containerList}
+              iconStyle={styles.customIcon}
+            />
+          )}
 
-        <TextComponent color={Color.black} fontWeight="bold">
-          {'Manage'}
-        </TextComponent>
-        <CustomSeparator />
-        {isLoginFn() && (
-          <ListItem
-            text={lang?.startFundraising}
-            icon="card-outline"
-            onPress={goToCreate}
-            fontSize={17}
-            color={Color.black}
-            containerStyle={styles.containerList}
-            iconStyle={styles.customIcon}
-          />
-        )}
+          <CustomSeparator />
 
-        {isLoginFn() && (
-          <ListItem
-            text={lang?.myFundraisings}
-            icon="person-outline"
-            onPress={() => navigation.navigate('History')}
-            fontSize={17}
-            color={Color.black}
-            containerStyle={styles.containerList}
-            iconStyle={styles.customIcon}
-          />
-        )}
-        <CustomSeparator />
+          <TextComponent color={Color.black} fontWeight="bold">
+            {lang?.settings}
+          </TextComponent>
+          <CustomSeparator />
 
-        <TextComponent color={Color.black} fontWeight="bold">
-          {lang?.settings}
-        </TextComponent>
-        <CustomSeparator />
+          <ScrollView>
+            <ListItem
+              text={lang?.myTerms}
+              icon="document-outline"
+              onPress={() =>
+                openLink(
+                  'https://pote-kole.web.app/politique_de_confidentialite.html',
+                )
+              }
+              fontSize={17}
+              color={Color.black}
+              containerStyle={styles.containerList}
+              iconStyle={styles.customIcon}
+            />
 
-        <ScrollView>
-          <ListItem
-            text={lang?.myTerms}
-            icon="document-outline"
-            onPress={() =>
-              openLink(
-                'https://pote-kole.web.app/politique_de_confidentialite.html',
-              )
-            }
-            fontSize={17}
-            color={Color.black}
-            containerStyle={styles.containerList}
-            iconStyle={styles.customIcon}
-          />
+            <ListItem
+              text={lang?.myPrivacy}
+              icon="copy-outline"
+              onPress={() => openLink('https://pote-kole.web.app/terms.html')}
+              fontSize={17}
+              color={Color.black}
+              containerStyle={styles.containerList}
+              iconStyle={styles.customIcon}
+            />
 
-          <ListItem
-            text={lang?.myPrivacy}
-            icon="copy-outline"
-            onPress={() => openLink('https://pote-kole.web.app/terms.html')}
-            fontSize={17}
-            color={Color.black}
-            containerStyle={styles.containerList}
-            iconStyle={styles.customIcon}
-          />
-
-          {/* <ListItem
+            {/* <ListItem
             text={lang?.dark_mode}
             icon="document-outline"
             onPress={comingSoon}
@@ -277,69 +286,38 @@ const Profile: React.FC = ({navigation}: any) => {
             iconStyle={styles.customIcon}
           /> */}
 
-          <ListItem
-            text={lang?.myAbout}
-            icon="information-circle-outline"
-            onPress={() => openLink('https://pote-kole.web.app/main.html')}
-            fontSize={17}
-            color={Color.black}
-            containerStyle={styles.containerList}
-            iconStyle={styles.customIcon}
-          />
-
-          <ListItem
-            text={lang?.language}
-            icon="language-outline"
-            fontSize={17}
-            onPress={comingSoon}
-            color={Color.black}
-            containerStyle={styles.containerList}
-            iconStyle={styles.customIcon}
-          />
-
-          {isLoginFn() && (
             <ListItem
-              text={lang?.logout}
-              icon="exit-outline"
-              onPress={() =>
-                Alert.alert(lang?.logout, lang?.are_you_sure, [
-                  {text: 'Sign out', onPress: () => handleLogout()},
-                  {
-                    text: 'Cancel',
-                    onPress: () => console.log('Cancel Pressed'),
-                  },
-                ])
-              }
+              text={lang?.myAbout}
+              icon="information-circle-outline"
+              onPress={() => openLink('https://pote-kole.web.app/main.html')}
               fontSize={17}
               color={Color.black}
               containerStyle={styles.containerList}
               iconStyle={styles.customIcon}
             />
-          )}
-          <CustomSeparator />
-          <View
-            style={{
-              flex: 1,
-              position: 'fixed',
-            }}>
+
+            <ListItem
+              text={lang?.language}
+              icon="language-outline"
+              fontSize={17}
+              onPress={comingSoon}
+              color={Color.black}
+              containerStyle={styles.containerList}
+              iconStyle={styles.customIcon}
+            />
+
             {isLoginFn() && (
               <ListItem
-                onPress={comingSoon}
-                text={lang?.efase_kont}
-                icon="trash-bin-outline"
-                fontSize={17}
-                color="#888"
-                containerStyle={styles.containerList}
-                iconStyle={[styles.customIcon, {color: '#888'}]}
-              />
-            )}
-
-            {isLoginFn() && user?.role == '1' && (
-              <ListItem
-                text={'Register payment moncash'}
-                icon="wallet-outline"
+                text={lang?.logout}
+                icon="exit-outline"
                 onPress={() =>
-                  navigation.navigate('UserMoncashPaymentRegister')
+                  Alert.alert(lang?.logout, lang?.are_you_sure, [
+                    {text: 'Sign out', onPress: () => handleLogout()},
+                    {
+                      text: 'Cancel',
+                      onPress: () => console.log('Cancel Pressed'),
+                    },
+                  ])
                 }
                 fontSize={17}
                 color={Color.black}
@@ -347,9 +325,41 @@ const Profile: React.FC = ({navigation}: any) => {
                 iconStyle={styles.customIcon}
               />
             )}
-          </View>
-        </ScrollView>
-      </View>
+            <CustomSeparator />
+            <View
+              style={{
+                flex: 1,
+                position: 'fixed',
+              }}>
+              {isLoginFn() && (
+                <ListItem
+                  onPress={comingSoon}
+                  text={lang?.efase_kont}
+                  icon="trash-bin-outline"
+                  fontSize={17}
+                  color="#888"
+                  containerStyle={styles.containerList}
+                  iconStyle={[styles.customIcon, {color: '#888'}]}
+                />
+              )}
+
+              {isLoginFn() && user?.role == '1' && (
+                <ListItem
+                  text={'Register payment moncash'}
+                  icon="wallet-outline"
+                  onPress={() =>
+                    navigation.navigate('UserMoncashPaymentRegister')
+                  }
+                  fontSize={17}
+                  color={Color.black}
+                  containerStyle={styles.containerList}
+                  iconStyle={styles.customIcon}
+                />
+              )}
+            </View>
+          </ScrollView>
+        </View>
+      </SafeAreaView>
     </Root>
   );
 };

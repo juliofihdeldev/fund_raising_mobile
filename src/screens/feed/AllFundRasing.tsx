@@ -6,7 +6,6 @@ import ItemDonationVertical from '../../component/ItemDonationVertical';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {FeedStackParamList} from '../../navigations/MainNavigation';
 import CustomView from '../../component/atom/CustomView';
-import {FlashList} from '@shopify/flash-list';
 
 type AllScreenNavigationProp = StackNavigationProp<
   FeedStackParamList,
@@ -33,8 +32,7 @@ const AllFundraising: React.FC<Props> = ({navigation, route}) => {
 
   return (
     <SafeAreaView style={[GlobalStyles.container]}>
-      <FlashList
-        estimatedItemSize={300}
+      <FlatList
         data={
           category === 'All Categories'
             ? fundraising?.filter(project => project.status === 'Active')
@@ -57,7 +55,7 @@ const AllFundraising: React.FC<Props> = ({navigation, route}) => {
             />
           </View>
         )}
-        keyExtractor={item => item.id}
+        keyExtractor={item => item?.id?.toString()}
         contentContainerStyle={GlobalStyles.container}
       />
     </SafeAreaView>

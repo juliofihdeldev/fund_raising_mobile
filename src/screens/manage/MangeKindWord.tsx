@@ -8,7 +8,6 @@ import {useFunding} from '../../context/FundingContext';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {FeedStackParamList} from '../../navigations/MainNavigation';
 import {useLang} from '../../context/LanguageContext';
-import {FlashList} from '@shopify/flash-list';
 
 type FeedDetailsScreenNavigationProp = StackNavigationProp<
   FeedStackParamList,
@@ -42,11 +41,11 @@ const MangeKindWord: React.FC<Props> = ({route, navigation}) => {
                 {lang?.word_support} ({messages?.length})
               </TextComponent>
 
-              <FlashList
+              <FlatList
                 horizontal={false}
                 data={messages}
                 renderItem={({item}) => <UserCommentItem item={item} />}
-                keyExtractor={item => item.id}
+                keyExtractor={item => item?.id?.toString()}
                 contentContainerStyle={GlobalStyles.container}
               />
             </View>

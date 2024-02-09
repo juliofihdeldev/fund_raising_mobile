@@ -1,5 +1,11 @@
-import React from 'react';
-import {View, SafeAreaView, ScrollView, StyleSheet} from 'react-native';
+import React, {useCallback, useEffect} from 'react';
+import {
+  View,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  FlatList,
+} from 'react-native';
 import {ProjectType} from '../../types/Index';
 import SearchBar from '../../component/SearchBar';
 import {GlobalStyles} from './GlobalStyle';
@@ -9,8 +15,6 @@ import ItemDonationVertical from '../../component/ItemDonationVertical';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {FeedStackParamList} from '../../navigations/MainNavigation';
 import TextComponent from '../../component/atom/CustomText';
-
-import {FlashList} from '@shopify/flash-list';
 
 type SearchScreenNavigationProp = StackNavigationProp<
   FeedStackParamList,
@@ -29,10 +33,14 @@ const Search: React.FC<Props> = ({navigation}) => {
     headerShown: false,
   });
 
-  React.useEffect(() => {
-    handleGetFundraising();
+  useEffect(() => {
+    handleGetFundraisingWithCallback;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const handleGetFundraisingWithCallback = useCallback(() => {
+    handleGetFundraising();
+  }, [handleGetFundraising]);
 
   const goBack = () => {
     navigation.goBack();
@@ -100,12 +108,15 @@ const Search: React.FC<Props> = ({navigation}) => {
         )}
       </View>
 
-      <View>
+      <View
+        style={{
+          backgroundColor: '#fff',
+        }}>
         <TextComponent style={styles.textStyle} fontSize={19} fontWeight="bold">
           Result for {searchValue}
         </TextComponent>
         <View style={{width: '100%', height: '100%'}}>
-          <FlashList
+          <FlatList
             horizontal={false}
             estimatedItemSize={300}
             data={filtered}
@@ -121,7 +132,7 @@ const Search: React.FC<Props> = ({navigation}) => {
                 />
               </View>
             )}
-            keyExtractor={item => item.id}
+            keyExtractor={item => item?.id?.toString()}
             contentContainerStyle={GlobalStyles.container}
           />
         </View>
@@ -141,6 +152,7 @@ const styles = StyleSheet.create({
   },
   searchContainer: {
     marginTop: 82,
+    backgroundColor: '#fff',
   },
   iconStyle: {
     marginLeft: 16,

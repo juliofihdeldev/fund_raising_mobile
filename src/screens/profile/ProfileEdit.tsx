@@ -6,6 +6,7 @@ import {
   StyleSheet,
   Dimensions,
   PermissionsAndroid,
+  Platform,
 } from 'react-native';
 
 import ImagePicker from 'react-native-image-crop-picker';
@@ -30,7 +31,6 @@ import {
   getStorage,
   getDownloadURL,
   ref as refStorageUpload,
-  uploadBytes,
   uploadBytesResumable,
 } from 'firebase/storage';
 import CustomImage from '../../component/atom/CustomImage';
@@ -53,7 +53,6 @@ const ProfileEdit: React.FC<UserType> = ({navigation}: any) => {
         buttonStyle={{
           width: 'auto',
           marginRight: 16,
-
           height: 42,
           backgroundColor: Color.secondary,
           borderRadius: 26,
@@ -74,11 +73,10 @@ const ProfileEdit: React.FC<UserType> = ({navigation}: any) => {
   );
 
   async function sendMediaToStorage() {
-    alert('sendMediaToStorage');
     const metadata = {
       contentType: 'image/jpeg',
     };
-    const imageBlob = await getBlobFroUri(image.uri);
+    const imageBlob = await getBlobFroUri(image?.sourceURL);
 
     const reference = refStorageUpload(
       storage,
@@ -127,7 +125,7 @@ const ProfileEdit: React.FC<UserType> = ({navigation}: any) => {
   }
 
   async function updateInfo(uid: any) {
-    if (image.uri.length > 1) await sendMediaToStorage();
+    if (image?.sourceURL?.length > 1) await sendMediaToStorage();
 
     try {
       let objUser: UserType = null;
@@ -153,13 +151,14 @@ const ProfileEdit: React.FC<UserType> = ({navigation}: any) => {
       console.log(error);
       Toast.show({
         type: ALERT_TYPE.WARNING,
-        title: 'Echèk',
-        textBody: 'Enfòmasyon ou an pa mete ajou',
+        title: 'Error',
+        textBody: 'Erreur lors de la mise à jour de votre profile',
       });
     }
   }
 
   const requestCameraPermission = async () => {
+    if (Platform.OS !== 'android') return;
     try {
       const granted = await PermissionsAndroid.request(
         PermissionsAndroid.PERMISSIONS.CAMERA,
@@ -221,9 +220,9 @@ const ProfileEdit: React.FC<UserType> = ({navigation}: any) => {
       <Root>
         <View style={styles.containerProfile}>
           <TouchableOpacity onPress={handleImageSelect}>
-            {image.uri ? (
+            {image.sourceURL ? (
               <Image
-                source={{uri: image.uri}}
+                source={{uri: image.sourceURL}}
                 resizeMode="contain"
                 style={styles.profile}
               />

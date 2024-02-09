@@ -19,11 +19,11 @@ android {
 
     namespace "com.new_potekole"
     defaultConfig {
-        applicationId "com.new_potekole"
+        applicationId "org.potekole.ede"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName "1.0"
+        versionCode 5
+        versionName "1.0.4"
     }
     signingConfigs {
         debug {

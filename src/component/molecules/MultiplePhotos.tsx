@@ -30,8 +30,8 @@ const styles = StyleSheet.create({
     margin: 8,
   },
   photo: {
-    width: 115,
-    height: 115,
+    width: 100,
+    height: 100,
     borderRadius: 8,
   },
   deleteButton: {

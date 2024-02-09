@@ -16,60 +16,18 @@ import {Color} from '../../assets/GlobalStyles';
 // google provider
 import TextComponent from '../../component/atom/CustomText';
 import {blurBackground, tell_story} from '../../assets/images';
-import TextAreaInput from '../../component/atom/TextAreaInput';
 import {useAuth} from '../../context/AuthContext';
 import {isNullOrEmpty} from '../../utils/isNullOrEmpty';
+import withLoadingModal from '../../component/HOC/Loading';
 
 const width = Dimensions.get('window').width;
 
-const SignUp = ({navigation}) => {
+const SignUpWithLoading = ({navigation}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [isAppleSignInAvailable, setIsAppleSignInAvailable] = useState(false);
+
+  const [isAppleSignInAvailable] = useState(false);
   let {login, user} = useAuth();
-
-  // handle login with google account
-  // 	const handleLoginWithGoogle = async () => {
-  // 		Alert.alert("Coming soon");
-  // 		return;
-  // 		try {
-  // 			// Get the Auth instance
-  // 			const auth = getAuth();
-  //
-  // 			// Create a GoogleAuthProvider instance
-  // 			const provider = new GoogleAuthProvider();
-  //
-  // 			// Sign in with Google using a pop-up window
-  // 			const result = await signInWithPopup(auth, provider);
-  //
-  // 			// You can access the user information from the result
-  // 			const user = result.user;
-  //
-  // 			// Optionally, you can perform additional actions after successful login
-  // 			console.log("Successfully logged in with Google:", user);
-  // 		} catch (error) {
-  // 			// Handle errors
-  // 			console.error("Error during Google login:", error.message);
-  // 			alert(error.message);
-  // 		}
-  // 	};
-
-  // const handleLoginWithApple = async () => {
-  // 	Alert.alert("Coming soon");
-  // 	return;
-  // 	try {
-  // 		await AppleAuthentication.signInAsync({
-  // 			requestedScopes: [
-  // 				AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
-  // 				AppleAuthentication.AppleAuthenticationScope.EMAIL,
-  // 			],
-  // 		});
-  // 	} catch (error) {
-  // 		console.error("Error during Apple login:", error.message);
-  // 	}
-  // };
 
   const handleSignUp = async () => {
     try {
@@ -207,6 +165,7 @@ const SignUp = ({navigation}) => {
     </View>
   );
 };
+const SignUp = withLoadingModal(SignUpWithLoading, 'Loading ...');
 
 export default SignUp;
 
@@ -221,7 +180,7 @@ const styles = StyleSheet.create({
   },
   containerImage: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    // backgroundColor: '#FFFFFF',
     width: '100%',
     alignItems: 'center',
   },
@@ -232,7 +191,7 @@ const styles = StyleSheet.create({
   buttonsContainer: {
     flex: 3,
     width: '100%',
-    backgroundColor: Color.white,
+    // backgroundColor: Color.white,
   },
   WelcomeBox: {
     padding: 26,

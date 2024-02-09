@@ -5,6 +5,7 @@ import {Color, boxShadow} from '../../assets/GlobalStyles';
 import TextComponent from '../../component/atom/CustomText';
 import {useFunding} from '../../context/FundingContext';
 import {useLang} from '../../context/LanguageContext';
+import {category} from '../../utils/category';
 const data_state = [
   'Ouest',
   'Nord',
@@ -18,7 +19,7 @@ const data_state = [
   'Sud-Est',
 ];
 
-const data_category = ['Charite', 'Sante', 'Education', 'Environnement'];
+const data_category = category.map(cat => cat.name).splice(1);
 
 const Location: React.FC = () => {
   const {lang} = useLang();

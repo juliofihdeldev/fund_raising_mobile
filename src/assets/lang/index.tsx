@@ -3,7 +3,7 @@ export type LangType = {
 };
 
 export const fr: LangType = {
-  view_all: 'Voir tout',
+  view_all: 'Voir tous',
   all_categories: 'Toutes les catégories',
   are_you_sure: 'Êtes-vous sûr ?',
   efase_kont: 'Supprimer votre compte',
@@ -106,7 +106,7 @@ export const fr: LangType = {
   word_how_much_do_you_want_to_collect: 'Combien voulez-vous collecter?',
   devise_goud_required: 'Devise Goud requise',
   withdraw_condition:
-    'Pour recevoir votre argent, vous devrez avoir un compte banque en Haiti.',
+    'Pour recevoir votre argent, vous devrez avoir un compte en bank Haiti.',
   word_tell_us_your_story: "Expliquez aux gens où ira l'argent et pourquoi.",
   word_why_do_you_need_this_fundraising:
     'Pourquoi avez-vous besoin de cette collecte?',
@@ -143,6 +143,7 @@ export const fr: LangType = {
   addMoney: 'Renflouer mon Compte',
   continue_without_creating_an_account: 'Continuer sans créer de compte',
   sign_up_with_phone_number: "S'inscrire avec votre telephone",
+  my_fundraising: 'Mes collectes',
 };
 
 Object.freeze(fr);

@@ -8,6 +8,7 @@ import {
   PermissionsAndroid,
   Alert,
   Dimensions,
+  Platform,
 } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
 import CustomSeparator from '../../component/atom/CustomSeparator';
@@ -49,6 +50,10 @@ const RaisingMedia: React.FC = () => {
 
   const requestCameraPermission = async () => {
     try {
+      if (Platform.OS === 'ios') {
+        setPermission(true);
+        return;
+      }
       const granted = await PermissionsAndroid.request(
         PermissionsAndroid.PERMISSIONS.CAMERA,
         {

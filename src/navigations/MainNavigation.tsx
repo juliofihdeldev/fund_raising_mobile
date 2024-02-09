@@ -27,7 +27,6 @@ export type ProfileStackParamList = {
   Create: undefined;
   Feed: undefined;
   EditProject: undefined;
-  Search: undefined;
   UserMoncashPaymentRegister: undefined;
   AllFundraising: undefined;
   ProfileScreen: undefined;
@@ -42,7 +41,7 @@ export type FeedStackParamList = {
   Favorite: undefined;
   ProfileTab: undefined;
   Payment: undefined;
-  Search: undefined;
+
   EditProject: undefined;
   ManageFundrasing: undefined;
   AllFundraising: undefined;
@@ -79,13 +78,6 @@ const FeedStack = () => {
         }}
         component={PaymentFormWithLoading}
       />
-      <Stack.Screen
-        name="Search"
-        options={{
-          presentation: 'modal',
-        }}
-        component={Search}
-      />
 
       <Stack.Screen
         name="EditProject"
@@ -96,20 +88,6 @@ const FeedStack = () => {
       />
 
       <Stack.Screen
-        name="ManageFundrasing"
-        options={{
-          presentation: 'modal',
-        }}
-        component={ManageFundrasing}
-      />
-      <Stack.Screen
-        name="Create"
-        component={CreateWithLoading}
-        options={{
-          presentation: 'modal',
-        }}
-      />
-      <Stack.Screen
         name="AllFundraising"
         component={AllFundraising}
         options={{
@@ -117,6 +95,7 @@ const FeedStack = () => {
           presentation: 'modal',
         }}
       />
+
       <Stack.Screen
         name="Welcome"
         component={Welcome}
@@ -145,24 +124,32 @@ const ProfileStack = () => {
         name="Create"
         component={CreateWithLoading}
         options={{
+          headerShown: false,
           presentation: 'modal',
         }}
       />
       <Stack.Screen name="EditProject" component={EditProjectWithLoading} />
-      <Stack.Screen name="History" component={History} />
+      <Stack.Screen
+        name="History"
+        component={History}
+        options={{
+          presentation: 'modal',
+        }}
+      />
       <Stack.Screen name="ManageFundrasing" component={ManageFundrasing} />
       <Stack.Screen
         name="UserMoncashPaymentRegister"
         component={UserMoncashPaymentRegisterWithLoading}
       />
+
       <Stack.Screen
         name="Feed"
         component={Feed}
         options={{
           headerShown: false,
-          presentation: 'modal',
         }}
       />
+
       <Stack.Screen
         name="FeedDetails"
         options={{
@@ -170,22 +157,6 @@ const ProfileStack = () => {
           presentation: 'modal',
         }}
         component={FeedDetailsWithLoading}
-      />
-      <Stack.Screen
-        name="AllFundraising"
-        component={AllFundraising}
-        options={{
-          // headerShown: false,
-          presentation: 'modal',
-        }}
-      />
-      <Stack.Screen
-        name="Welcome"
-        component={Welcome}
-        options={{
-          headerShown: false,
-          presentation: 'modal',
-        }}
       />
     </Stack.Navigator>
   );
@@ -197,6 +168,7 @@ export default function MainNavigation() {
       initialRouteName="Feed"
       activeColor={Color.primary}
       inactiveColor={'#333'}
+      keyboardHidesNavigationBar={true}
       theme={{colors: {secondaryContainer: Color.primary}}}
       labeled={false}
       // shifting={true}
@@ -245,7 +217,6 @@ export default function MainNavigation() {
         options={{
           tabBarAccessibilityLabel: 'Profile',
           tabBarLabel: 'Compte',
-
           tabBarIcon: ({color}) => (
             <Ionicons name="person" color={color} size={26} />
           ),

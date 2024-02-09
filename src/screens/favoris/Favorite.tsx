@@ -5,21 +5,19 @@ import {
   ScrollView as ReactScrollView,
   Animated,
   StyleSheet,
+  FlatList,
 } from 'react-native';
 import {useAuth} from '../../context/AuthContext';
 import ItemDonationUser from '../../component/ItemDonationUser';
 import {useFunding} from '../../context/FundingContext';
 import ItemDonationVertical from '../../component/ItemDonationVertical';
 import {Root} from 'react-native-alert-notification';
-import CustomHeader from '../../component/CustomHeader';
 import TextComponent from '../../component/atom/CustomText';
-
 import {StackNavigationProp} from '@react-navigation/stack';
 import {FeedStackParamList} from '../../navigations/MainNavigation';
 import {useLang} from '../../context/LanguageContext';
 import {GlobalStyles} from '../feed/GlobalStyle';
 import {ScrollView} from 'react-native-virtualized-view';
-import {FlashList} from '@shopify/flash-list';
 
 type FavoriteScreenNavigationProp = StackNavigationProp<
   FeedStackParamList,
@@ -43,42 +41,21 @@ const Favorite: React.FC<Props> = ({navigation}) => {
   }, [user?.id]);
 
   const scrollY = new Animated.Value(0);
-  const diffClamp = Animated.diffClamp(scrollY, 0, 124);
-
-  const translateY = diffClamp.interpolate({
-    inputRange: [0, 124],
-    outputRange: [0, -124],
-  });
 
   return (
     <Root>
       <SafeAreaView style={GlobalStyles.container}>
-        <Animated.View
-          style={[
-            styles.headerStyle,
-            // eslint-disable-next-line react-native/no-inline-styles
-            {
-              backgroundColor: translateY ? '#fff' : 'transparent',
-              transform: [{translateY: translateY}],
-            },
-          ]}>
-          <CustomHeader />
-        </Animated.View>
-        <View>
+        <View style={{padding: 12}}>
           <ScrollView
-            style={{marginTop: 86}}
             onScroll={e => {
               scrollY.setValue(e.nativeEvent.contentOffset.y);
             }}>
-            <TextComponent
-              fontSize={21}
-              fontWeight="bold"
-              style={{marginBottom: 12}}>
+            <TextComponent fontSize={21} fontWeight="bold">
               Your Donnations
             </TextComponent>
 
             <ReactScrollView alwaysBounceHorizontal={true}>
-              <FlashList
+              <FlatList
                 horizontal={true}
                 data={donationsUser.map(el => {
                   return {
@@ -98,7 +75,7 @@ const Favorite: React.FC<Props> = ({navigation}) => {
                     />
                   </View>
                 )}
-                keyExtractor={item => item.id}
+                keyExtractor={item => item?.id?.toString()}
                 contentContainerStyle={GlobalStyles.container}
               />
             </ReactScrollView>
@@ -115,8 +92,7 @@ const Favorite: React.FC<Props> = ({navigation}) => {
                   {lang?.urgence}
                 </TextComponent>
 
-                <FlashList
-                  estimatedItemSize={300}
+                <FlatList
                   data={fundraising.filter(
                     item => item.is_emergency && item.status === 'Active',
                   )}
@@ -132,7 +108,7 @@ const Favorite: React.FC<Props> = ({navigation}) => {
                       />
                     </View>
                   )}
-                  keyExtractor={item => item.id}
+                  keyExtractor={item => item?.id?.toString()}
                   contentContainerStyle={GlobalStyles.container}
                 />
               </ReactScrollView>
